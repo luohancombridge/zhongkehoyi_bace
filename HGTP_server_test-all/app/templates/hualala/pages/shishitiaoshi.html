@@ -1,0 +1,183 @@
+{% extends "/hualala/pages/base.html" %}
+{% block content %}
+<style type="text/css">
+.mt-10{margin-top:25px;}
+.row.no-gutter {
+    margin-left: 0;
+    margin-right: 0;
+}
+</style>
+    <div class="container-fluid"     port={{ port }}>
+        <div class="row mt-10">
+        <h3 class="page-header" id={{ yidi_mulu_ip }} style="display:none">接口调试信息</h3>
+            {% if yidi_ip!='1' %}
+                <div class="col-lg-3">
+                    <div class="input-group">
+                        <span class="input-group-addon  span-info">输入目录</span>
+                        <input type="text" class="form-control" placeholder="Search for..." id="mulu_url">
+                        <span class="input-group-btn">
+                              <button class="btn btn-success" id="submit_url" type="button">Go!</button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h3>
+                        <div class="input-group">
+                        <div >请求地址:
+                            <small id="shurchu_url" color="#000000">   {{ request_url }}</small>
+                        </div>
+                            </div>
+                    </h3>
+                </div>
+            {% else %}
+                <div class="col-lg-3">
+                    <h4 id={{ yidi_mulu_ip }}>接口信息来源：<span
+                            class="label label-default">{{ yidi_mulu_ip }}</span></h4>
+                </div>
+                <div class="col-lg-6">
+                    <h4>
+                        <div class="input-group">
+                            <div>请求地址:
+                                <small id="shurchu_url" color="#000000">   {{ request_url }}</small>
+                            </div>
+                        </div>
+                    </h4>
+                </div>
+            {% endif %}
+        </div>
+    <div class="row mt-10">
+        <div class="col-lg-6">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <div class="panel-title"  ><strong ><h4 id="jiekou_name">接口名:{{ jiekou_name }}</h4></strong></div>
+                </div>
+                <div class="panel-body">
+                    <h3><div id="case_name">用例名:<small id="case_name_panel" color="#000000">{{ case_name }}</small></div></h3>
+                    <pre  id="shuru" style = "border:none; background:none;height:400px;"  class="pre-scrollable”">
+{{ shuru }}
+      </pre>
+                </div>
+            </div>
+        </div>
+                <div class="col-lg-6">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <div  style="display:inline-block; "  name={{ request_url }}  ><strong ><h4 >接口输出 &nbsp;&nbsp;</h4></strong></div>
+                <button type="button"  id="assert_shengcheng" class="btn  btn-warning"   placement="left" data-toggle="popover" title="断言示例" data-content="focus">生成断言</button>
+                </div>
+                <div class="panel-body"  >
+                    <h3><div id="duanyan">断言:
+                        <small id="case_assert_panel">
+                            {{ result_statu }}  </small>
+                        </div>
+                    </h3>
+                </div>
+                      <pre  id="shuchu" style = "border:none;background:none;height:400px;"  class="pre-scrollable”">
+{{ shuchu }}
+      </pre>
+            </div>
+        </div>
+    </div>
+</div>
+   <script src="static/hualala/vendor/jquery/jquery.min.js"></script>
+    <script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/hualala/vendor/metisMenu/metisMenu.min.js"></script>
+    <script src="static/hualala/dist/js/sb-admin-2.js"></script>
+<script src="{{url_for('static', filename='layer-v3.0/layer/layer.js')}}">
+<script src="{{url_for('static', filename='jquery-1.8.0.js')}}"></script>
+<script src="static/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+<script src="static\socket.io\socket.io.min.js"></script>
+    <script type=text/javascript>
+    //弹出生成断言弹出框
+    $(document).ready(function()
+    {
+    $('#assert_shengcheng').popover()
+    }
+)
+    //websocket 操作 ，
+    /*
+    var socket = io.connect('http://127.0.0.1:5000/testnamespace');
+    socket.on('response',function(data){
+           if (data.re!='no change')
+            {
+            }
+            else
+            {
+            }
+    });
+  */
+    //模态框打开后执行清空操作
+    var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+    $('#file_up').on('hidden.bs.modal', function (e) {
+$('#file_detail').val('')
+var file = $('input[type="file"]')
+file.after(file.clone().val(""));
+file.remove();
+})
+//执行提交file操作
+    //向本地发送请求，删除之前的实时调试信息
+  $(document).ready(function()
+  {
+     $.post('http://127.0.0.1:'+$('[port]').attr('port')+'/delete_shsihitiaoshi', {statu: 'delete'},
+                        function (data) {
+                        }
+                    )
+  }
+  )
+$('#submit').click(function()
+{
+     var beizhu=$('#file_detail').val()
+     $.get($SCRIPT_ROOT + '/upload_fil_beizu', {beizu: beizhu},
+                        function (data) {
+                        }
+                    )
+}
+)
+//执行提交目录的操作
+$('#submit_url').click(function()
+{
+mulu=$('#mulu_url').val()
+     $.get($SCRIPT_ROOT + '/jiekou_mulu', {mulu: mulu,statu:"调试"},
+                        function (data) {
+                        }
+                    )
+}
+)
+    var shishi_tisoshi_statu=0
+  //轮询获取实时接口信息
+  setInterval("timeorder()",3000);
+  function  timeorder(){
+      if  (shishi_tisoshi_statu==0)
+      {
+          shishi_tisoshi_statu=1
+               $.getJSON('http://'+$('.page-header').attr('id')+':'+$('[port]').attr('port')+'/shishitiaoshi', {statu:"调试",'ip_data':$('.page-header').attr('id')},
+                        function (data) {
+                         shishi_tisoshi_statu=0
+                          if (data.error_statu!='')
+                          {
+                              $('#shuchu').html(data.error_statu)
+                          }
+                          else {
+                              $('#shuru').html(data.shuru)
+                              $('#shuchu').html(data.shuchu)
+                              $('#assert_shengcheng').attr('data-content',data.simple_assert)
+                              $('#case_assert_panel').html(data.result_statu)
+                              $('#jiekou_name').html("接口名:" + data.jiekou_name)
+                              $('#case_name_panel').html(data.case_name)
+                              $('#shurchu_url').html(data.request_url)
+                          }
+                        }
+                    )
+
+      }
+
+  }
+  //调整url元素位置
+    $(document).ready(function()
+        {
+            var top= $('#submit_url').offset().top
+           $('#shurchu_url').parent().css({position: "fixed",'top':top+11,'z-index':2});
+        }
+    )
+</script>
+{% endblock %}

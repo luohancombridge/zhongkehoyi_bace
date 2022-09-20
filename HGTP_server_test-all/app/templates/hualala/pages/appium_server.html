@@ -1,0 +1,62 @@
+{% extends "/hualala/pages/base.html" %}
+{% block content %}
+    <style type="text/css">
+        .mt-10 {
+            margin-top: 25px;
+        }
+        .mt-low {
+            margin-top: 15px;
+        }
+.textarea{
+    width: 650px;
+    min-height: 220px;
+    max-height: 300px;
+    _height: 120px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 3px;
+    outline: 0;
+    border: 1px solid #a0b3d6;
+    font-size: 12px;
+    line-height: 24px;
+    padding: 2px;
+    word-wrap: break-word;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-color: rgba(82, 168, 236, 0.8);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+}
+        .row.no-gutter {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    </style>
+<div class="container-fluid">
+<div class="row mt-10">
+  <div class="col-md-6">
+<div class="panel panel-success">
+    <div class="panel-heading">Panel heading without title</div>
+  <div class="panel-body">
+    Panel content
+  </div>
+  <div class="panel-footer">Panel footer</div>
+</div>
+  </div>
+</div>
+</div>
+
+
+
+<script src="static/hualala/vendor/jquery/jquery.min.js"></script>
+<script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/hualala/vendor/metisMenu/metisMenu.min.js"></script>
+<script src="static/hualala/dist/js/sb-admin-2.js"></script>
+<script src="{{ url_for('static', filename='layer-v3.0/layer/layer.js') }}">
+<script src = "{{url_for('static', filename='jquery-1.8.0.js')}}" ></script>
+<script type=text/javascript>
+    //获取local  server版本信息
+    var $SCRIPT_ROOT = 'http://'+window.location.host
+
+
+    </script>
+{% endblock %}

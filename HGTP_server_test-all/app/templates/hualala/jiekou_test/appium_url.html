@@ -1,0 +1,98 @@
+{% extends "/hualala/pages/base.html" %}
+{% block content %}
+    <style type="text/css">
+        .mt-10 {
+            margin-top: 25px;
+        }
+        .mt-low {
+            margin-top: 15px;
+        }
+        .textarea {
+            width: 650px;
+            min-height: 220px;
+            max-height: 300px;
+            _height: 120px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 3px;
+            outline: 0;
+            border: 1px solid #a0b3d6;
+            font-size: 12px;
+            line-height: 24px;
+            padding: 2px;
+            word-wrap: break-word;
+            overflow-x: hidden;
+            overflow-y: auto;
+            border-color: rgba(82, 168, 236, 0.8);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+        }
+        .row.no-gutter {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    </style>
+    <div class="container-fluid">
+        <div class="row mt-10">
+            <div class="col-lg-12">
+                <h3 class="page-header"  >appium server</h3>
+            </div>
+        </div>
+    </div>
+<div class="container-fluid ">
+    <div class="row mt-12">
+                <table class="table table-striped  table-hover  table-responsive  table-condensed ">
+                    <thead>
+                    <tr>
+                        <th>用例名</th>
+                        <th>用例描述</th>
+                        <th>路径</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody  id="case_list">
+                    {%  for i in case_json %}
+                    <tr  >
+                        <td>{{  i["casename"] }}</td>
+                        <td>{{  i["casedesc"] }}</td>
+                        <td>
+                              {{  i["casepath"] }}
+                        </td>
+                                                <td>
+                            <div class="btn-toolbar" role="toolbar" aria-label="...">
+                                <div class="btn-group" role="group" >
+                                    <button type="button " class="btn btn-warning  btn-xs" >运行
+                                    </button>
+                                    <button type="button " class="btn btn-danger btn-xs"  >查看</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {%  endfor %}
+                    </tbody>
+                </table>
+        </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="static/hualala/vendor/jquery/jquery.min.js"></script>
+<script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/hualala/vendor/metisMenu/metisMenu.min.js"></script>
+<script src="static/hualala/dist/js/sb-admin-2.js"></script>
+<script src="static/layer-v3.0/layer/layer.js"></script>
+<script type=text/javascript>
+
+
+    </script>
+{% endblock %}

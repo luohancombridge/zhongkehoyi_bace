@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>脚本列表</title>
+<link href= {{url_for('static', filename='mages/style.css')}} rel="stylesheet" type="text/css" />
+<style type="text/css">
+body {
+	background:#FFF
+}
+</style>
+</head>
+<body>
+<div id="contentWrap">
+<div class="pageTitle"></div>
+<div class="pageColumn">
+<div class="pageButton"></div>
+    <style type="text/css">
+table.zyhovertable {
+    font-family:
+    verdana,arial,sans-serif;
+    font-size:11px;
+    color:#333333;
+    border-width: 1px;
+    border-color: #999999;
+    border-collapse:
+    collapse;
+}
+table.zyhovertable th {
+    background-color:#C3DDE0;
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #999999;
+}
+table.zyhovertable tr {
+    background-color:#DCDCDC;
+}
+table.zyhovertable td {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #999999;
+}
+</style>
+<table class="zyhovertable">
+<tr>
+<th width="5%"><label><input name="F" id="quanxuan" type="checkbox" value="全选" /> </label></th><th width="10%">脚本名</th><th width="10%">类名</th><th width="5%">所属仓库</th><th width="40%">备注</th><th width="40%">文件类型</th>
+</tr>
+            {% for i in  mulu %}
+<tr onmouseover="this.style.backgroundColor='#FFFF66';"onmouseout="this.style.backgroundColor='#DCDCDC';"><td><label><input name="Fruit" class={{i[0]}} type="checkbox" value={{i}} /> </label></td><td> {{i[0]}}</td><td> {{i[1]}}</td><td>{{i[2]}}</td><td>{{i[3]}}</td><td><p>自动化脚本</p></td></tr>
+<tr onmouseover="this.style.backgroundColor='#FFFF66';"onmouseout="this.style.backgroundColor='#DCDCDC';">
+<tr onmouseover="this.style.backgroundColor='#FFFF66';"onmouseout="this.style.backgroundColor='#DCDCDC';">
+    {% endfor %}
+</table>
+</div></div>
+<p><input type="button" id="resulte" value="运行">   <input type="button" href="http://www.baidu.com" id="bianji" value="查看运行结果"  ></p>
+    <form action="/update" method="POST" enctype="multipart/form-data">
+    <input type="file" name="file"  />
+        <input type="submit"  style="line-height:1.5;"  value="提交" />
+    </form>
+</body>
+<script src="{{url_for('static', filename='jquery-1.8.0.js')}}"></script>
+<script type=text/javascript>
+var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+</script>
+<script type=text/javascript>
+ $('#quanxuan').click(function () {
+     if ($('input:checkbox:first').attr("checked")=='checked') {
+         var yuanu = $('input[name="Fruit"]');
+         for (var i = 0; i < yuanu.length; i++) {
+
+             yuanu.eq(i).attr("checked", 'checked');
+         }
+     }
+     else
+         {
+                  var yuanu = $('input[name="Fruit"]');
+         for (var i = 0; i < yuanu.length; i++) {
+
+             yuanu.eq(i).attr("checked", false);
+         }
+         }
+    })
+$("[name='Fruit']:checked").each(function () {
+            fruit += $(this).val() + " ";
+        })
+    $('#resulte').click(function () {
+        var name='';
+                var de= $("input[name='Fruit']");
+
+                       for (var i = 0; i < de.length; i++) {
+                           if ( de.eq(i).attr('checked')=='checked')
+                           {
+                               name += de.eq(i).attr('class') + ";";
+                           }
+         }
+               $.post($SCRIPT_ROOT + '/add', {name: "John", dsd: name, ame: "John"},
+                    function (data) {
+                    });
+    }
+    )
+     $('#bianji').click(function () {
+location.href =$SCRIPT_ROOT + '/result'
+$("body").css("background","black");
+         }
+    )
+</script>
+</html>

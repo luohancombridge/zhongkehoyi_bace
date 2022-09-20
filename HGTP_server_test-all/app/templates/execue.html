@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Flask JQuery</title>
+    <p><input type="button" id="bianji" value="bianji"></p>
+<!-- 插入jquery -->
+<script src="{{url_for('static', filename='jquery-1.8.0.js')}}"></script>
+<script type=text/javascript>
+var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+</script>
+<script type=text/javascript>
+$(function() {
+    $('#bianji').on('click', function() {
+$.getJSON($SCRIPT_ROOT + '/ss', {
+            a: $('input[name="a"]').val(),
+            b: $('input[name="b"]').val(),
+            c: $("#calculate").val(),
+            now: new Date().getTime()
+        },
+        function(data) {
+            $('#result').text(data.result);
+            $("#calculate").val(data.result);
+        });
+});
+    // 绑定click事件
+});
+</script>
+</head>
+<body>
+<p>
+    <input type=text size=5 name=a> +
+    <input type=text size=5 name=b> =
+    <span id=result>?</span>
+</p>
+<p><input type="button" id="calculate" value="计算"></p>
+ <p><input type="checkbox"  id="hk" name="checkbox1">A
+ <input type="checkbox"  name="checkbox1"> B
+ <input type="checkbox" name="checkbox1">C</p>
+ <p><input type="checkbox" name="checkbox1">D
+ <input type="checkbox" name="checkbox1">E
+ <input type="checkbox" name="checkbox1">F</p>
+  <p> <input name="checkbox1" id="hdk" type="checkbox" value="ss" />ssss</p>
+</body>
+</html>

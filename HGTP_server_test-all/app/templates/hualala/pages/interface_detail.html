@@ -1,0 +1,1537 @@
+{% extends "/hualala/pages/base.html" %}
+{% block content %}
+    <style type="text/css">
+        .mt-10 {
+            margin-top: 25px;
+        }
+
+        .mt-low {
+            margin-top: 15px;
+        }
+
+        .textarea {
+            width: 450px;
+            min-height: 220px;
+            max-height: 300px;
+            _height: 120px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 3px;
+            outline: 0;
+            border: 1px solid #a0b3d6;
+            font-size: 12px;
+            line-height: 24px;
+            padding: 2px;
+            word-wrap: break-word;
+            overflow-x: hidden;
+            overflow-y: auto;
+            border-color: rgba(82, 168, 236, 0.8);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+        }
+
+        .textarea {
+            width: 650px;
+            min-height: 220px;
+            max-height: 300px;
+            _height: 120px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 3px;
+            outline: 0;
+            border: 1px solid #a0b3d6;
+            font-size: 12px;
+            line-height: 24px;
+            padding: 2px;
+            word-wrap: break-word;
+            overflow-x: hidden;
+            overflow-y: auto;
+            border-color: rgba(82, 168, 236, 0.8);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+        }
+
+        .row.no-gutter {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    </style>
+    <div class="modal fade" id="case_detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" style="width:700px">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row mt-low">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#home" aria-controls="home"
+                                                                          role="tab" data-toggle="tab">用例详情</a>
+                                </li>
+                                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab"
+                                                           data-toggle="tab">配置文件管理</a></li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="home">
+                                    <div class="container-fluid">
+                                        <div class="row mt-low">
+                                            <div class="col-lg-12">
+                                                <form class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label class="col-lg-2 control-label">用例名</label>
+                                                        <div class="col-lg-10" name="modal_case_select">
+                                                            <select class="form-control" id="this_case_select">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-low">
+                                            <div class="col-lg-12">
+                                                <form role="form">
+                                                    <div class="form-group">
+                                                        <label for="name">请求参数</label>
+                                                        <textarea class="form-control" rows="3" spellcheck="false"
+                                                                  contenteditable="true" id="json_template"></textarea>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="profile">
+                                    <div class="row ">
+                                        <div class="col-md-1 mt-low">
+                                            <label for="name">config</label>
+                                        </div>
+                                        <div class="col-md-11" id="private_config">
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-md-1 mt-low">
+                                            <label for="name">sign</label>
+                                        </div>
+                                        <div class="col-md-11" id="private_config_sign">
+                                            <div class="input-group mt-low">
+                                                <span class="input-group-addon" id="basic-addon1">@</span>
+                                                <input type="text" class="form-control" placeholder="Username"
+                                                       aria-describedby="basic-addon1">
+                                            </div>
+                                            <div class="input-group mt-low">
+                                                <span class="input-group-addon" id="basic-addon1">@</span>
+                                                <input type="text" class="form-control" placeholder="Username"
+                                                       aria-describedby="basic-addon1">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-low">
+                                        <div class="col-lg-12">
+                                            <form role="form">
+                                                <div class="form-group">
+                                                    <label for="name">json模板</label>
+                                                    <textarea class="form-control" rows="3" spellcheck="false"
+                                                              contenteditable="true"
+                                                              id="json_template_private"></textarea>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="case_change_submit">提交更改</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <div class="container-fluid">
+        <div class="row mt-10">
+            <form class="form-inline">
+                <div class="col-md-6">
+                    <button class="btn btn-success btn-sm " type="button" id="run_now_chonggou">运行
+                    </button>
+                    <div class="input-group input-group-sm ">
+                        <div class="input-group-btn">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <select class=" form-control  input-sm" id="find_first">
+                                    <option>选择业务</option>
+                                    {% for i in first_mulu %}
+                                        <option> {{ i }}</option>
+                                    {% endfor %}
+                                </select>
+                                <select class=" form-control  input-sm" id="find_second">
+                                    <option>选择功能</option>
+                                    {% for i in second_mulu %}
+                                        <option first_mulu={{ second_mulu[i] }}> {{ i }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <input spellcheck="false"
+                                       style="width:80px;" AUTOCOMPLETE="off" type="text" class="form-control input-sm"
+                                       style="width:150px"
+                                       id="sousuo_input" placeholder="接口名" aria-describedby="basic-addon3">
+                            </div>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button class="btn btn-info btn-sm" type="button" name="sousuo_all"
+                                >
+                                    搜索
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group input-group-sm ">
+                        <div class="input-group-btn">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button class="btn btn-success btn-sm" type="button" id="publick_cong_save">
+                                    公共配置文件管理
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-offset-6">
+                    <label for="firstname" class="control-label input-sm">定时任务：</label>
+                    <div class="input-group">
+                        <span class="input-group-addon input-sm">运行时间</span>
+                        <input spellcheck="false"
+                               style="width:80px;" AUTOCOMPLETE="off" type="text" class="form-control input-sm"
+                               id="run_time"
+                               placeholder="14:12" aria-describedby="basic-addon3">
+                    </div>
+                    <select class=" form-control  input-sm" id="dingshi_run_type_time">
+                        <option>everyday</option>
+                        <option>today</option>
+                    </select>
+                    <button class="btn btn-info btn-sm" type="button" name="add_beizhu"
+                            data-toggle="modal" data-target="#shezhi_youjian">邮件设置
+                    </button>
+                    <button class="btn btn-success btn-sm" type="button" name="dingshi_tijiao">提交</button>
+                </div>
+            </form>
+        </div>
+        <div class="row mt-10">
+            <div class="col-sm-7   table-responsive">
+                <table class="table table-hover table-bordered  table-striped" id="case_table"
+                       version_id={{ version_id }}>
+                    <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" name="all_choice"></th>
+                        <th>模块名</th>
+                        <th>功能名</th>
+                        <th>接口名</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="xiangmu_body">
+                    {% for i in all_data %}
+                        <tr test="true" mulu_id={{ i[0] }}  jiekou_id={{ i[3] }}>
+                            <td>
+                                <input type="checkbox" name="simple_choice">
+                            </td>
+                            <td>{{ i[1] }}</td>
+                            <td>{{ i[2] }}</td>
+                            <td>{{ i[4] }}</td>
+                            <td>
+                                <div class="btn-group btn-group-xs" role="group">
+                                    <button class="btn btn-success btn-xs btn-outline" type="button" name="case_detail"
+                                            data-toggle="modal" data-target="#case_list"
+                                    >详情
+                                    </button>
+                                    <button class="btn btn-success btn-xs btn-outline" type="button"
+                                            name="run_case_this"
+                                            data-toggle="modal" data-target="#bianji_alert">运行
+                                    </button>
+                                    <button class="btn btn-success btn-xs  btn-outline" type="button" name="delete_this"
+                                    >删除
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div>
+                    <ul class="pagination" id="fenye_first">
+                        <li><a href="#">&laquo;</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="col-xs-5">
+                <div class="row">
+                    <div class="panel panel-danger" id="job_list_panel" style="height:275px;">
+                        <div class="panel-heading">用例集</div>
+                        <table class="table table-bordered table-hover ">
+                            <thead>
+                            <tr>
+                                <th style="width:25%">创建时间</th>
+                                <th>运行时间</th>
+                                <th>间隔</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="suite_body">
+                            <tr class="warning" test="true" id="shishi_table_firse">
+                                <td width="90px">实时</td>
+                                <td>{{ shishi_list[1] }}</td>
+                                <td>实时</td>
+                                <td id="shishi_statue_xianshi">{{ shishi_list[0] }}</td>
+                                <td>
+                                    <div class="btn-group btn-group-xs" role="group">
+                                        <button class="btn btn-info btn-xs" type="button" name="shishi_run_result">
+                                            运行结果
+                                        </button>
+                                        <button class="btn btn-warning btn-xs" type="button" name="shishi_run_detail"
+                                                data-toggle="modal" data-target="#renwu_detail">任务详情
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% for i in all_dingshirenwu %}
+                                <tr class="warning" test="true" r>
+                                    <td width="90px">{{ i[9] }}</td>
+                                    <td>{{ i[6] }}</td>
+                                    <td>{{ i[7] }}</td>
+                                    <td name="dingshi_fist_statu" run_id={{ i[0] }}>{{ i[8] }}</td>
+                                    <td>
+                                        <div class="btn-group btn-group-xs" role="group">
+                                            <button class="btn btn-info btn-xs" type="button"
+                                                    run_id={{ i[0] }} name="dingshi_run_result">
+                                                运行结果
+                                            </button>
+                                            <button class="btn btn-warning btn-xs" type="button"
+                                                    name="dingshi_run_detail"
+                                                    run_id={{ i[0] }}     data-toggle="modal"
+                                                    data-target="#renwu_detail">任务详情
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <div>
+                            <ul class="pagination" id="suite_fenye">
+                                <li><a href="#">&laquo;</a></li>
+                                <li><a href="#">&raquo;</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">运行详情</div>
+                        <div class="panel-body">
+                            <div class="container-fluid ">
+                                <div class="row">
+                                    <div class="int-group input-group-sm">
+                                        <div class="col-xs-7">
+                                            <form class="form-horizontal">
+                                                <div class="form-group">
+                                                    <h6 id="long_all_num">
+                                                        <span class="label label-success">成功</span>&nbsp<a id="tu_pass">0</a>
+                                                        &nbsp&nbsp<span class="label label-danger">失败</span>&nbsp<a
+                                                            id="tu_fail">0</a>
+                                                        &nbsp&nbsp<span class="label label-warning">出错</span>&nbsp<a
+                                                            id="tu_error">0</a>&nbsp&nbsp
+                                                    </h6>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-xs-5" id="progress">
+                                            <div class="progress progress-striped active"
+                                                 style="position: relative; top: 10px; left: -20px; z-index: 2;">
+                                                <div class="progress-bar progress-bar-success " role="progressbar"
+                                                     aria-valuenow="60"
+                                                     id="jindu" aria-valuemin="0" aria-valuemax="100"
+                                                     style="width: 0%;">
+                                                    <span>0% 完成</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row  mt-10  " id="log_scroll" style=" height:130px; overflow:auto; ">
+                                    <div class="col-md-12 ">
+                        <pre id="run_detail_add" style="border:none; overflow:hidden;background:none">
+                        </pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="shezhi_youjian" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog   modal-sm" style="width:500px">
+            <div class="modal-content">
+                <div class="modal-header  " style="height:50px">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h5 class="modal-title"><strong>邮件设置</strong></h5>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row ">
+                            <div class="col-xs-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="sizing-addon2">邮件title</span>
+                                    <input type="text" class="form-control" id="youjian_title_dingshi"
+                                           aria-describedby="sizing-addon2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row  mt-low">
+                            <div class="col-xs-12">
+                                <form role="form">
+                                    <div class="form-group  form-group-sm">
+                                        <label>发件人</label>
+                                        <select class="form-control  input-sm" id="fajianren_dingshi">
+                                            <option>无</option>
+                                            {% for i in all_sender %}
+                                                <option name={{ i[1] }}>{{ i[2] }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col-xs-12">
+                                <form role="form">
+                                    <div class="form-group form-group-sm">
+                                        <label>收件人</label>
+                                        <select id="shoujianren_dingshi" name="usertype"
+                                                class="selectpicker show-tick form-control input-sm" multiple
+                                                data-live-search="false">
+                                            {% for i in all_receiver %}
+                                                <option value={{ i[1] }}>
+                                                    <form class="form-horizontal" role="form">
+                                                        <p>{{ i[1] }} &#12288</p>
+                                                        <p class="form-control-static">{{ i[0] }}</p>
+                                                    </form>
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        {#                            <div class="row  mt-low">#}
+                        {#                        <div class="col-xs-12">#}
+                        {#                            <div class="input-group">#}
+                        {#                                <span class="input-group-addon" id="sizing-addon2">jekins_job</span>#}
+                        {#                                <select class=" form-control  input-xs">#}
+                        {#                                <option name="none" num="none">无</option>#}
+                        {#                                    {% for i in jobs %}#}
+                        {#                                        <option name={{ i[1] }} num={{ i[0] }}>{{ i [1] }}</option>#}
+                        {#                                    {% endfor %}#}
+                        {#                                </select>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+                        {#                    </div>#}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal" name="dingshi_su_ti">关闭
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm" name="bianji_email" data-dismiss="modal">提交
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+
+
+    <div class="modal fade" id="simple_run_detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog   modal-sm" style="width:550px;height:200px">
+            <div class="modal-content">
+                <div class="modal-header" style="height:50px">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h5 class="modal-title"><strong>实时运行</strong></h5>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row ">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <table class="table table-bordered table-hover ">
+                                        <thead>
+                                        <tr class="primary">
+                                            <th>业务名</th>
+                                            <th>添加时间</th>
+                                            <th>添加人</th>
+                                            <th>关联版本</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="this_real_tinme_run_panel_test">
+                                        <tr class="success" test="true" style="cursor:pointer">
+                                            <td>
+                                                孙振
+                                            </td>
+                                            <td>95%</td>
+                                            <td>2分11秒</td>
+                                            <td>
+                                                否
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" role="group" aria-label="...">
+                                                    <button type="button" name="yewu_bianji"
+                                                            class="btn btn-xs btn-default">
+                                                        编辑
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">关闭</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <div class="modal fade" id="banben_guan_li" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog   modal-sm" style="width:400px">
+            <div class="modal-content">
+                <div class="modal-header" style="height:50px">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h5 class="modal-title"><strong>添加版本</strong></h5>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row mt-low">
+                            <div class="col-sm-12">
+                                <form class="form-horizontal">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">选择业务</label>
+                                        <div class="col-sm-9" name="file_secret">
+                                            <select class="form-control" id="add_yewu_detail_banben">
+                                                {% for i in first_mulu %}
+                                                    <option> {{ i }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row mt-low" name="file_top_url">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon3">接口名</span>
+                                    <input type="text" class="form-control" id="basic-url"
+                                           aria-describedby="basic-addon3">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer mt-10">
+                        <button type="button" class="btn btn-success btn-sm" id="banben_add">提交</button>
+                        <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">关闭</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+    </div>
+
+
+
+
+
+    <div class="modal fade" id="shishi_run_detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog   modal-sm" style="width:650px;height:200px">
+            <div class="modal-content">
+                <div class="modal-header" style="height:50px">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h5 class="modal-title"><strong>实时运行</strong></h5>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row ">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <table class="table table-bordered table-hover " id="table_yewu">
+                                        <thead>
+                                        <tr class="primary">
+                                            <th>运行时间</th>
+                                            <th>耗时</th>
+                                            <th>通过case</th>
+                                            <th>失败case</th>
+                                            <th>接口数</th>
+                                            <th>状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="real_time_run_list_panel">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">关闭</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+
+
+
+
+
+    <div class="modal fade" id="dingshi_run_detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog   modal-sm" style="width:650px;height:200px">
+            <div class="modal-content">
+                <div class="modal-header" style="height:50px">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h5 class="modal-title"><strong>实时运行</strong></h5>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row ">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <table class="table table-bordered table-hover " id="table_yewu">
+                                        <thead>
+                                        <tr class="primary">
+                                            <th>运行时间</th>
+                                            <th>接口数</th>
+                                            <th>通过case</th>
+                                            <th>失败case</th>
+                                            <th>通过率</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="dingshi_table_tobody">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">关闭</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+
+
+      <div class="modal fade" id="publick_config_change" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" style="width:700px">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row mt-low">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#home" aria-controls="home"
+                                                                          role="tab" data-toggle="tab">用例详情</a>
+                                </li>
+                                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab"
+                                                           data-toggle="tab">配置文件管理</a></li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="home">
+                                    <div class="container-fluid">
+                                        <div class="row mt-low">
+                                            <div class="col-lg-12">
+                                                <form class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label class="col-lg-2 control-label">流程名</label>
+                                                        <div class="col-lg-10" name="modal_case_select_publick_change">
+                                                           <button-counter></button-counter>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-low">
+                                            <div class="col-lg-12">
+                                                <form role="form">
+                                                    <div class="form-group">
+                                                        <label for="name">请求参数</label>
+                                                        <textarea class="form-control" rows="3" spellcheck="false"
+                                                                  contenteditable="true" id="json_template"></textarea>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="profile">
+                                    <div class="row ">
+                                        <div class="col-md-1 mt-low">
+                                            <label for="name">config</label>
+                                        </div>
+                                        <div class="col-md-11" id="private_config">
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-md-1 mt-low">
+                                            <label for="name">sign</label>
+                                        </div>
+                                        <div class="col-md-11" id="private_config_sign">
+                                            <div class="input-group mt-low">
+                                                <span class="input-group-addon" id="basic-addon1">@</span>
+                                                <input type="text" class="form-control" placeholder="Username"
+                                                       aria-describedby="basic-addon1">
+                                            </div>
+                                            <div class="input-group mt-low">
+                                                <span class="input-group-addon" id="basic-addon1">@</span>
+                                                <input type="text" class="form-control" placeholder="Username"
+                                                       aria-describedby="basic-addon1">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-low">
+                                        <div class="col-lg-12">
+                                            <form role="form">
+                                                <div class="form-group">
+                                                    <label for="name">json模板</label>
+                                                    <textarea class="form-control" rows="3" spellcheck="false"
+                                                              contenteditable="true"
+                                                              id="json_template_private"></textarea>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="case_change_submit">提交更改</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <script src="static/hualala/vendor/jquery/jquery.min.js"></script>
+    <script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!--<script src="static/bootstrap-table-master/dist/bootstrap-table.min.js"></script>-->
+    <script src="static/hualala/vendor/metisMenu/metisMenu.min.js"></script>
+    <script src="static/hualala/dist/js/sb-admin-2.js"></script>
+    <script src="static/layer-v3.0/layer/layer.js"></script>
+    <script src="static/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <script src="static/echarts/echarts.min.js"></script>
+    <script src="static/fenye/fenye.js"></script>
+    <script src="static/fenye/jiekou_pic.js"></script>
+    <script src="static/jquery-cookie-js/jquery.cookie.js"></script>
+    <script src="static/vue.js"></script>
+    <script type=text/javascript>
+    new Vue({
+ delimiters: ['{[', ']}']
+})
+    var pub_conf_change_selce=new Vue
+    $('#publick_cong_save').click(function(){
+        $('#publick_config_change').modal('show')
+    })
+    Vue.component('button-counter', {
+        props:['selcted'],
+         delimiters: ['{[', ']}'],
+        data: function () {
+            $.ajaxSetup({
+                async: false
+            })
+            var url='http://127.0.0.1:5025/tree/get_interface_detail_test'
+            let data_a=''
+            var version_id=$('#case_table').attr('version_id')
+            $.post(url,{version_id:version_id},function(data)
+            {
+                data_a=data['all_data']
+            })
+            return {
+                test_count: data_a
+            }
+        },
+        template: ' <select  class="form-control" v-model="selected">\n' +
+            '  <option v-for="(option,id) in test_count" :interface_id="option[0]" >\n' +
+            '    {[ option[3] ]}\n' +
+            '  </option>\n' +
+            '</select>'
+    })
+    var interface_all_detail=new Vue({
+        el:"[name=\"modal_case_select_publick_change\"]",
+        data:{
+            selected:'11'
+        }
+    })
+        //删除接口
+        $('[name="delete_this"]').click(function () {
+            var interface_id = $(this).parent().parent().parent().attr('jiekou_id')
+            $.post($SCRIPT_ROOT + '/tree/delete_interface', {
+                interface_id: interface_id
+
+            }, function (data) {
+                if (data.statu == 'success') {
+                    layer.msg('运行成功', {
+                        shade: [0.3, '#fff'],
+                        shadeClose: true,
+                        icon: 1,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    })
+                    setTimeout(window.location.reload(), 2000)
+
+                }
+                else {
+                    layer.msg(data.detail, {
+                        shade: [0.3, '#fff'],
+                        shadeClose: true,
+                        icon: 2,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    })
+                }
+            })
+        })
+        $(document).ready(function () {
+            $.removeCookie('jiekou_detail')
+            fenye_def($('#fenye_first'), $('#xiangmu_body'), 12)
+            fenye_def($('#suite_fenye'), $('#suite_body'), 3)
+        })
+        var $SCRIPT_ROOT = 'http://' + window.location.host + '/'
+        $('[name="shishi_run_result"]').click(function () {
+            $('#real_time_run_list_panel').empty()
+            $('#shishi_run_detail').modal('show')
+            $.post($SCRIPT_ROOT + 'tree/get_real_time_run', {
+                type: "实时",
+                version_id: $('#case_table').attr('version_id')
+            }, function (data) {
+                var table_data = " <tr class=\"success\" test=\"true\" style=\"cursor:pointer\">\n" +
+                    "                                            <td>\n" +
+                    "                                                孙振\n" +
+                    "                                            </td>\n" +
+                    "                                             <td>\n" +
+                    "                                                afa\n" +
+                    "                                            </td>\n" +
+                    "                                            <td>95%</td>\n" +
+                    "                                            <td>2分11秒</td>\n" +
+                    "                                            <td>\n" +
+                    "                                                否\n" +
+                    "                                            </td>\n" +
+                    "                                            <td>\n" +
+                    "                                                否\n" +
+                    "                                            </td>\n" +
+                    "                                            <td>\n" +
+                    "                                                <div class=\"btn-group\" role=\"group\" aria-label=\"...\">\n" +
+                    "                                                    <button type=\"button\" name=\"real_time_run_result\"\n" +
+                    "                                                            class=\"btn btn-xs btn-success\">查看结果\n" +
+                    "                                                    </button>\n" +
+                    "                                                    <button type=\"button\" name=\"real_time_run_delete\"\n" +
+                    "                                                            class=\"btn btn-xs btn-danger\">删除\n" +
+                    "                                                    </button>\n" +
+                    "                                                </div>\n" +
+                    "                                            </td>\n" +
+                    "                                        </tr>"
+
+                for (var k in data.get_real_time_data) {
+                    var z = data.get_real_time_data[k]
+                    $('#real_time_run_list_panel').append(table_data)
+                    $('#real_time_run_list_panel').find('tr').eq(-1).attr('run_id', z[0])
+                    $('#real_time_run_list_panel').find('tr').eq(-1).find('td').each(function (u, i) {
+                        if (u != 6) {
+                            $(this).html(data.get_real_time_data[k][u])
+                        }
+                        else {
+                            $('#real_time_run_list_panel').find('tr').eq(-1).attr('run_id', data.get_real_time_data[k][6])
+                        }
+                    })
+
+                }
+
+            })
+        })
+
+
+        $('[name="dingshi_run_result"]').click(function () {
+            $('#dingshi_table_tobody').empty()
+            $('#real_time_run_list_panel').empty()
+            $('#dingshi_run_detail').modal('show')
+            var task_job_id = $(this).attr('run_id')
+            $.post($SCRIPT_ROOT + 'tree/get_real_time_run', {
+                task_job_id: task_job_id,
+                type: "定时",
+                version_id: $('#case_table').attr('version_id')
+            }, function (data) {
+                var table_data = "                              <tr class=\"success\" test=\"true\" style=\"cursor:pointer\">\n" +
+                    "                                        <td>a</td>\n" +
+                    "                                        <td>a</td>\n" +
+                    "                                        <td>a</td>\n" +
+                    "                                        <td>a/td>\n" +
+                    "                                        <td  >a</td>\n" +
+                    "                                        <td>\n" +
+                    "                                                     <div class=\"btn-group\" role=\"group\" aria-label=\"...\">\n" +
+                    "                                                          <button type=\"button\" name=\"task_time_run_result\" class=\"btn btn-xs btn-success\">查看结果\n" +
+                    "                                                         </button>\n" +
+                    "                                                         <button type=\"button\" name=\"task_time_run_delete\" class=\"btn btn-xs btn-danger\">删除\n" +
+                    "                                                           </button>\n" +
+                    "                                                         </div>\n" +
+                    "                                        </td>\n" +
+                    "                                        </tr>"
+
+                for (var k in data.get_real_time_data) {
+
+                    var z = data.get_real_time_data[k]
+                    $('#dingshi_table_tobody').append(table_data)
+                    $('#dingshi_table_tobody').find('tr').eq(-1).attr('run_id', data['json_id'])
+                    $('#dingshi_table_tobody').find('tr').eq(-1).find('[name="dingshizhuangtai"]').attr('run_id', data['json_id'])
+                    $('#dingshi_table_tobody').find('tr').eq(-1).attr('run_time', z[5])
+                    $('#dingshi_table_tobody').find('tr').eq(-1).find('td').each(function (u, i) {
+                        if (u != 5) {
+                            $(this).html(data.get_real_time_data[k][u])
+                        }
+                    })
+
+                }
+
+            })
+        })
+        //删除实时运行结果
+        $('#real_time_run_list_panel').on('click', '[name="real_time_run_delete"]', function () {
+
+                var run_id = $(this).parent().parent().parent().attr('run_id')
+
+                $.post($SCRIPT_ROOT + 'tree/delete_real_run_result_simple', {run_id: run_id}, function (data) {
+
+                    $(this).parent().parent().parent().remove()
+                })
+
+            }
+        )
+        //实时运行结果查看点击
+        $('#real_time_run_list_panel').on('click', '[name="real_time_run_result"]', function () {
+            var run_id = $(this).parent().parent().parent().attr('run_id')
+            window.open($SCRIPT_ROOT + 'tree/db_test_reslut_new' + '/real_time_run/' + run_id.toString() + '/web_page' + '/test');
+            {#$.post( $SCRIPT_ROOT+'tree/db_test_reslut',{db_run_type:"real_time_run",run_id:run_id},function(data)#}
+            {#{#}
+            {#   if (data.statu=="success")#}
+            {#   {#}
+            {##}
+            {#         window.open($SCRIPT_ROOT+'tree/db_test_reslut');#}
+            {##}
+            {#   }#}
+            {#})
+        #}
+        })
+
+
+        //定时 运行结果查看点击
+        $('#dingshi_table_tobody').on('click', '[name="task_time_run_result"]', function () {
+            var run_id = $(this).parent().parent().parent().attr('run_id')
+            var run_time = $(this).parent().parent().parent().attr('run_time')
+            window.open($SCRIPT_ROOT + 'tree/db_test_reslut_new' + '/task_time_run/' + run_id.toString() + '/web_page' + '/' + run_time.toString());
+            {#$.post( $SCRIPT_ROOT+'tree/db_test_reslut',{db_run_type:"task_time_run",run_id:run_id,run_time:run_time},function(data)#}
+            {#{#}
+            {#   if (data.statu=="success")#}
+            {#   {#}
+            {##}
+            {#         window.open($SCRIPT_ROOT+'tree/db_test_reslut');#}
+            {##}
+            {#   }#}
+            {#})
+        #}
+        })
+
+        $('#banben_guan_li').on('show.bs.modal', function () {
+            $('#add_yewu_detail_banben').empty()
+            $('#basic-url').val('')
+            $.ajax({
+                type: "post",
+                url: get_url + 'jing/common/get_bus',
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({"type": 0}),
+                success: function (data) {
+                    var z_data = '<option>iot</option>'
+                    $.each(data, function (a, b) {
+                        $.each(b, function (k, i) {
+                            $('#add_yewu_detail_banben').append(z_data)
+                            $('#add_yewu_detail_banben').find('option').eq(-1).attr('yewu_id', i[0])
+                            $('#add_yewu_detail_banben').find('option').eq(-1).text(i[1])
+                        })
+                    })
+                }
+            })
+        })
+
+
+        $('#yewu_add').click(function () {
+
+            var yewu_new_add = $('#yewu_new_add').val()
+            if ($.trim(yewu_new_add) == '') {
+                layer.msg('业务名不能为空', {
+                    shade: [0.3, '#fff'],
+                    shadeClose: true,
+                    icon: 2,
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                })
+            } else {
+
+                $.ajax({
+                    type: "post",
+                    url: get_url + 'jing/add_bus',
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({"bus_name": yewu_new_add}),
+                    success: function (data) {
+                        if (data.status == 'success') {
+                            layer.msg('添加成功', {
+                                shade: [0.3, '#fff'],
+                                shadeClose: true,
+                                icon: 1,
+                                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                            })
+                            $('#simple_run_detail').modal('hide')
+                        } else {
+                            layer.msg(data.detail, {
+                                shade: [0.3, '#fff'],
+                                shadeClose: true,
+                                icon: 2,
+                                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                            })
+                            $('#simple_run_detail').modal('hide')
+                        }
+                    }
+                })
+
+            }
+        })
+
+
+        //列表全选 ，第一个参数为全选的choic，第二个参数为字choice的 定位方式
+        function all_choice() {
+            $('[name="all_choice"]').click(function () {
+                if ($(this).is(':checked')) {
+                    $('[name="simple_choice"]').attr('checked', true)
+                } else {
+                    $('[name="simple_choice"]').attr('checked', false)
+                }
+            })
+        }
+
+        all_choice()
+
+
+        $('#find_second').change(function () {
+
+            var this_first = $('#find_first').val()
+            var this_second = $('#find_second').val()
+            if ($.trim(this_second) == '选择功能') {
+                if ($.trim(this_first) == '选择业务') {
+                    $('#xiangmu_body').find('tr').show()
+                } else {
+                    $('#xiangmu_body').find('tr').each(function () {
+                        if ($(this).find('td').eq(1).html() == this_first) {
+                            $(this).show()
+                        } else {
+                            $(this).hide()
+                        }
+                    })
+                }
+            } else {
+
+                $('#xiangmu_body').find('tr').each(function () {
+                    if ($(this).find('td').eq(1).html() == this_first
+                        && $(this).find('td').eq(2).html() == this_second) {
+                        $(this).show()
+                    } else {
+                        $(this).hide()
+                    }
+                })
+            }
+        })
+
+        $('#find_first').change(function () {
+            $('#find_second').val('选择功能')
+            var this_data = $('#find_first').val()
+            if ($.trim(this_data) == '选择业务') {
+                $('#xiangmu_body').find('tr').show()
+                $('#find_second').find('option').show()
+            } else {
+                $('#find_second').find('option').each(function () {
+                    if ($(this).attr('first_mulu') == this_data) {
+                        $(this).show()
+                    } else if ($(this).val() == '选择功能') {
+                        $(this).show()
+                    } else {
+                        $(this).hide()
+                    }
+                })
+                $('#xiangmu_body').find('tr').each(function () {
+                    if ($(this).find('td').eq(1).html() == this_data) {
+                        $(this).show()
+                    } else {
+                        $(this).hide()
+                    }
+
+                })
+            }
+
+        })
+        //搜索功能
+
+        $('[name="sousuo_all"]').click(function () {
+            var sousuo_detail = $('#sousuo_input').val()
+            $('#find_second').val('选择功能')
+            $('#find_first').val('选择业务')
+            if ($.trim(sousuo_detail) == '') {
+                $('#xiangmu_body').find('tr').show()
+            } else {
+                $('#xiangmu_body').find('tr').each(function () {
+                    if ($(this).find('td').eq(3).html().search(sousuo_detail) >= 0) {
+                        $(this).show()
+                    } else {
+                        $(this).hide()
+                    }
+                })
+            }
+        })
+        //单接口运行
+        $('[name="run_case_this"]').click(function () {
+            var this_el = $(this).parent().parent().parent()
+            mulu_di = this_el.attr('mulu_id')
+            version_id = $('#case_table').attr('version_id')
+            var interface_id = []
+
+            interface_id.push(this_el.attr('jiekou_id'))
+            $.post($SCRIPT_ROOT + '/tree/case_db_run', {
+                version_id: version_id,
+                interface_id: JSON.stringify(interface_id),
+                version_id: version_id,
+                run_server: '',
+                email_receiver: '',
+                email_sender: '',
+                emali_title: '',
+                statue: 1,
+                jenkins_job: ''
+            }, function (data) {
+
+                if (data.statu == 'success') {
+                    layer.msg('运行成功', {
+                        shade: [0.3, '#fff'],
+                        shadeClose: true,
+                        icon: 1,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    })
+
+
+                }
+                else {
+
+                    layer.msg(data.detail, {
+                        shade: [0.3, '#fff'],
+                        shadeClose: true,
+                        icon: 2,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    })
+
+                }
+            })
+        })
+
+        //批量口运行
+        $('#run_now_chonggou').click(function () {
+            var this_el = $(this).parent().parent().parent()
+            mulu_di = this_el.attr('mulu_id')
+            version_id = $('#case_table').attr('version_id')
+            var interface_id = []
+            $('[name="simple_choice"]').each(function () {
+                if ($(this).is(':checked')) {
+                    var this_id = $(this).parent().parent().attr('jiekou_id')
+                    interface_id.push(this_id)
+                }
+            })
+            $.post($SCRIPT_ROOT + '/tree/case_db_run', {
+                version_id: version_id,
+                interface_id: JSON.stringify(interface_id),
+                version_id: version_id,
+                run_server: '',
+                email_receiver: '',
+                email_sender: '',
+                emali_title: '',
+                statue: 1,
+                jenkins_job: ''
+            }, function (data) {
+                if (data.statu == 'success') {
+                    layer.msg('运行成功', {
+                        shade: [0.3, '#fff'],
+                        shadeClose: true,
+                        icon: 1,
+                        time: 4000 //2秒关闭（如果不配置，默认是3秒）
+                    })
+                    {#setTimeout(window.location.reload(), 3000)#}
+
+                }
+                else {
+                    layer.msg(data.detail, {
+                        shade: [0.3, '#fff'],
+                        shadeClose: true,
+                        icon: 2,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    })
+
+                }
+            })
+        })
+
+        //定时运行提交
+        $('[name="dingshi_tijiao"]').click(function () {
+                var all_interface_id = []
+                var all_branch = ''
+                var statu = 0
+                $('#xiangmu_body').find('[type="checkbox"]').each(function () {
+                    if ($(this).is(":checked")) {
+                        statu = 1
+                        var interface_id = $(this).parent().parent().attr('jiekou_id')
+                        all_interface_id.push(interface_id)
+
+                    }
+                })
+                var run_time = $('#run_time').val()
+                var run_type = $('#dingshi_run_type_time').val()
+                shoujianren = []
+                {#$('#shoujianren_dingshi').find('option').each(function () {#}
+                {#        if ($(this).is(':selected')) {#}
+                {#            shoujianren = shoujianren.push($(this).attr('value'))#}
+                {#        }#}
+                {#    }#}
+                {#)#}
+
+                $('#shoujianren_dingshi').find('option').each(function () {
+                        if ($(this).is(':selected')) {
+                            shoujianren.push($(this).attr('value'))
+                        }
+                    }
+                )
+                var fajianren = ''
+                if ($('#fajianren_dingshi').val() != '无') {
+                    $('#fajianren_dingshi').find('option').each(function () {
+                        if ($(this).val() == $('#fajianren_dingshi').val()) {
+                            fajianren = $(this).attr('name')
+                        }
+                    })
+
+                }
+                if (run_type == "todya") {
+                    run_type = 0
+                }
+                else {
+                    run_type = 1
+                }
+                var version_id = $('#case_table').attr('version_id')
+                if (statu == 1) {
+                    $.post($SCRIPT_ROOT + 'jing/timed_tasks_create', {
+                            version_id: version_id,
+                            email_sender: fajianren,
+                            email_receiver: JSON.stringify(shoujianren),
+                            run_time: run_time,
+                            run_interval: run_type,
+                            email_title: $('#youjian_title_dingshi').val(),
+                            interface_lise: JSON.stringify(all_interface_id)
+                        },
+                        function (data) {
+                            if (data.statu == "success") {
+                                layer.msg('提交成功', {
+                                    shade: [0.3, '#fff'],
+                                    shadeClose: true,
+                                    icon: 1,
+                                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                                })
+                                setTimeout(function () {
+                                    window.location.reload()
+                                }, 3000);
+                            }
+                            else {
+                                layer.msg('提交失败', {
+                                    shade: [0.3, '#fff'],
+                                    shadeClose: true,
+                                    icon: 2,
+                                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                                })
+                            }
+                        })
+                }
+                else {
+                    layer.msg('请选择要运行的接口', {
+                        shade: [0.3, '#fff'],
+                        shadeClose: true,
+                        icon: 1,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    })
+                }
+            }
+        )
+
+        //删除接口
+        $('[name="delete_this"]').click(function () {
+            var interface_id_data = $(this).parent().parent().parent().attr('jiekou_id')
+            var jiekou_id = $(this).parent().parent().parent().attr('jiekou_id')
+            layer.confirm('是否确定要删除', {
+                btn: ['是', '否'] //按钮
+            }, function () {
+                interface_id(interface_id_data);
+            }, function () {
+
+            })
+
+            function interface_id(interface_id) {
+                $.ajax({
+                    type: "post",
+                    url: $SCRIPT_ROOT + '/tree/delete_interface',
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({"interface_id": interface_id}),
+                    success: function (data) {
+                        if (data.statu == 'success') {
+                            layer.msg('删除成功', {
+                                shade: [0.3, '#fff'],
+                                shadeClose: true,
+                                icon: 1,
+                                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                            })
+                            setTimeout("window.location.reload()", 3000)
+                        } else {
+                            layer.msg(data.detail, {
+                                shade: [0.3, '#fff'],
+                                shadeClose: true,
+                                icon: 2,
+                                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                            })
+                        }
+                    }
+                })
+            }
+        })
+
+        //实时运行进度获取
+        function get_shishi_jindu(run_type) {
+            var version_id = $('#case_table').attr('version_id')
+            var url = $SCRIPT_ROOT + 'jing/real_time_job_progress'
+            $.post(url, {version_id: version_id, run_type: run_type}, function (data) {
+                fail_interface_num = data.detail['fail_interface_num']
+                pass_interface_num = data.detail['pass_interface_num']
+                $('#tu_pass').html(String(pass_interface_num))
+                $('#tu_fail').html(String(fail_interface_num))
+                all_interface_num = data.detail['interface_num']
+                tongguolv = (fail_interface_num + pass_interface_num) / all_interface_num
+                tongguolv = parseFloat(tongguolv.toFixed(2)) * 100
+                tongguolv = tongguolv.toString() + '%'
+                $('[role="progressbar"]').attr('style', 'width: ' + tongguolv + ';')
+            })
+
+        }
+
+        {#setTimeout(get_shishi_jindu,2000,0)#}
+        //获取运行状态轮训累
+        var a = ''
+
+        function get_run_statu() {
+            var version_id = $('#case_table').attr('version_id')
+            var url = $SCRIPT_ROOT + 'tree/get_run_statu_all'
+            $.post(url, {version_id: version_id}, function (data) {
+                var dingshi_detail = JSON.parse(data.detail)
+                if (dingshi_detail.shishi_statu == 0) {
+                    $('#shishi_statue_xianshi').html('运行完毕')
+                }
+                else if (dingshi_detail.shishi_statu == 1) {
+                    $('#shishi_statue_xianshi').html('运行中')
+                }
+                $('[name="dingshi_fist_statu"]').each(function () {
+                    var run_id = $(this).attr('run_id')
+                    for (z in dingshi_detail) {
+                        if (run_id == z) {
+                            if (dingshi_detail[z] == 1) {
+                                $(this).html("运行中")
+                            }
+                            else {
+                                $(this).html("运行完毕")
+                            }
+                        }
+                        run_now_chonggou
+                    }
+
+                })
+                get_shishi_jindu(0)
+                {#clearInterval(a)#}
+            })
+        }
+
+        a = setInterval(get_run_statu, 30000)
+
+
+        $('#case_detail').on('hide.bs.modal', function () {
+            $.removeCookie('jiekou_detail')
+            $('#private_config').empty()
+        })
+
+        $('[name="case_detail"]').click(function () {
+                $('#case_detail').modal('show')
+                jiekou_id = $(this).parent().parent().parent().attr('jiekou_id')
+                $.removeCookie('jiekou_detail')
+                $.cookie('jiekou_detail', jiekou_id, {expires: 7});
+            }
+        )
+
+
+        $('#case_detail').on('shown.bs.modal', function () {
+         alert(3333)
+            var url = $SCRIPT_ROOT + 'tree/page_get_jiekou_detail'
+            let jiekou_id = $.cookie('jiekou_detail')
+            var selece_iption = ' <option></option>'
+            let version_id = $('#case_table').attr('version_id')
+            $.post(url, {jiekou_id: jiekou_id, version_id: version_id}, function (data) {
+                    $('[name="modal_case_select"]').find('select').empty()
+                    $.each(data.all_case_detail, function (a, b) {
+                            $('[name="modal_case_select"]').find('select').append(selece_iption)
+                            $('[name="modal_case_select"]').find('option').eq(-1).html(b[5])
+                            $('[name="modal_case_select"]').find('option').eq(-1).attr('case_id', b[0])
+
+                        }
+                    )
+                    let config_html = '   <div class="input-group mt-low">\n' +
+                        '                                                <span class="input-group-addon" name="case_simple_section_key">@</span>\n' +
+                        '                                                <input type="text" class="form-control" placeholder="Username"\n' +
+                        '                                                   name="case_simple_section_value"    aria-describedby="basic-addon1">\n' +
+                        '                                            </div>'
+                    let config_json = JSON.parse(data.config_detail)
+                    let json_detail = JSON.parse(data.json_detail)
+                    $('#json_template_private').attr('rows', String(Object.keys(json_detail).length + 2))
+                    $('#json_template_private').val(data.json_detail)
+                    $('#private_config').empty()
+                    for (var i in config_json['config']) {
+                        $('#private_config').append(config_html)
+                        $('[name="case_simple_section_key"]').eq(-1).html(i)
+                        $('[ name="case_simple_section_value"]').eq(-1).val(config_json['config'][i])
+                    }
+                    var z=0
+
+                                  for (var i in config_json['config']) {
+                        $('[name="case_simple_section_key"]').eq(z).html(i)
+                        $('[ name="case_simple_section_value"]').eq(z).val(config_json['config'][i])
+                                      z=z+1
+                    }
+
+                    $('#private_config_sign').empty()
+                    for (var i in config_json['sign']) {
+                        $('#private_config_sign').append(config_html)
+                        $('[name="case_simple_section_key"]').eq(-1).html(i)
+                        $('[ name="case_simple_section_value"]').eq(-1).val(config_json['sign'][i])
+                    }
+                    var len = JSON.parse(data.all_case_detail[0][6])
+                    len = Object.keys(len).length + 2
+                    $('#json_template').val(data.all_case_detail[0][6])
+                    $('#json_template').attr('rows', String(len))
+                }
+            )
+        })
+        $('[name="modal_case_select"]').change(function () {
+            var url = $SCRIPT_ROOT + 'tree/page_get_jiekou_detail'
+            let version_id = $('#case_table').attr('version_id')
+            let jiekou_id = $.cookie('jiekou_detail')
+            var case_id = $('#this_case_select').find("option:selected").attr('case_id')
+            $.post(url, {jiekou_id: jiekou_id, version_id: version_id, case_id: case_id}, function (data) {
+                $('#json_template').val(data.case_detail)
+            })
+        })
+        $('#case_change_submit').click(function () {
+            if ($('#json_template').is(':visible')) {
+                var case_detail = $('#json_template').val()
+                let case_id = $('#this_case_select').find("option:selected").attr('case_id')
+                let jiekou_id = $.cookie('jiekou_detail')
+                let version_id = $('#case_table').attr('version_id')
+                let url = $SCRIPT_ROOT + 'tree/change_case_save'
+                $('#case_change_submit').attr('disabled', true)
+                $.post(url, {case_id: case_id, case_detail: case_detail}, function (data) {
+                    $('#case_change_submit').attr('disabled', false)
+                    if (data.statu == "success") {
+                        layer.msg('保存成功', {
+                            shade: [0.3, '#fff'],
+                            shadeClose: true,
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        })
+                    }
+                    else {
+                        layer.msg(data.detail, {
+                            shade: [0.3, '#fff'],
+                            shadeClose: true,
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        })
+                    }
+                })
+            }
+                        if ($('[id="profile"]').is(':visible')) {
+                    $('#case_change_submit').attr('disabled', true)
+                let json_template_private = $('#json_template_private').val()
+                            let all_key= $('#private_config').find('span')
+                            let all_value= $('#private_config').find('input')
+                            let all_key_value={}
+                           for (i=0;i<all_key.length;i++) {
+                        all_key_value[all_key.eq(i).html()] = all_value.eq(i).val()
+                               console.log(all_key_value)
+                           }
+                                           let jiekou_id = $.cookie('jiekou_detail')
+                let version_id = $('#case_table').attr('version_id')
+                           let  sing_type=$('#private_config_sign').find('input').val()
+                             var url = $SCRIPT_ROOT + 'tree/save_page_private_config_change'
+                            console.log(all_key_value)
+                $.post(url, {jiekou_id:jiekou_id,version_id:version_id,config: JSON.stringify(all_key_value), json_tem: json_template_private,sing_type:sing_type}, function (data) {
+                    $('#case_change_submit').attr('disabled', false)
+                    if (data.statu == "success") {
+                        layer.msg('保存成功', {
+                            shade: [0.3, '#fff'],
+                            shadeClose: true,
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        })
+                    }
+                    else {
+                        layer.msg(data.detail, {
+                            shade: [0.3, '#fff'],
+                            shadeClose: true,
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        })
+                    }
+                })
+            }
+        })
+    </script>
+{% endblock %}

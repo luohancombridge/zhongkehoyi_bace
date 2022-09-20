@@ -1,0 +1,463 @@
+{% extends "/hualala/pages/base.html" %}
+{% block content %}
+    <style type="text/css">
+        .mt-10 {
+            margin-top: 25px;
+        }
+        .mt-low {
+            margin-top: 15px;
+        }
+        .textarea {
+            width: 650px;
+            min-height: 220px;
+            max-height: 300px;
+            _height: 120px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 3px;
+            outline: 0;
+            border: 1px solid #a0b3d6;
+            font-size: 12px;
+            line-height: 24px;
+            padding: 2px;
+            word-wrap: break-word;
+            overflow-x: hidden;
+            overflow-y: auto;
+            border-color: rgba(82, 168, 236, 0.8);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+        }
+        .row.no-gutter {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    </style>
+<div class="container-fluid">
+    <div class="row mt-10">
+        <div class="col-md-7">
+            <div class="panel panel-default"   id="first_panel">
+                <div class="panel-heading">
+                    项目列表
+                </div>
+                <div class="panel-body">
+                    <div class="row ">
+                        <div class="col-sm-6">
+                            <div class="form-group  form-group-sm  ">
+                                <div class="btn-group" role="group" aria-label="...">
+                                    <button type="button" class="btn btn-info btn-xs" id="all_run"  >&#8194运行&#8194</button>
+                                    <button type="button" class="btn btn-success btn-xs" id="all_stop">停止</button>
+                                    <button type="button" class="btn btn-danger btn-xs" id="add_linux"  data-toggle="modal" data-target="#myModal">输入linux</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row  ">
+                        <div class="col-md-12 "  style=" height:500px; overflow:auto;">
+                            <div class="panel panel-success">
+                                <div class="panel-body">
+                                    <table class="table table-hover  table-condensed  ">
+                                        <thead>
+                                        <tr  >
+                                            <th>
+                                                <input type="checkbox"  name="all_choice">
+                                                选择</th>
+                                            <th>地址</th>
+                                            <th>备注</th>
+                                            <th>用户名</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody  id="xiangmu_body">
+                                        <tr name="linux_detail">
+                                            <td  name="checi_lei"> <input type="checkbox"  name="simple_choice"></td>
+                                            <td    name="ip_address">a</td>
+                                            <td    name="beizhu">a</td>
+                                            <td name="name">3</td>
+                                            <td name="caozuo">
+                                                <div class="form-group  form-group-sm  ">
+                                                    <div class="btn-group" role="group" aria-label="...">
+                                                        <button type="button" class="btn btn-info btn-xs" name="simple_run"  >&#8194运行&#8194</button>
+                                                        <button type="button" class="btn btn-success btn-xs" name="simple_stop">停止</button>
+                                                        <button type="button" class="btn btn-success btn-xs" name="bianji">编辑</button>
+                                                        <button type="button" class="btn btn-danger btn-xs" name="delete">删除</button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5 ">
+            <div class="panel panel-success" >
+                <div class="panel-heading">运行详情</div>
+                <div class="panel-body">
+                    <div class="container-fluid ">
+                        <div class="row">
+                            <div class="int-group input-group-sm">
+                                <div class="col-md-6">
+                                    <h6  id="long_all_num"></h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row  mt-10 "   id="log_scroll" style=" height:500px; overflow:auto;">
+                            <div class="col-md-12 " >
+                        <pre   id="run_detail_add"   style = "border:none;overflow:hidden; background:none" >
+                        </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade  bs-example-modal-smq" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"  >
+    <div class="modal-dialog"   style="width:500px" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h5 class="modal-title" id="myModalLabel">添加linux</h5>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                <div class="row mt-low">
+                    <div class="col-lg-12">
+                        <div class="input-group  input-group-sm">
+                            <span class="input-group-addon">服务器名</span>
+                            <input type="text" class="form-control"
+                                   aria-describedby="basic-addon1" id="linux_name">
+                        </div>
+                    </div>
+                </div>
+                    <div class="row mt-low">
+                        <div class="col-lg-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon">ip地址</span>
+                                <input type="text" class="form-control"
+                                       aria-describedby="basic-addon1" id="ip_address">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-low">
+                        <div class="col-lg-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon">端口号</span>
+                                <input type="text" class="form-control"
+                                       aria-describedby="basic-addon1" id="port_num">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-low">
+                        <div class="col-lg-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon">用户名</span>
+                                <input type="text" class="form-control"
+                                       aria-describedby="basic-addon1" id="server_name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-low">
+                        <div class="col-lg-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon">密码</span>
+                                <input type="text" class="form-control"
+                                       aria-describedby="basic-addon1" id="password">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary"   id="linux_submit">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade  bs-example-modal-smq" id="bianji_linux" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"  >
+    <div class="modal-dialog"   style="width:500px" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h5 class="modal-title" >编辑linux</h5>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row mt-low">
+                        <div class="col-lg-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon">服务器名</span>
+                                <input type="text" class="form-control"
+                                       aria-describedby="basic-addon1" id="linux_name_bianji">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-low">
+                        <div class="col-lg-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon">ip地址</span>
+                                <input type="text" class="form-control"
+                                       aria-describedby="basic-addon1" id="ip_address_bianji">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-low">
+                        <div class="col-lg-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon">端口号</span>
+                                <input type="text" class="form-control"
+                                       aria-describedby="basic-addon1" id="port_num_bianji">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-low">
+                        <div class="col-lg-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon">用户名</span>
+                                <input type="text" class="form-control"
+                                       aria-describedby="basic-addon1" id="server_name_bianji">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-low">
+                        <div class="col-lg-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon">密码</span>
+                                <input type="text" class="form-control"
+                                       aria-describedby="basic-addon1" id="password_bianji">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary"   id="linux_submit_bianji">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/hualala/vendor/jquery/jquery.min.js"></script>
+<script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/hualala/vendor/metisMenu/metisMenu.min.js"></script>
+<script src="static/hualala/dist/js/sb-admin-2.js"></script>
+<script src="static/layer-v3.0/layer/layer.js"></script>
+<script src="static/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+<script type=text/javascript>
+ var $SCRIPT_ROOT = 'http://'+window.location.host
+    $(document).ready(function()
+    {
+        $('[name="simple_stop"]').attr('disabled',true)
+        $('[name="linux_detail"]').eq(0).hide()
+        $.post($SCRIPT_ROOT+'/jemter_get_all_linux',{"type":"all"},
+            function(data)
+            {
+                $.each(data.linux_detail,function(a,b)
+                {
+                    $('#xiangmu_body').append($('[name="linux_detail"]').eq(0).clone())
+                    $('[name="ip_address"]').eq(-1).html(b[2])
+                    $('[name="ip_address"]').eq(-1).attr('name',b[2])
+                    $('[name="beizhu"]').eq(-1).html(b[1])
+                    $('[name="name"]').eq(-1).html(b[4])
+
+                })
+                $('[name="linux_detail"]').show()
+                $('[name="linux_detail"]').eq(0).hide()
+            }
+        )
+    })
+    $('#linux_submit').click(function()
+    {
+        var ip=$('#ip_address').val()
+        var beizhu=$('#linux_name').val()
+        var name=$('#server_name').val()
+        var password=$('#password').val()
+        var port=$('#port_num').val()
+$.post($SCRIPT_ROOT+'/jemter_add_linux',{"ip":ip,"beizhu":beizhu,"name":name,"password":password,"port":"port"},
+function(data)
+{
+if (data.statu=='success')
+{
+    var ip=$('#ip_address').val()
+    var beizhu=$('#linux_name').val()
+    var name=$('#server_name').val()
+    $('#xiangmu_body').append($('[name="linux_detail"]').eq(0).clone())
+    $('[name="ip_address"]').eq(-1).attr('name',ip)
+    $('[name="'+ip+'"]').eq(-1).html(ip)
+    $('[name="beizhu"]').eq(-1).html(beizhu)
+    $('[name="name"]').eq(-1).html(name)
+    $('[name="linux_detail"]').eq(-1).show()
+}
+else if (data.statu=='重复')
+{
+    layer.msg('ip地址重复',{icon: 2})
+
+}
+$('#myModal').modal('hide')
+
+})
+    })
+
+    //单个linux删除
+    $('#xiangmu_body').on('click','[name="delete"]',function()
+    {
+        var ip=$(this).parent().parent().parent().prev().prev().prev().html()
+        $.post($SCRIPT_ROOT+'/delete_simple_linux',{"ip":ip},function(data)
+        {
+            if (data.statu=='success')
+            {
+                layer.msg('删除成功',{icon: 2})
+                $('[name="'+ip+'"]').parent().remove()
+            }
+
+        })
+    })
+    //全选
+    $('[name="all_choice"]').click(function()
+    {
+     if ($(this).is(':checked'))
+     {
+         $(this).attr('checked',true)
+         $('[name="simple_choice"]').attr('checked',true)
+         $('[name="simple_choice"]').eq(0).attr('checked',false)
+     }
+     else
+     {
+         $(this).attr('checked',false)
+         $('[name="simple_choice"]').attr('checked',false)
+     }
+
+    })
+
+    //单个运行
+    $('#xiangmu_body').on('click','[name="simple_run"]',function()
+    {
+          var ip=$(this).parent().parent().parent().prev().prev().prev().html()
+        var zz=[]
+        var this_el=$(this)
+        zz.push(ip)
+     $.post($SCRIPT_ROOT+'/run_linux',{"all_ip":JSON.stringify(zz)},
+     function(data)
+     {
+         $('#all_stop').attr('disabled',false)
+         this_el.html('运行中')
+         this_el.attr('disabled',true)
+         this_el.next().attr('disabled',false)
+     })
+        layer.msg('启动成功',{icon: 1})
+
+    })
+    //全部运行
+    $('#all_run').click(function()
+    {
+        var all_ip=[]
+        var all_ele=[]
+        $('[name="simple_choice"]').each(
+function()
+{
+    if ($(this).attr('checked'))
+    {
+        all_ip.push($(this).parent().next().attr('name'))
+        all_ele.push($(this).parent().parent().find('[name="simple_run"]'))
+        $(this).parent().parent().find('[name="simple_run"]').html('运行中')
+        $(this).parent().parent().find('[name="simple_run"]').attr('disabled',true)
+        $(this).parent().parent().find('[name="simple_run"]').next().attr('disabled',false)
+    }
+    $.post($SCRIPT_ROOT+'/run_linux',{"all_ip":JSON.stringify(all_ip)},
+        function(data)
+        {
+            $('#all_stop').attr('disabled',false)
+            layer.msg('启动成功',{icon: 1})
+        })
+}
+        )
+    })
+    //编辑linux 信息
+    $('#xiangmu_body').on('click','[name="bianji"]',function()
+    {
+        $.post($SCRIPT_ROOT+'/bianji_linux',{"ip":$(this).parent().parent().parent().parent().find('td').eq(1).attr('name'),"type":"open"},
+        function(data)
+        {
+         $('#bianji_linux').modal('show')
+            $('#linux_name_bianji').val(data.detail[1])
+            $('#ip_address_bianji').val(data.detail[2])
+            $('#port_num_bianji').val(data.detail[3])
+            $('#server_name_bianji').val(data.detail[4])
+            $('#password_bianji').val(data.detail[5])
+            $('#linux_submit_bianji').attr('sql_id',data.detail[0])
+        })
+    })
+    $('#linux_submit_bianji').click(function()
+    {
+        var sql_id=$(this).attr('sql_id')
+        var linux_name=$('#linux_name_bianji').val()
+        var ip_add= $('#ip_address_bianji').val()
+        var port= $('#port_num_bianji').val()
+        var server_nam= $('#server_name_bianji').val()
+        var pass_word=$('#password_bianji').val()
+        $.post($SCRIPT_ROOT+'/bianji_linux',{"sql_id":sql_id,"type":"save","linux_name":linux_name,"ip_add":ip_add,"port":port,"server_nam":server_nam,"pass_word":pass_word},
+            function(data)
+            {
+                $('#bianji_linux').modal('hide')
+                window.location.reload()
+            })
+
+    })
+    //单个停止
+    $('#xiangmu_body').on('click','[name="simple_stop"]',function()
+    {
+        var ip=[]
+        ip.push($(this).parent().parent().parent().parent().find('td').eq(1).attr('name'))
+        var  this_ele=$(this)
+        $.post($SCRIPT_ROOT+'/stop_run_linux',{"ip":JSON.stringify(ip)},
+            function(data)
+            {
+               if (data.statu=="success")
+               {
+                   this_ele.attr('disabled',true)
+                   this_ele.prev().attr('disabled',false)
+                   this_ele.prev().html('&#8194运行&#8194')
+               }
+            })
+    })
+
+    //全部停止
+    $('#all_stop').click(function()
+    {
+        var all_ip=[]
+        $('[name="simple_choice"]').each(
+            function() {
+                if ($(this).is(':checked')) {
+                    all_ip.push($(this).parent().next().attr('name'))
+                    $(this).parent().parent().find('[name="simple_run"]').html('&#8194运行&#8194')
+                    $(this).parent().parent().find('[name="simple_run"]').attr('disabled', false)
+                    $(this).parent().parent().find('[name="simple_run"]').next().attr('disabled', true)
+                }
+            }
+        )
+
+        var  this_ele=$(this)
+        $.post($SCRIPT_ROOT+'/stop_run_linux',{"ip":JSON.stringify(all_ip)},
+            function(data)
+            {
+                if (data.statu=="success")
+                {
+                    this_ele.attr('disabled',true)
+                    this_ele.prev().attr('disabled',false)
+                    this_ele.prev().html('&#8194运行&#8194')
+                }
+            })
+    })
+</script>
+{% endblock %}

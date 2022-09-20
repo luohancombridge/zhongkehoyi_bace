@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        .table.table-bordered > tr >td {
+            height: 90px;
+            max-height: 90px;
+        }
+        .mt-10 {
+            margin-top: 25px;
+        }
+        .mt-low {
+            margin-top: 15px;
+        }
+        .textarea {
+            width: 650px;
+            min-height: 420px;
+            max-height: 420px;
+            _height: 120px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 3px;
+            outline: 0;
+            border: 1px solid #a0b3d6;
+            font-size: 12px;
+            line-height: 24px;
+            padding: 2px;
+            word-wrap: break-word;
+            overflow-x: hidden;
+            overflow-y: auto;
+            border-color: rgba(82, 168, 236, 0.8);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+        }
+        .row.no-gutter {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    </style>
+    <link href="static\hualala\vendor\bootstrap\css\bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="col-xs-12">
+        <h3 class="page-header"  name={{ local_port }}> test result</h3>
+    </div>
+    <div class="row mt-10">
+        <div class="col-xs-3">
+            <ul>
+                <li><h5><strong>开始时间:</strong><small id="begin_time"  port={{ port }}>12月17日</small></h5></li>
+                <li><h5><strong>耗时:</strong><small  id="token_time">taken_time</small></h5></li>
+                <li><h5><strong>运行结果:</strong><small id="totle_reslut">成功:success 失败: fail </small></h5></li>
+                <li><h5><strong>操作：</strong> <a href="#"  id="zhankai_all" >隐藏</a></h5></li>
+            </ul>
+        </div>
+        <div class="col-xs-7 ">
+            <div id="main" style="width: 500px;height:200px;"></div>
+        </div>
+    </div>
+    <div class="row mt-10">
+        <div class="col-xs-9">
+            <div class="form-group  form-group-sm  ">
+            <table class="table table-condensed table-striped  ">
+                <thead>
+                <tr  class="active">
+                    <td>类名</td>
+                    <td>描述</td>
+                    <td class="hidden-xs">case数</td><!--在手机上隐藏，在电脑是显示-->
+                    <td class="hidden-xs">通过数</td>
+                    <td class="hidden-xs">失败数</td>
+                    <td class="hidden-xs">出错数</td>
+                    <td>详细信息</td>
+                </tr>
+                </thead>
+                <tbody  id="result_body">
+                <tr class="success" name="class_detail">
+                    <td  name="lei_name">adaf</td>
+                    <td    name="lei_desc">2</td>
+                    <td name="case_num">3</td>
+                    <td name="pass_num">4</td>
+                    <td name="fail_num">5</td>
+                    <td name="error_num">5</td>
+                    <td name="detail"><a href="#">展开</a></td>
+                </tr>
+                <tr  name="fnagfa_detail">
+                    <td  name="fangfa_name"><p class="text-success"></p></td>
+                    <td    name="fangfa_desc"><p  style = "border:none; overflow:auto;;background:none" ></p></td>
+                    <td name="case_detail" colspan="5"  align="left"><a href="#"  name="statu_def" >fail</a>
+                        <pre    style = "border:none; overflow:auto;background:none" >
+                        </pre>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/hualala/vendor/jquery/jquery.min.js"></script>
+<script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/hualala/vendor/metisMenu/metisMenu.min.js"></script>
+<script src="static/hualala/dist/js/sb-admin-2.js"></script>
+<script src="static/layer-v3.0/layer/layer.js"></script>
+<script src="static/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+<script src="static/echarts/echarts.min.js"></script>
+<script type=text/javascript>
+$(document).ready(function()
+{
+    var port=$('#begin_time').attr('port')
+    $('#zhankai_all').click(function()
+        {
+            var a=0
+            $('[name="fnagfa_detail"]').each(function()
+            {
+                  $('tr[name="fnagfa_detail"]').hide()
+            })
+
+        }
+    )
+    $('[name="fnagfa_detail"]').hide()
+    $('[name="class_detail"]').hide()
+    var type="run_all"
+    var canshu=window.location.search
+    $.post('http://127.0.0.1:'+port+'/ui_run_result'+canshu,{'type':type},
+
+function(data)
+{
+    $('#begin_time').html(data.begin_time)
+    $('#token_time').html(String(data.taken_time)+'秒')
+    var pass_all_num=0
+    var fail_all_num=0
+    var error_all_num=0
+    $.each(data.result_detail,function(k,b)
+    {
+    $('#result_body').append($('[name="class_detail"]').eq(0).clone(true))
+        $('[name="lei_name"]').eq(-1).html($.trim(k))
+        $('[ name="lei_desc"]').eq(-1).html($.trim(b[0][8]))
+        $('[name="case_num"]').eq(-1).html(b.length)
+        $('[name="detail"]').eq(-1).attr('class_name',k)
+        var pass_num=0
+        var fail_num=0
+        var error_num=0
+        $.each(b,function(z,u)
+        {
+            $('[name="fnagfa_detail"]').clone()
+            $('[name="class_detail"]').eq(-1).after($('[name="fnagfa_detail"]').eq(0).clone())
+            $('[name="class_detail"]').eq(-1).next().attr('class_name',k)
+            $('[name="class_detail"]').eq(-1).next().find('[name="fangfa_name"]').find('p').html($.trim(u[4]))
+            $('[name="class_detail"]').eq(-1).next().find('[name="fangfa_desc"]').find('p').html(u[9])
+            $('[name="class_detail"]').eq(-1).next().find('[name="case_detail"]').find('pre').html(u[7])
+            var s='&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'
+            if (u[6]=="fail")
+            {
+                $('[name="class_detail"]').eq(-1).next().find('[name="fangfa_name"]').find('p').attr('text-danger')
+                $('[name="class_detail"]').eq(-1).attr('class','danger')
+                $('[name="class_detail"]').eq(-1).next().find('[name="case_detail"]').find('a').html('fail')
+                fail_num=fail_num+1
+                fail_all_num=fail_all_num+1
+            }
+            else if (u[6]=="success")
+            {
+                $('[name="class_detail"]').eq(-1).next().find('[name="fangfa_name"]').find('p').attr('text-success')
+                $('[name="class_detail"]').eq(-1).next().find('[name="case_detail"]').find('a').html('success')
+                pass_num=pass_num+1
+                pass_all_num=pass_all_num+1
+            }
+            else if (u[6]=="error")
+            {
+                $('[name="class_detail"]').eq(-1).next().find('[name="fangfa_name"]').find('p').attr('text-warning')
+                $('[name="class_detail"]').eq(-1).attr('class','warning')
+                $('[name="class_detail"]').eq(-1).next().find('[name="case_detail"]').find('a').html('error')
+                error_num=error_num+1
+                error_all_num=error_all_num+1
+            }
+        })
+        $('[name="pass_num"]').eq(-1).html(pass_num)
+        $('[name="fail_num"]').eq(-1).html(fail_num)
+        $('[name="error_num"]').eq(-1).html(error_num)
+
+    }
+    )
+    $('[name="class_detail"]').show()
+    $('[name="class_detail"]').eq(0).hide()
+    var myChart = echarts.init(document.getElementById('main'));
+    $('#totle_reslut').html('成功：'+String(pass_all_num)+'&nbsp 失败：'+String(fail_all_num)+'&nbsp 出错：'+String(error_all_num))
+    option = {
+        color:['red', 'yellow','green'],
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient : 'vertical',
+            x : 'left',
+            data:['失败','报错','成功']
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {
+                    show: true,
+                    type: ['pie', 'funnel'],
+                    option: {
+                        funnel: {
+                            x: '25%',
+                            width: '50%',
+                            funnelAlign: 'center',
+                            max: 1548
+                        }
+                    }
+                },
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+        calculable : true,
+        series : [
+            {
+                name:'访问来源',
+                type:'pie',
+                radius : ['50%', '70%'],
+                itemStyle : {
+                    normal : {
+                        label : {
+                            show : false
+                        },
+                        labelLine : {
+                            show : false
+                        }
+                    },
+                    emphasis : {
+                        label : {
+                            show : true,
+                            position : 'center',
+                            textStyle : {
+                                fontSize : '30',
+                                fontWeight : 'bold'
+                            }
+                        }
+                    }
+                },
+                data:[
+                    {value:fail_all_num, name:'失败'},
+                    {value:error_all_num, name:'报错'},
+                    {value:pass_all_num, name:'成功'}
+                ]
+            }
+        ]
+    };
+    myChart.setOption(option)
+})
+    $('#result_body').on('click','[name="statu_def"]',function(){
+
+if ($(this).next().is(':visible'))
+{
+    $(this).next().hide()
+}
+else {
+    $(this).next().show()
+}
+    })
+    $('#result_body').on('click','[name="detail"]',function()
+    {
+var class_name=$(this).attr('class_name')
+        var find_var='[class_name="'+class_name+'"]'
+        if ($('[name="fnagfa_detail"][class_name="'+class_name+'"]').is(':visible'))
+        {
+            $('[name="fnagfa_detail"][class_name="'+class_name+'"]').hide()
+        }
+        else
+        {
+            $('[name="fnagfa_detail"][class_name="'+class_name+'"]').show()
+            $('[name="fnagfa_detail"][class_name="'+class_name+'"]').find('pre').hide()
+        }
+    })
+}
+)
+
+
+</script>
+</body>
+</html>

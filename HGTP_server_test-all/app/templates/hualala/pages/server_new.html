@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        .carousel-inner img {
+            width: 100%;
+            height: 100%;
+        }
+        .mt-10 {
+            margin-top: 25px;
+        }
+        .mt-low {
+            margin-top: 15px;
+        }
+        .textarea {
+            width: 650px;
+            min-height: 420px;
+            max-height: 420px;
+            _height: 120px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 3px;
+            outline: 0;
+            border: 1px solid #a0b3d6;
+            font-size: 12px;
+            line-height: 24px;
+            padding: 2px;
+            word-wrap: break-word;
+            overflow-x: hidden;
+            overflow-y: auto;
+            border-color: rgba(82, 168, 236, 0.8);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+        }
+        .row.no-gutter {
+            margin-left: 0;
+            margin-right: 0;
+
+    </style>
+    <link hrel="stylesheet" href="../static/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet">
+    <link href="../static\bootstrap-4.3.1-dist\css\bootstrap.min.css" rel="stylesheet">
+</head>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <a class="navbar-brand" href="#">
+        <img src="http://getbootstrap.com/docs/4.1/assets/brand/bootstrap-solid.svg"  width="30" height="30"  alt="Logo" >
+    </a>
+    <a class="navbar-brand" href="#">测试</a>
+    <!-- Links -->
+    <ul class="navbar-nav">
+           <liv class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle "  href="#"  data-toggle="dropdown">
+                接口自动化
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">酒店</a>
+                <a class="dropdown-item" href="#">大交通</a>
+            </div>
+        </liv>
+
+           <liv class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle "  href="#"  data-toggle="dropdown">
+                ui自动化
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">酒店</a>
+                <a class="dropdown-item" href="#">大交通</a>
+            </div>
+        </liv>
+
+
+           <liv class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle "  href="#"  data-toggle="dropdown">
+                杂项
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">酒店</a>
+                <a class="dropdown-item" href="#">大交通</a>
+            </div>
+        </liv>
+
+
+           <liv class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle "  href="#"  data-toggle="dropdown">
+                性能测试
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">酒店</a>
+                <a class="dropdown-item" href="#">大交通</a>
+            </div>
+        </liv>
+
+
+
+                 <liv class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle "  href="#"  data-toggle="dropdown">
+                mock挡板
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">酒店</a>
+                <a class="dropdown-item" href="#">大交通</a>
+            </div>
+        </liv>
+
+
+
+
+                 <liv class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle "  href="#"  data-toggle="dropdown">
+                资产管理
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">酒店</a>
+                <a class="dropdown-item" href="#">大交通</a>
+            </div>
+        </liv>
+
+
+
+                 <liv class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle "  href="#"  data-toggle="dropdown">
+                配置管理
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">酒店</a>
+                <a class="dropdown-item" href="#">大交通</a>
+            </div>
+        </liv>
+        <liv class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle "  href="#"  data-toggle="dropdown">
+                项目列表表
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">酒店</a>
+                <a class="dropdown-item" href="#">大交通</a>
+            </div>
+        </liv>
+    </ul>
+</nav>
+
+<div class="container-fluid">
+    <div class="row mt-low">
+        <div class="col-sm-12">
+                <form>
+                    <div class="form-row align-items-center">
+                        <div class="col-sm-3 my-2">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">ip 地址</div>
+                                </div>
+                                <input type="text" class="form-control"  id="add_name" placeholder="ip 地址">
+                            </div>
+                        </div>
+                        <div class="col-sm-3 my-1">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">端口号</div>
+                                </div>
+                                <input type="text" class="form-control" id="add_pass" placeholder="端口号">
+                            </div>
+                        </div>
+                        <div class="col-auto my-1">
+                            <button type="submit"  id='add_user' class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </form>
+        </div>
+    </div>
+    <div class="row mt-10">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header text-white  bg-secondary ">
+                    server 列表
+                </div>
+                <div class="card-body">
+<!--                    <table class="table   table-sm table-bordered  table-responsive-sm  table-hover">-->
+<!--                        <thead  class="thead-light">-->
+<!--                        <tr>-->
+<!--                            <th>ip 地址</th>-->
+<!--                            <th>端口号</th>-->
+<!--                            <th>运行job数</th>-->
+<!--                            <th>操作</th>-->
+<!--                            <th>启停</th>-->
+<!--                        </tr>-->
+<!--                        </thead>-->
+<!--                        <tbody>-->
+<!--                        <tr>-->
+<!--                            <td>127。0。0。1</td>-->
+<!--                            <td>2071</td>-->
+<!--                            <td>12</td>-->
+<!--                            <td>-->
+<!--                                <div class="btn-group btn-block btn-group-sm">-->
+<!--                                    <button type="button" class="btn btn-outline-info">编辑</button>-->
+<!--                                    <button type="button" class="btn btn-outline-danger">删除</button>-->
+<!--                                </div>-->
+<!--                            </td>-->
+<!--                            <td>-->
+<!--                                <input type="checkbox" name="my-checkbox"   statu="启用">-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        </tbody>-->
+<!--                    </table>-->
+
+
+
+
+                    <table class="table   table-sm table-bordered  table-responsive-sm  table-hover">
+                        <thead  class="thead-light">
+                        <tr>
+                            <th>ip地址</th>
+                            <th>端口号</th>
+                            <th>线程数</th>
+                            <th>操作</th>
+                            <th>是否启用<</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in user_detail %}
+                        <tr>
+                            <td>{{i[1]}}</td>
+                            <td>{{i[2]}}</td>
+                            <td>{{i[-1]}}</td>
+                            <td>
+
+                                <div class="btn-group btn-block btn-group-sm">
+                                    <button type="button" class="btn btn-outline-info">编辑</button>
+                                    <button type="button" class="btn btn-outline-danger" id="delete_server">删除</button>
+                                </div>
+
+
+                            </td>
+                            <td>
+                                {% if i[-2]=="1" %}
+                                <input type="checkbox" name="my-checkbox" statu={{i[0]}}>
+                                {% else %}
+                                <input type="checkbox" name="my-checkbox" checked statu={{i[0]}}>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../static/hualala/vendor/jquery/jquery.min.js"></script>
+<script src="../static/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+<script src="../static/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
+<script src="../static/layer-v3.0/layer/layer.js"></script>
+<script type=text/javascript>
+ var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+    $(document).ready(function () {
+        $("[name='my-checkbox']").bootstrapSwitch({
+            onText: "启用",
+            offText: "停止",
+            onColor: "success",
+            offColor: "warning",
+            size: "small",
+            onSwitchChange: function (event, state) {
+                var ip = $(this).attr('statu')
+                $.post($SCRIPT_ROOT + '/change_server', {change_id: ip, statu: state},
+                    function (data) {
+                    }
+                )
+            }
+        })
+    })
+    //增加server
+    $('#add_user').click(function () {
+            var ip = $('#add_name').val()
+            var duankou = $('#add_pass').val()
+            $.post($SCRIPT_ROOT + '/add_server', {ip: ip, duankou: duankou},
+                function (data) {
+                    if (data.a != "1") {
+                        $('#alert_text').empty()
+                        $('#alert_text').append('<strong>Fail  !  </strong>' + data.a)
+                        $('#alert').show()
+                        setTimeout(function () {
+                            $('#alert').hide();
+                        }, 3000);
+                    } else {
+                        window.location.reload()
+                    }
+                }
+            )
+        }
+    )
+    //删除server
+    $('.glyphicon-remove').parent().each(function () {
+            $(this).click(function () {
+                    var ip = $(this).parent().parent().find('td').html()
+                    $.post($SCRIPT_ROOT + '/delete_server', {ip: ip},
+                        function (data) {
+                            if (data.statu == 'success') {
+                                window.location.reload()
+                            }
+
+                        })
+                }
+            )
+        }
+    )
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+# -*- coding: utf-8 -*-
+__author__ = 'SUNZHEN519'
+#增加用户权限表quanxian，字段值模型为众筹,   只有出现在字段中 的模块用户才会有权限进行脚本管理
+import sqlite3
+conn = sqlite3.connect(r'E:\HGTP_server\example.db')
+
+c = conn.cursor()
+c.execute('delete  from git_detail ')
+#增加接口信息表，第一个为信息类型(run 为运行中，bug为bug，debug为debug)，第二个为接口名，第三个为linux信息，第四个为接口输出输入信息##分割，第五个为接口配置信息,第六个为测试ip地址
+#最后一个味log
+#c.execute("create table jie_kou_test(num nvarchar(10),name nvarchar(20),linux nvarchar(70),data nvarchar(1000),ifconfig nvarchar(100),ip nvarchar(20))")
+#benname=[i[0] for i in c.fetchall()]
+#查询表结构
+#c.execute("PRAGMA table_info(jie_kou_test)")
+#c.execute("alter table userss add column benlei varchar;")
+#通用配置增加标签表
+#c.execute("create table qian_table(biao_qian nvarchar(300))")
+#c.execute("update statu set statu=0 where name=sun")
+#增加普通simple表
+#c.execute("create table simple(num nvarchar(10),data nvarchar(300))")
+
+#c.execute("update userss set benlei=1 where benname='ren_chou_zong_e_xian_zhi.py'")
+#c.execute("update userss set benlei='1' ")
+#c.execute("PRAGMA table_info(user)")
+#c.execute("select * from user ")
+#c.execute("alter table jie_kou_test add column time varchar(1000);")
+#c.execute('update statu set statu=\'0\' ')
+#创建定位元素信息表格
+#c.execute("create table yuansu(url nvarchar(50),name nvarchar(300),method nvarchar(300),canshu nvarchar(300)),mokuai nvarchar(300),num nvarchar(300)")
+#增加列
+#c.execute('alter table yuansu add num nvarchar(300)')
+#增加userss列，增加运行顺序标价
+#c.execute('alter table userss add cixu nvarchar(300)')
+#接口result表格，name接口名，ip接口地址，data接口dict信息，time接口操作时间戳
+#c.execute("create table jiekou_result(name nvarchar(50),ip nvarchar(300),data nvarchar(300),time nvarchar(300))")
+
+print(c.fetchall())
+conn.commit()
+
+#查询表结构

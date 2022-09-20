@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>test result</title>
+    <meta name="generator" content="HTMLTestRunner 0.8.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    
+<style type="text/css" media="screen">
+body        { font-family: verdana, arial, helvetica, sans-serif; font-size: 80%; }
+table       { font-size: 100%; }
+pre         { }
+
+/* -- heading ---------------------------------------------------------------------- */
+h1 {
+	font-size: 16pt;
+	color: gray;
+}
+.heading {
+    margin-top: 0ex;
+    margin-bottom: 1ex;
+}
+
+.heading .attribute {
+    margin-top: 1ex;
+    margin-bottom: 0;
+}
+
+.heading .description {
+    margin-top: 4ex;
+    margin-bottom: 6ex;
+}
+
+/* -- css div popup ------------------------------------------------------------------------ */
+
+
+
+.popup_window {
+    display: none;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    /*border: solid #627173 1px; */
+    padding: 10px;
+    background-color: #E6E6D6;
+    font-family: "Lucida Console", "Courier New", Courier, monospace;
+    text-align: left;
+    font-size: 8pt;
+    width: 500px;
+}
+
+}
+/* -- report ------------------------------------------------------------------------ */
+#show_detail_line {
+    margin-top: 3ex;
+    margin-bottom: 1ex;
+}
+#result_table {
+    width: 80%;
+    border-collapse: collapse;
+    border: 1px solid #777;
+}
+#header_row {
+    font-weight: bold;
+    color: white;
+    background-color: #777;
+}
+#result_table td {
+    border: 1px solid #777;
+    padding: 2px;
+}
+#total_row  { font-weight: bold; }
+.passClass  { background-color: #6c6; }
+.failClass  { background-color: #c60; }
+.errorClass { background-color: #c00; }
+.passCase   { color: #6c6; }
+.failCase   { color: #c60; font-weight: bold; }
+.errorCase  { color: #c00; font-weight: bold; }
+.hiddenRow  { display: none; }
+.testcase   { margin-left: 2em; }
+
+
+/* -- ending ---------------------------------------------------------------------- */
+#ending {
+}
+
+</style>
+<link rel="stylesheet"  href="static/bootstrap-select/dist/css/bootstrap-select.min.css">
+<!-- Latest compiled and minified JavaScript -->
+<link type="text/css" rel="stylesheet" href="static/bootstrap-fileinput/css/fileinput.css" />
+    <!-- Bootstrap Core CSS -->
+    <link href="static/hualala/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="static/hualala/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+<link href="static/hualala/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link hrel="stylesheet" href="static/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+</head>
+<body>
+<div class='heading'>
+    <pre>      </pre>
+
+<h1>用例执行情况</h1>
+      <pre>      </pre>
+<p class='attribute'><strong>Start Time:</strong> {{ timee }}</p>
+<p class='attribute'><strong> Time Taken:</strong> {{ taken }}</p>
+<p class='attribute'><strong>all:</strong> {{ total[0] }}
+<strong>pass:</strong> {{ total[1] }}
+    <strong>fail:</strong> {{ total[2] }}
+    <strong>error:</strong> {{ total[3] }}
+    <p><strong>jekins job:</strong> {{ job }}</p>
+     <p><strong>详细结果地址:</strong> {{ url_detail }}</p>
+
+</div>
+    <pre>   </pre>
+
+
+
+<p id='show_detail_line'>Show
+<a href='#' class="summary">all_hide</a>
+<a href='#'  class="all_fail">Failed</a>
+</p>
+<table id='result_table'>
+<colgroup>
+<col align='left' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+</colgroup>
+
+<tr id='header_row'>
+    <td>Test Group/Test case</td>
+    <td>Count</td>
+    <td>Pass</td>
+    <td>Fail</td>
+    <td>Error</td>
+    <td>View</td>
+</tr>
+<!--字典形式，第一个key为接口名字，第二个key为-->
+{% for i in z %}
+<tr class={{z[i]['style']}} name="title"  id={{i.split(':')[0].strip()}} >
+    <td>{{i}}</td>
+    <td>{{z[i]['count']}}</td>
+    <td>{{z[i]['Pass']}}</td>
+    <td>{{z[i]['fail']}}</td>
+    <td>{{z[i]['error']}}</td>
+    <td><a href="###"  class="detail">Detail</a></td>
+</tr>
+    <div class="test_case_all">
+    {% for k in z[i]['detail'] %}
+<tr  class='none' name={{i.split(':')[0].strip()}}  >
+    <td class={{k['status']}}><div class='testcase'>{{k['desc'].split(':')[-1].strip()}}</div></td>
+    {% if k['status'].strip()=='fail' %}
+    <td colspan='5' align='center'>
+<a class="popup_link" onfocus='this.blur();' href="###" >
+        {{k['status']}}</a>
+ <div  class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+    <pre>
+        {{k['output']}}
+    </pre>
+     </div>
+    </td>
+
+         {% elif k['status'].strip()=='error' %}
+    <td colspan='5' align='center'>
+<a class="popup_link" onfocus='this.blur();' href="###" >
+        {{k['status']}}</a>
+ <div  class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+    <pre>
+        {{k['output']}}
+    </pre>
+     </div>
+    </td>
+
+
+{% else %}
+
+<td colspan='5' align='center'>
+
+{{k['status']}}
+    </td>
+
+{% endif %}
+</tr>
+    {% endfor %}
+    </div>
+{% endfor %}
+
+
+
+
+<tr id='total_row'>
+
+    <td>Total</td>
+    <td>{{ total[0] }}</td>
+    <td>{{ total[1] }}</td>
+    <td>{{ total[2] }}</td>
+    <td>{{ total[3] }}</td>
+    <td>&nbsp;</td>
+
+</tr>
+</table>
+
+<div id='ending'>&nbsp;</div>
+<script src="{{url_for('static', filename='jquery-1.8.0.js')}}"></script>
+   <script src="static/hualala/vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="static/hualala/vendor/metisMenu/metisMenu.min.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="static/hualala/dist/js/sb-admin-2.js"></script>
+<script src="{{url_for('static', filename='layer-v3.0/layer/layer.js')}}"></script>
+<script src="static/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+	<script src="{{url_for('static', filename='layer-v3.0/layer/layer.js')}}"></script>
+
+<script type=text/javascript>
+var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+</script>
+<script type=text/javascript>
+
+
+    $('.popup_link').click(function()
+
+        {
+
+            if ($(this).next().is(':visible')) {
+                $(this).next().hide()
+            }
+　　　　　　　else
+            {
+                 $(this).next().show()
+
+            }
+
+        }
+
+    )
+
+
+$('.detail').each(function(){
+
+
+$(this).click(function(){
+
+var name=$(this).parent().parent().attr('id')
+if ($('tr[name="'+name+'"]').is(':hidden'))
+
+{
+$('tr[name="'+name+'"]').show()
+
+}
+
+else
+{
+$('tr[name="'+name+'"]').hide()
+}
+
+
+
+})
+
+
+})
+
+
+
+
+    $('.summary').click(function()
+
+                    {
+
+
+
+if ($('.none').is(':hidden'))
+
+{
+
+
+$('.none').show()
+    $(this).html('all_hide')
+
+}
+else
+
+{
+$('.none').hide()
+        $(this).html('all_show')
+
+}
+
+}
+
+)
+
+
+
+$('.all_fail').click(function()
+
+                     {
+
+
+$('.none').hide()
+
+$('.fail').parent().show()
+
+
+}
+
+)
+
+</script>
+</body>
+</html>

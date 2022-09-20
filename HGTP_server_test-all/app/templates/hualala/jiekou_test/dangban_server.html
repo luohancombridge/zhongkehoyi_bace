@@ -1,0 +1,1030 @@
+{% extends "/hualala/pages/base.html" %}
+{% block content %}
+    <style type="text/css">
+        .mt-10 {
+            margin-top: 25px;
+        }
+        .mt-low {
+            margin-top: 15px;
+        }
+        .textarea {
+            width: 650px;
+            min-height: 220px;
+            max-height: 300px;
+            _height: 120px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 3px;
+            outline: 0;
+            border: 1px solid #a0b3d6;
+            font-size: 12px;
+            line-height: 24px;
+            padding: 2px;
+            word-wrap: break-word;
+            overflow-x: hidden;
+            overflow-y: auto;
+            border-color: rgba(82, 168, 236, 0.8);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+        }
+        .row.no-gutter {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    </style>
+<div class="container-fluid ">
+    <!--<div class="row mt-10">-->
+    <!--<div class="col-lg-12">-->
+    <!--<h3 class="page-header"  name={{ local_port }}></h3>-->
+    <!--</div>-->
+    <!--</div>-->
+    <div class="row mt-10">
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">项目列表</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button type="button" class="btn btn-success btn-xs"  id="top_add"
+                                    data-toggle="modal" data-target="#xiangmu_modal"
+                            >增加项目</button>
+                                                        <a  class="btn btn-success btn-xs"  id="second_add"
+                                    data-toggle="modal" data-target="#xiangmu_guanli"
+                            >增加业务</a>
+                                                        <button  class="btn  btn-warning  btn-xs" id="top_mock_url"  data-toggle="modal" data-target="#linux_detail">linux 设置</button>
+                        </div>
+                                                        <div class="btn-group" role="group" aria-label="...">
+                                <button type="button" class="btn btn-warning btn-xs">服务器选择</button>
+
+                                <div class="btn-group" role="group">
+                                    <button type="button" id="test_up" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Dropdown
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" name="test_up">
+                                        {% for i in linux  %}
+                                        <li name={{i[0]}}><a href="#">{{ i[1] }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <button type="button" class="btn btn-danger btn-xs "   id="linux_server_tong">提交</button>
+                            </div>
+
+                             <div class="btn-group" role="group" aria-label="...">
+                                 <h5  id="moke_url_show"  moke_url_gen={{ moke_gen_url}}><span class="label label-info">moke地址:</span>{{  moke_url }}</h5>
+</div>
+                        </div>
+
+                    </div>
+                    <div class="row  ">
+                        <div class="col-md-6 pre-scrollable">
+                            <div class="panel panel-success">
+                                <div class="panel-body">
+                                    <table class="table table-hover  table-condensed  ">
+                                        <thead>
+                                        <tr>
+                                            <th>名称</th>
+                                            <th>地址</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody  id="xiangmu_body">
+                                        {%  for i  in xiangmu  %}
+                                        <tr id={{ i[0] }}  name={{ i[4]}}>
+                                            <td>{{ i[2] }}</td>
+                                            <td>{{ i[3] }}</td>
+                                            <td>
+                                                <div class="btn-toolbar" role="toolbar" aria-label="...">
+                                                    <div class="btn-group" role="group" name="top_delete">
+                                                        <button type="button " class="btn btn-warning  btn-xs" name="top_bianji">编辑
+                                                        </button>
+                                                        <button type="button " class="btn btn-danger btn-xs" name="case_delete"  >删除</button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {%   endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pre-scrollable">
+                            <div class="panel panel-success">
+                                <div class="panel-body">
+                                    <div class="row ">
+                                        <table class="table table-striped  table-hover  table-responsive  table-condensed ">
+                                            <thead>
+                                            <tr>
+                                                <th>名称</th>
+                                                <th>请求地址</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody  id="xiangmu_next">
+                                            {%  for i in yewu  %}
+                                            <tr  name={{i[1]}} id={{i[0] }} xiangmu_id={{  i[8] }}>
+                                                <th>{{  i[1] }}</th>
+                                                 <th>{{  i[4] }}</th>
+                                                <td>
+                                                    <div class="btn-toolbar" role="toolbar" aria-label="...">
+                                                        <div class="btn-group" role="group"  name="yewu_delete">
+                                                            <button type="button " class="btn btn-warning  btn-xs"  name="xiangmu_bainji">编辑
+                                                            </button>
+                                                            <button type="button " class="btn btn-danger btn-xs" name="case_delete">删除
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {%  endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="panel-footer">Panel footer</div>-->
+            </div>
+        </div>
+        <div class="col-md-4  pre-scrollable">
+            <div class="panel panel-success">
+                <div class="panel-heading">case列表</div>
+                <div class="panel-body">
+                </div>
+                   <div class="container-fluid ">
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <button type="button " class="btn btn-warning  btn-xs" name="case_add_new">新增case</button>
+                        </div>
+                    </div>
+
+                <table class="table table-striped  table-hover  table-responsive  table-condensed ">
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>等待时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody  id="case_list">
+                    {%  for i in case_list %}
+                    <tr   case_di={{ i[0] }}   yewu_id={{  i[4] }} xiangmu_id={{  i[5] }}>
+                        <td>{{  i[6] }}</td>
+                        <td>{{  i[1] }}</td>
+                        <td>
+                            <div class="btn-toolbar" role="toolbar" aria-label="...">
+                                <div class="btn-group" role="group"  name="case_delete">
+                                    <button type="button " class="btn btn-warning  btn-xs" name="case_bianji">编辑</button>
+                                    <button type="button " class="btn btn-danger btn-xs"  name="case_delete">删除</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {%  endfor %}
+                    </tbody>
+                </table>
+                </div>
+                <div class="panel-footer">Panel footer</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="take_linux_log_kuang" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog"  style="width:400px">
+        <div class="modal-content">
+            <div class="modal-header  "  style="height:50px">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" >挡板case设置</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row ">
+                            <div  class="col-sm-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon" >case名称</span>
+                                    <input type="text"   id="case_name" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-low ">
+                            <div  class="col-sm-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon" >暂停时间</span>
+                                    <input type="text"   id="time_sleep" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                        </div>
+                    <div class="row mt-low ">
+                        <div class="col-lg-12">
+                            <div class="form-group  form-group-sm">
+                                <label>请求json</label>
+                                <textarea class="form-control" spellcheck="false" rows="5"
+                                       id="request_json"  ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-lg-12">
+                            <div class="form-group  form-group-sm">
+                                <label>返回json</label>
+                                <textarea class="form-control" spellcheck="false" rows="5"
+                                          id="respons_json"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning btn-sm" name="close">关闭</button>
+                <button type="button" class="btn btn-success btn-sm"  name="case_submit">提交</button>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+
+
+
+
+
+
+<div class="modal fade " id="xiangmu_guanli" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog"  style="width:500px">
+        <div class="modal-content">
+            <div class="modal-header" style="height:50px">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" >接口设置</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row  mt-low">
+                                <div class="col-lg-12" name="sign_type">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-addon" >接口名称</span>
+                                        <input  name="yewu_name_add"    type="text" class="form-control" placeholder="name" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                    </div>
+
+                    <div class="row mt-low ">
+                                <div class="col-lg-12" name="sign_type">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-addon" >请求地址</span>
+                                        <input  name="yewu_request_url" type="text" class="form-control" placeholder="request_url" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                    </div>
+
+
+
+
+                    <div class="row mt-low">
+                            <div class="form-group form-group-sm">
+                                <label class="col-lg-3 control-label ">接口类型</label>
+                                <div class="col-lg-9" name="sign_type">
+                                    <select class="form-control"  name="jiekou_type">
+                                        <option>no_sign</option>
+                                    </select>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="row mt-low ">
+                            <div class="form-group  form-group-sm">
+                                <label class="col-lg-3 control-label">请求方式</label>
+                                <div class="col-lg-9"   >
+                                    <select class="form-control" name="yewu_request_method">
+                                        <option>get</option>
+                                        <option>post</option>
+                                    </select>
+                                </div>
+                            </div>
+                    </div>
+                    <div name="chuancan_type">
+                        <div class="row mt-low">
+                                <div class="form-group  form-group-sm">
+                                    <label class="col-lg-3 control-label">传参方式</label>
+                                    <div class="col-lg-9" >
+                                        <select class="form-control" name="yewu_send_type">
+                                            <option>json</option>
+                                            <option>form_data</option>
+                                        </select>
+                                    </div>
+                                </div>
+                        </div>
+                         </div>
+                        <div class="row mt-low ">
+                        <div class="col-lg-12">
+                            <div class="form-group  form-group-sm">
+                                <label>header_json</label>
+                                <textarea class="form-control" spellcheck="false" rows="5"
+                                       id="header_json"  ></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning btn-sm  "  name="close" >关闭</button>
+                <button type="button" class="btn btn-success btn-sm"  id="yewuguanli_submit" >提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+
+
+
+
+
+
+<div class="modal fade  bs-example-modal-sm" id="xiangmu_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog"  style="width:400px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" >信息设置</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row ">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-lg-12" name="sign_type">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-addon" >项目名称</span>
+                                        <input type="text" class="form-control" placeholder="name"   name="add_name" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="row ">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-lg-12" name="sign_type">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-addon" >请求地址</span>
+                                        <input type="text" class="form-control" placeholder="request_url"  name="request_url"  aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-sm" name="close">关闭</button>
+                <button type="button" class="btn btn-success btn-sm"  id="xiangmu_submit" >提交</button>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+
+
+<div class="modal fade  bs-example-modal-sm" id="yewu_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog"  style="width:400px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" >信息设置</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row ">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-lg-12" name="sign_type">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-addon" >名称</span>
+                                        <input type="text" class="form-control" placeholder="name"   id="add_name_yew" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="row ">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-lg-12" name="sign_type">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-addon" >请求地址</span>
+                                        <input type="text" class="form-control" placeholder="request_url"  id="request_url_yewu"  aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-sm" name="close">关闭</button>
+                <button type="button" class="btn btn-success btn-sm"  id="yewu_submit" >提交</button>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<div class="modal fade" id="linux_detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog"  style="width:400px">
+        <div class="modal-content">
+            <div class="modal-header  "  style="height:50px">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" >linux设置</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                     <div class="row ">
+                        <div  class="col-sm-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon" >linux名</span>
+                                <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1" id="linux_name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-low">
+                        <div  class="col-sm-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon" >用户名</span>
+                                <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1" id="linux_user">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-low ">
+                        <div class="col-lg-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon">密码</span>
+                                <input type="text" class="form-control"   id="linux_password" placeholder="Username" aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row  mt-low">
+                        <div class="col-lg-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon" >linux 地址</span>
+                                <input type="text" class="form-control" id="linux_url" placeholder="Username" aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-low">
+                        <div class="col-lg-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon" >连接host</span>
+                                <input type="text" class="form-control"  id="linux_host" placeholder="Username" aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning btn-sm" name="close">关闭</button>
+                <button type="button" class="btn btn-success btn-sm"  name="linux_add_submit">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<script src="static/hualala/vendor/jquery/jquery.min.js"></script>
+<script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/hualala/vendor/metisMenu/metisMenu.min.js"></script>
+<script src="static/hualala/dist/js/sb-admin-2.js"></script>
+<script src="static/layer-v3.0/layer/layer.js"></script>
+<script type=text/javascript>
+//linux服务器列表，点击显示
+    $('[name="test_up"]').find('a').each(function()
+        {
+$(this).click(function(){
+    var test=$(this).html()
+    $('#test_up').html(test+'<span class="caret"></span>')
+})
+        }
+    )
+    var $SCRIPT_ROOT = 'http://'+window.location.host
+    $(document).ready(function()
+        {
+        var id=$('#xiangmu_body').find('tr').eq(0).attr('id')
+        var yewuid=$('#xiangmu_next').find('tr').eq(0).attr('id')
+        $('[name="case_add_new"]').attr('yewuid',yewuid)
+        $('[name="case_add_new"]').attr('xiangmuid',id)
+        $('#xiangmu_guanli').attr('xiangmu_type',id)
+        $('#case_list').find('tr').each(
+        function()
+        {
+        if ($(this).attr('yewu_id')==yewuid  && $(this).attr('xiangmu_id')==id   )
+        {
+        $(this).show()
+        }
+        else
+        {
+        $(this).hide()
+        }
+        }
+        )
+
+        $('#xiangmu_next').find('tr').each(
+        function()
+        {
+        if ($(this).attr('xiangmu_id')==id)
+        {
+        $(this).show()
+        }
+        else
+        {
+        $(this).hide()
+        }
+
+        }
+
+        )
+            // var ze = $('[class="label label-default"]').offset().top;
+            // var left= $('#top_add').offset().left;
+            // var left2= $('#second_add').offset().left;
+            // $('#top_mock_url').css({position:'fixed','left':left+50})
+            // $('#top_add').css({position: "fixed ",'top':ze,'z-index':1})
+            // $('#second_add').css({position: "fixed ",'top':ze,'z-index':1})
+            // $('#second_mock_url').css({position:'fixed','left':left2+50})
+        }
+    )
+    $('tbody').find('tr').each(function(){
+      $(this).click(function()
+          {
+
+              $(this).parent().find('tr').removeAttr('class')
+              $(this).attr('class','success')
+              moke_url=$(this).attr('name')
+              //是否点击的项目，如果是则根据项目显示业务
+              if ($(this).parent().attr('id')=='xiangmu_body')
+              {
+              $('#xiangmu_next').find('tr').removeAttr('class')
+              moke_url=$('#moke_url_show').attr('moke_url_gen')
+              var find_statu=0
+                 var id=$(this).attr('id')
+                  $('#moke_url_show').html('<span class="label label-info">moke地址:</span>'+moke_url+id)
+                var yewuid=''
+                 $('#xiangmu_guanli').attr('xiangmu_type',id)
+                  var statu=0
+                 $('#xiangmu_next').find('tr').each(function()
+                 {
+                 if ($(this).attr('xiangmu_id')==id)
+                 {
+                 $(this).show()
+                 if (statu==0)
+                 {
+                 yewuid=$(this).attr('id')
+
+                 statu=1
+                 $('[name="case_add_new"]').attr('yewuid',yewuid)
+                  $('[name="case_add_new"]').attr('xiangmuid',id)
+                  $('#moke_url_show').html('<span class="label label-info">moke地址:</span>'+moke_url+id+'_'+yewuid)
+                 $(this).attr('class','success')
+                 }
+                 }
+                 else
+                 {
+                 $(this).hide()
+                 }
+                 }
+                 )
+                 //招到最上面显示的业务id
+                 if (statu==0)
+                 {
+                 $('#case_list').find('tr').hide()
+                 }
+                 else
+                 {
+                 $('#case_list').find('tr').each(function()
+
+                 {
+                     if ($(this).attr('yewu_id')==yewuid && $(this).attr('xiangmu_id')==id)
+                     {
+                           $(this).show()
+                     }
+                     else
+                     {
+                     $(this).hide()
+                     }
+                 }
+
+                 )
+                 }
+
+
+              }
+          }
+      )
+
+    })
+
+    $('[name="case_bianji"]').each(function()
+
+        {
+$(this).click(function()
+    {
+       var case_di=$(this).parent().parent().parent().parent().attr('case_di')
+       var yewu_id=$(this).parent().parent().parent().parent().attr('yewu_id')
+        var xiangmu_id=$(this).parent().parent().parent().parent().attr('xiangmu_id')
+        $('#take_linux_log_kuang').modal('show')
+        $('[name="case_submit"]').attr('sumbit_type','bianji')
+$.post($SCRIPT_ROOT+'/case_read',{id:case_di},
+function(data)
+{
+$('#case_name').val(data.name)
+$('#time_sleep').val(data.time_sleep)
+$('#request_json').val(data.request_json)
+$('#respons_json').val(data.return_json)
+
+}
+
+
+)
+
+    }
+)
+
+        }
+    )
+
+
+    //根据项目管理列表点击弹出框来确定是否有错
+    $('[name="xiangmu_bainji"]').each(function()
+
+        {
+$(this).click(function()
+
+    {
+$('#xiangmu_guanli').modal('show')
+var id=$(this).parent().parent().parent().parent().attr('xiangmu_id')
+$('#xiangmu_guanli').attr('xiangmu_id',id)
+var yewu_id=$(this).parent().parent().parent().parent().attr('id')
+$.post($SCRIPT_ROOT+'/yewu_bianji_show',{id:yewu_id},function(data)
+
+    {
+ $('[name="yewu_name_add"]').val(data.name)
+  $('[name="yewu_request_url"]').val(data.moke_url)
+   $('[name="yewu_chuancan_type"]').val(data.chuancan_type)
+    $('[name="jiekou_type"]').val(data.jiekou_type)
+     $('[name="yewu_request_method"]').val(data.yewu_request_moetho)
+      $('[name="yewu_send_type"]').val(data.yewu_send_type)
+    }
+)
+
+    }
+)
+
+
+        }
+    )
+
+    //删除确认弹出框
+$('button[ name="case_delete"]').click(
+function()
+{
+            var type=$(this).parent().attr('name')
+            if (type=='case_delete')
+            {
+            var id=$(this).parent().parent().parent().parent().attr('case_di')
+            }
+            else
+            {
+                 var id=$(this).parent().parent().parent().parent().attr('id')
+            }
+    layer.msg('未备份请谨慎删除', {
+        time: 0 //不自动关闭
+        ,btn: ['删除', '关闭'],
+        shade:[0.3, '#000'],
+
+        skin: 'layui-layer-rim',
+        shadeClose: true
+        ,yes: function(index){
+            layer.close(index);
+                        $.post($SCRIPT_ROOT + '/delete_moke_xiangmu', {type: type,id:id},
+                function (data) {
+                    if (data.statu=='success')
+                    {
+                            window.location.reload();
+
+
+                    }
+                }
+            );
+
+        }
+        ,btn2: function(index, layero){
+
+        }
+    });
+}
+)
+    //模态框关闭
+    $('[name="close"]').click(function () {
+
+
+$(this).parent().parent().parent().parent().modal('hide')
+
+    })
+    //最上面的编辑弹出框
+    $('[name="top_bianji"]').each(function()
+        {
+            $(this).click(function () {
+
+            var id=$(this).parent().parent().parent().parent().attr('id')
+            var name=$(this).parent().parent().parent().parent().find('td').eq(0).html()
+            var moke_url=$(this).parent().parent().parent().parent().attr('name')
+             var request_url=$(this).parent().parent().parent().parent().find('td').eq(1).html()
+                $('#xiangmu_modal').attr('name','top_bianji'+'#'+id)
+                    $('#xiangmu_modal').modal('show')
+             $('[name="add_name"]').val(name)
+             $('[name="request_url"]').val(request_url)
+             //$('[name="moke_url"]').val(moke_url)
+
+            })
+        }
+    )
+
+   //项目弹出框打开，前的初始化操作
+   $('#top_add').click(function(){
+   $('#xiangmu_modal').attr('name','top_add')
+   })
+   //业务弹出框打开，前的初始化操作
+   $('#second_add').click(function(){
+   $('#xiangmu_guanli').attr('name','second_add')
+   })
+
+       $('#xiangmu_modal').on('show.bs.modal',function(){
+
+  $(this).find('input').each(function(){
+
+  $(this).val('')
+  })
+
+       })
+
+//项目信息弹出框弹点击按钮上传
+
+    $('#xiangmu_submit').click(function()
+
+        {
+            var statu=0
+            $('#xiangmu_modal').modal('hide')
+            var name=$('#xiangmu_modal').find('input').eq(0).val()
+            var request_url=$('#xiangmu_modal').find('input').eq(1).val()
+            var moke_url=$('#xiangmu_modal').find('input').eq(2).val()
+            $('#xiangmu_modal').find('input').each(function()
+                {
+                    if ($.trim($(this).val())=='')
+
+                    {
+                        statu=1
+                        layer.msg('信息不能为空', {
+                            icon: 0,
+                            time:1000
+
+                        })
+                        return false
+                    }
+
+                }
+
+            )
+
+            if (statu!=1)
+            {
+                $.post($SCRIPT_ROOT + '/top_add', {name: name, request_url: request_url, moke_url: moke_url,type:$('#xiangmu_modal').attr('name')},
+                    function (data) {
+                        if  (data.statu=='success')
+                        {
+                                 <!--layer.msg('添加成功', {-->
+                                <!--icon: 6,-->
+                                <!--time:1000-->
+
+                            <!--}-->
+                            <!--)-->
+                                window.location.reload()
+                        }
+                        if (data.statu=='chongfu')
+
+                        {
+                            layer.msg('名称重复', {
+                                icon: 0,
+                                time:1000
+
+                            })
+                        }
+
+                    }
+                )
+
+            }
+
+        }
+    )
+
+       //业务管理增加
+    $('#yewuguanli_submit').click(function()
+
+        {
+            var id=$('#xiangmu_guanli').attr('xiangmu_type')
+            var name=$('[name="yewu_name_add"]').val()
+            var request_url=$('[name="yewu_request_url"]').val()
+            var yewu_chuancan_type=$('[name="yewu_chuancan_type"]').val()
+            var jiekou_type=$('[name="jiekou_type"]').val()
+            var yewu_request_method=$('[name="yewu_request_method"]').val()
+            var yewu_send_type=$('[name="yewu_send_type"]').val()
+            var header_json=$('#header_json').val()
+            $.post($SCRIPT_ROOT + '/yewu_add',{header_json:header_json,id:id,name:name,request_url:request_url,yewu_chuancan_type:yewu_chuancan_type,
+
+                    jiekou_type:jiekou_type,yewu_request_method:yewu_request_method,yewu_send_type:yewu_send_type },
+                function(data)
+                {
+
+                    if (data.statu=='success')
+                    {
+                        layer.msg('添加成功', {
+                            icon: 6,
+                            time:1000
+
+                        });
+                        $('#xiangmu_guanli').modal('hide')
+                        setTimeout(function(){
+                            window.location.reload()
+                        },2000)
+                    }
+
+            if (data.statu=='url 重复')
+            {
+                layer.msg('url地址重复', {
+                    icon: 2,
+                    time:1000
+
+                });
+                $('#xiangmu_guanli').modal('hide')
+            }
+
+
+        }
+    )
+
+
+    }
+    )
+
+        //提交linux信息
+    $('[name="linux_add_submit"]').click(function()
+
+        {
+            var linux_user=$('#linux_user').val()
+            var linux_name=$('#linux_name').val()
+            var linux_password=$('#linux_password').val()
+            var linux_url=$('#linux_url').val()
+            var linux_host=$('#linux_host').val()
+
+$.post($SCRIPT_ROOT +'/linux_add',{linux_user:linux_user,linux_name:linux_name,linux_password:linux_password,linux_url:linux_url,linux_host:linux_host},function(data)
+
+    {
+if (data.statu=='success')
+{
+$('#linux_detail').modal('hide')
+ layer.msg('添加成功', {
+                icon: 6,
+                time:1000
+
+            });
+
+
+}
+
+    }
+)
+        }
+    )
+
+//新增case 按钮点击
+$('[name="case_add_new"]').click(function()
+{
+$('#case_name').val()
+$('#time_sleep').val()
+$('#request_json').val()
+$('#respons_json').val()
+$('#take_linux_log_kuang').modal('show')
+$('[name="case_submit"]').attr('sumbit_type','add')
+}
+)
+//新增case提交
+$('[name="case_submit"]').click(function()
+{
+var name=$('#case_name').val()
+var  time_sleep=$('#time_sleep').val()
+var request_json=$('#request_json').val()
+var respons_json=$('#respons_json').val()
+var  yewuid=$('[name="case_add_new"]').attr('yewuid')
+var  xiangmuid=$('[name="case_add_new"]').attr('xiangmuid')
+if ($(this).attr('sumbit_type')=='add' ||  $(this).attr('sumbit_type')=='bianji')
+{
+if ($(this).attr('sumbit_type')=='add')
+{
+var url=$SCRIPT_ROOT+'/add_case'
+}
+if ($(this).attr('sumbit_type')=='bianji')
+{
+var url=$SCRIPT_ROOT+'/bianji_case'
+}
+
+$.post(url,{name:name,time_sleep:time_sleep,request_json:request_json,respons_json:respons_json,yewuid:yewuid,xiangmuid:xiangmuid},
+function(data)
+{
+$('#take_linux_log_kuang').modal('hide')
+if (data.statu=='json error')
+{
+alert('json 解析错误')
+}
+else if (data.statu=='chongfu')
+{
+alert('名称重复')
+}
+else
+{
+
+ layer.msg('添加成功', {
+                icon: 6,
+                time:1000
+
+            })
+               setTimeout(function(){
+                           window.location.reload()
+                        },2000)
+}
+}
+
+)
+
+}
+
+}
+
+)
+//挡板进去linux
+$('#linux_server_tong').click(function()
+{
+var name=$('#test_up').html().split('<span class="caret"></span>')[0]
+name=name.trim()
+$.post($SCRIPT_ROOT+'/server_use',{name:name},
+function(data)
+{
+
+
+}
+)
+
+
+}
+)
+
+$('#xiangmu_next').find('tr').each(function()
+{
+$(this).click(function()
+{
+yewuid=$(this).attr('id')
+xiangmu_id=$(this).attr('xiangmu_id')
+moke_url=$('#moke_url_show').attr('moke_url_gen')
+$('#moke_url_show').html('<span class="label label-info">moke地址:</span>'+moke_url+xiangmu_id+'_'+yewuid)
+$('#case_list').find('tr').show()
+$('#case_list').find('tr').each(function()
+
+{
+if ($(this).attr('yewu_id')==yewuid && $(this).attr('xiangmu_id')==xiangmu_id)
+{
+$(this).show
+}
+else
+{
+$(this).hide()
+}
+
+}
+)
+
+
+}
+)
+
+}
+)
+
+    </script>
+{% endblock %}

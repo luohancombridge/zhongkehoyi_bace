@@ -1,0 +1,31 @@
+﻿<form action="" method="POST">
+
+   仓库名 <input type=text size=15 name=fname id="da"   style="width:200px">
+分支名<input type=text size=15 name=fn id="fen"   style="width:200px">
+    是否develop<input name=Fruit type="checkbox" id="fe" value="" />
+<input type="submit"  style="line-height:1.5;" id="ss" value="更新" />
+</form>
+<script src="{{url_for('static', filename='jquery-1.8.0.js')}}"></script>
+<script type=text/javascript>
+var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+</script>
+<script type="text/javascript" language="javascript">
+    $("#fe").attr("checked", true);
+$('#da').bind('input propertychange', function() {
+var left=$('#da').val();
+if(left.length>=25)
+{
+    var kk="width:"+(200+(left.length-15)*15)+"px";
+   $('#da').attr("style",kk);
+}
+else{
+
+$('#da').attr("style","width:130px;");
+}
+
+});
+</script>
+
+
+
+

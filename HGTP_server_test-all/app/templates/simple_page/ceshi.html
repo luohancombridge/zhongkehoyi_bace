@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<meta name="author" content="Mobify">
+<title>接口调试信息</title>
+<link rel="stylesheet" href="/static/new/css/bellows.min.css">
+<link rel="stylesheet" href="/static/new/css/bellows-theme.min.css">
+<link rel="stylesheet" href="/static/new/css/main.css">
+    <link rel="stylesheet" href= {{url_for('static', filename='jquery-ui-1.12.1/jquery-ui.css')}}>
+    <link rel="stylesheet" href= {{url_for('static', filename='DataTables-1.10.13/media/css/jquery.dataTables.min.css')}}>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body class="-bellows">
+
+
+<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">调试中</a></li>
+		<li><a href="#tabs-2">报错</a></li>
+		<li><a href="#tabs-3">开发反馈</a></li>
+	</ul>
+	<div id="tabs-1">
+
+
+<form action="/data_jiao_yan_sql" method="post">
+   库存单: <input type="text" name="new sql"  id ="data" />
+
+  <input type="button"  id="sqls"   value="submit" />
+	<div id="k1">
+	<pre style="font-size:17px">输入</pre><br>
+
+	 <br />
+					<pre id="3"   style="font-size:13px">{{z}}</pre>
+                    <br />
+	</div>
+		<div id="k2"  style="position: relative; left: 700px; top: -300px;">
+		<pre style="font-size:17px">输出</pre><br>
+
+	 <br />
+					<pre id="4"   style="font-size:13px">{{k}}</pre>
+                    <br />
+		</div>
+</form>
+
+    </div>
+	<div id="tabs-2">
+
+    </div>
+	<div id="tabs-3">
+	</div>>
+</div>
+
+		<!-- JavaScript -->
+
+    <script type="text/javascript" src="{{url_for('static', filename='jquery-1.8.0.js')}}"></script>
+     <script type="text/javascript" src="{{url_for('static', filename='jquery-ui-1.12.1/jquery-ui.js')}}"></script>
+    <script type="text/javascript"   src="{{url_for('static', filename='jquery-ui-1.12.1/jquery-ui.min.js')}}"></script>
+        <script src="/static/layer-v3.0/layer/layer.js"></script>
+    <script type="text/javascript"   src="{{url_for('static', filename='DataTables-1.10.13/media/js/jquery.dataTables.min.js')}}"></script>
+<script type=text/javascript>
+var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+</script>
+		<script>
+
+     $('#k1').css({position: "relative ",'top':50})
+
+
+
+            $(document).ready(function(){
+                $('#tabs').tabs();
+ setInterval(function () {
+       $.post($SCRIPT_ROOT + '/cs', {statu:"2"},
+                 function(data)
+                 {
+                 if (data.jieshu=="0")
+                 {
+                 $('#3').html(data.shuru);
+$('#k2').css({position: "abosulate",'left':700,'top':-90})
+ $('#4').html(data.shuchu);
+                   }
+
+
+    })
+
+
+
+    }, 2000);
+});
+		</script>
+	</div>
+</div>
+<div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';">
+</div>
+</body>
+</html>

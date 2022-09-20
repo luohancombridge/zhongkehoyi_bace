@@ -1,0 +1,138 @@
+{% extends "/hualala/pages/base.html" %}
+{% block content %}
+<style type="text/css">
+.mt-10{margin-top:25px;}
+.row.no-gutter {
+    margin-left: 0;
+    margin-right: 0;
+}
+</style>
+ <div class="container-fluid">
+     <div class="row">
+                    <div class="col-lg-12">
+                        <h3 class="page-header">运行管理</h3>
+                    </div>
+                </div>
+                <div class="row mt-10">
+                    <div class="col-lg-12">
+                        <div class="btn-toolbar">
+                            <div class="btn-group">
+                                <button class="btn btn-default" data-toggle="modal" data-target="#file_up"  data-show-preview="false">
+                                    上传文件
+                                </button>
+                            </div>
+                      </div>
+                    </div>
+                      </div>
+     <div class="row mt-10">
+                    <div class="col-lg-12">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">文件列表</div>
+                                   <div class="panel-body">
+                                       <div class="btn-group" role="group" aria-label="...">
+                                           <button type="button" class="btn btn-success">全选</button>
+                                           <button type="button" class="btn btn-warning">删除</button>
+                                           <button type="button" class="btn btn-default">Right</button>
+                                       </div>
+                                    </div>
+                                  <table class="table table-striped">
+                                             <thead>
+                                             <tr>
+                                                 <th>选择</th>
+                                                 <th>文件名</th>
+                                                 <th>上传者</th>
+                                                 <th>备注</th>
+                                                 <th>上传时间</th>
+                                             </tr>
+                                             </thead>
+                                             <tbody>
+                                             {% for i in data %}
+                                             <tr id={{i[4] }}>
+                                                 <td>
+                                                     <label>
+                                                         <input type="radio" name={{ i[4] }} value="love" >
+                                                     </label>
+                                                 </td>
+                                                 <td>{{ i[6] }}</td>
+                                                 <td>{{ i[1] }}</td>
+                                                 <td>{{ i[5] }}</td>
+                                                 <td>{{ i[2] }}</td>
+                                             </tr>
+                                             {% endfor %}
+                                             </tbody>
+                                  </table>
+                            </div>
+                        </div>
+                     </div>
+       </div>
+<div class="modal fade" id="file_up" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+            <form action="/upload_file" method="post" enctype="multipart/form-data">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					模态框（Modal）标题
+				</h4>
+			</div>
+			<div class="modal-body">
+                 <div class="container-fluid  ">
+                        <div class="row mt-10">
+                            <div class="col-lg-12">
+                                <div class="form-group" id="file_container">
+                                         <input type="file" name="files" multiple>
+                                </div>
+                            </div>
+                        </div>
+                       <div class="row mt-10">
+                            <div class="col-lg-12">
+				               <div class="input-group">
+                                       <span class="input-group-addon" id="basic-addon1">脚本备注</span>
+                                       <input type="text" class="form-control" placeholder="Username" id="file_detail"  aria-describedby="basic-addon1">
+                               </div>
+                            </div>
+                        </div>
+                 </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button " class="btn btn-default" data-dismiss="modal">
+					关闭
+				</button>
+				<button type="button submit " class="btn btn-primary" id="submit">
+					提交
+				</button>
+			</div>
+   </form>
+		</div>
+	</div>
+</div>
+   <script src="static/hualala/vendor/jquery/jquery.min.js"></script>
+    <script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/hualala/vendor/metisMenu/metisMenu.min.js"></script>
+    <script src="static/hualala/dist/js/sb-admin-2.js"></script>
+<script src="{{url_for('static', filename='layer-v3.0/layer/layer.js')}}">
+<script src="{{url_for('static', filename='jquery-1.8.0.js')}}"></script>
+<script src="static/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <script type=text/javascript>
+    //模态框打开后执行清空操作
+    var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+    $('#file_up').on('hidden.bs.modal', function (e) {
+$('#file_detail').val('')
+var file = $('input[type="file"]')
+file.after(file.clone().val(""));
+file.remove();
+})
+//执行提交file操作
+$('#submit').click(function()
+{
+     var beizhu=$('#file_detail').val()
+     $.get($SCRIPT_ROOT + '/upload_fil_beizu', {beizu: beizhu,
+                        function (data) {
+                        }
+                        }
+                    )
+}
+)
+</script>
+{% endblock %}

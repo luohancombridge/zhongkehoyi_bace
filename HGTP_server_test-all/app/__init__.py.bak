@@ -1,0 +1,27 @@
+# -*- coding: utf-8 -*-
+from __future__ import division
+from flask import Flask # 引入 flask
+from flask import Flask, request, redirect, url_for
+from werkzeug import *
+from flask_sqlalchemy import SQLAlchemy
+# from celery import Celery
+from sqlalchemy import create_engine
+import os
+from flask import current_app
+app = Flask(__name__)
+basedir = os.path.abspath(os.path.dirname(__file__)).decode('gb2312')
+basedir=os.path.dirname(basedir)
+basedir=os.path.join(basedir,'example.db')
+app.config.update(RESTFUL_JSON=dict(ensure_ascii=False))
+db = SQLAlchemy(app)# 实例化一个flask 对象
+app.config.from_object('fileconfig')
+UPLOAD_FOLDER = r'D:\untitled6\app\Uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
+app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
+# celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+basedir
+# app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
+# db = SQLAlchemy(app)
+# celery.conf.update(app.config)
+from app import view

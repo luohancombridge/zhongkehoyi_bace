@@ -1,0 +1,51 @@
+# -*- coding: utf-8 -*-
+__author__ = 'SUNZHEN519'
+# -*- coding: utf-8 -*-
+from tempfile import mktemp
+from app import app
+from flask import send_from_directory,send_file,Response
+import socket
+
+import os
+import json
+import urllib.request, urllib.error, urllib.parse
+import re
+import  chardet
+
+import time
+
+import sqlite3
+
+from flask import render_template, flash, redirect,request,g,Response,stream_with_context
+from flask_bootstrap import Bootstrap
+
+from flask import current_app
+from werkzeug.utils import secure_filename
+from flask import Flask, render_template, session, redirect, url_for, flash,jsonify
+import datetime
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+db_chemy = SQLAlchemy(app)
+class tody_tongji(db_chemy.Model):
+    __tablename__ = 'tody_tongji'
+    id = db_chemy.Column(db_chemy.Integer, primary_key = True, autoincrement = True)
+    name = db_chemy.Column(db_chemy.String(50), unique=True)
+    jiekou_name = db_chemy.Column(db_chemy.String(120), unique=True)
+    case_num = db_chemy.Column(db_chemy.String(120), unique=True)
+    pass_num = db_chemy.Column(db_chemy.String(120), unique=True)
+    fail_num = db_chemy.Column(db_chemy.String(120), unique=True)
+    user_team = db_chemy.Column(db_chemy.String(120), unique=True)
+    riqi = db_chemy.Column(db_chemy.String(120), unique=True)
+    jiekou_num=db_chemy.Column(db_chemy.String(120), unique=True)
+    def __init__(self, name=None, jiekou_name=None,case_num=None,pass_num=None,fail_num=None,user_team=None,riqi=None,jiekou_num=None):
+        self.name = name
+        self.jiekou_name = jiekou_name
+        self.case_num=case_num
+        self.pass_num=pass_num
+        self.fail_num=fail_num
+        self.user_team=user_team
+        self.riqi=riqi
+        self.jiekou_num=jiekou_num
+    def __repr__(self):
+        return '%s (%r, %r)' % (self.__class__.__name__, self.name,self.jiekou_name,self.case_num,
+                                self.pass_num,self.fail_num,self.user_team,self.riqi,self.jiekou_num)

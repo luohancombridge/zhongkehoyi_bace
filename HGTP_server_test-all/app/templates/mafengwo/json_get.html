@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        .carousel-inner img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .mt-10 {
+            margin-top: 25px;
+        }
+
+        .mt-low {
+            margin-top: 15px;
+        }
+
+        .textarea {
+            width: 650px;
+            min-height: 420px;
+            max-height: 420px;
+            _height: 120px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 3px;
+            outline: 0;
+            border: 1px solid #a0b3d6;
+            font-size: 12px;
+            line-height: 24px;
+            padding: 2px;
+            word-wrap: break-word;
+            overflow-x: hidden;
+            overflow-y: auto;
+            border-color: rgba(82, 168, 236, 0.8);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+        }
+
+        .row.no-gutter {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    </style>
+    <link hrel="stylesheet" href="/static/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css"
+          rel="stylesheet">
+    <link href="/static/bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+
+<div class="container-fluid">
+<div class="row  mt-low" >
+    <div class="col-md-4">
+        <div class="card h-50" >
+            <div class="card-header mb-2">输入json字符串</div>
+                <div class="form-group">
+                    <label for="comment">
+                        <form  class="form-inline ">
+                        <button type="button" class="btn btn-sm btn-outline-success"  id="submit_json">提交json字符串</button>
+                            <input type="text"  id="json_key_one" class=" input-sm ml-3" placeholder="提取的key值" aria-label="Username" aria-describedby="basic-addon1">
+                        </form>
+                    </label>
+                    <textarea class="form-control  "   rows="18" id="json_detail"></textarea>
+                </div>
+                <button type="button"  id="json_chushihua" class="btn btn-outline-secondary btn-sm btn-block">返回</button>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="input-group mb-3">
+            <input type="text" id="find_detail"  class="form-control" placeholder="输入要查找的key，多个用逗号隔开，切必须在同一个层级" aria-label="Username" aria-describedby="basic-addon1">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary btn-outline-success" type="button" id="find_submit">提交</button>
+            </div>
+        </div>
+        <div  id="find_result">
+
+        </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="/static/hualala/vendor/jquery/jquery.min.js"></script>
+<script src="/static/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+<script src="/static/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
+<script src="/static/layer-v3.0/layer/layer.js"></script>
+<script type=text/javascript>
+    function _getRandomString(len) {
+        len = len || 32;
+        var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz'; // 默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1
+        var maxPos = $chars.length;
+        var pwd = '';
+        for (i = 0; i < len; i++) {
+            pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+        }
+        return pwd;
+    }
+
+
+
+    var url_host='http://172.18.70.73:5025/'
+$('#submit_json').click(function(){
+    var json_detail=$('#json_detail').val()
+    var json_key=$('#json_key_one').val()
+    $.post(url_host+'/json_tiqu/json_submit',{json_detail:json_detail,json_key:json_key},
+    function(data){
+        $('#json_detail').val(data.data)
+        $('#json_detail').attr('disabled','true')
+        $('#json_chushihua').attr('begin_json',json_detail)
+    })
+})
+$('#json_chushihua').click(function(){
+    $('#json_detail').removeAttr('disabled')
+    $('#json_detail').val($(this).attr('begin_json'))
+})
+    $('#find_submit').click(function() {
+        var find_detail = $('#find_detail').val()
+        var json_detail = $('#json_detail').val()
+        $.post(url_host + '/json_tiqu/find_submit', {find_detail: find_detail, json_detail, json_detail},
+            function (data) {
+                var u = "\n" +
+                    "            <div class=\"alert alert-success mb-3\" role=\"alert\" data-toggle=\"collapse\">\n" +
+                    "                A simple success alert—check it out!\n" +
+                    "            </div>"
+                    +
+                    "<div  class=\"collapse\">\n" +
+                    " <pre  name=\"all_gind_json\"></pre>" +
+
+                    "</div>"
+                if (data.hasOwnProperty('data')) {
+                    $('#find_result').empty()
+                } else {
+                    alert('error')
+                }
+                var statu = "1"
+                $.each(data.data, function (k, i) {
+                    var id_statu = _getRandomString(12)
+                    $('#find_result').append(u)
+
+                    $('#find_result').find('[ role="alert"]').eq(-1).html(JSON.stringify(i[0]))
+                    $('#find_result').find('[ role="alert"]').eq(-1).attr('all_data_json', i[1])
+                    $('[name="all_gind_json"]').eq(-1).html(i[1])
+                    $('#find_result').find('[class="collapse"]').eq(-1).attr('id', id_statu)
+                    $('#find_result').find('[ role="alert"]').eq(-1).attr('data-target', "#" + id_statu)
+
+                })
+            })
+    })
+
+
+
+    $(document).keyup(function(event){
+        if (event.keyCode==13)
+        {
+
+            var find_detail=$('#find_detail').val()
+            var json_detail=$('#json_detail').val()
+            $.post(url_host+'/json_tiqu/find_submit',{find_detail:find_detail,json_detail,json_detail},
+                function(data)
+                {
+                    var u="\n" +
+                        "            <div class=\"alert alert-success mb-3\" role=\"alert\" data-toggle=\"collapse\">\n" +
+                        "                A simple success alert—check it out!\n" +
+                        "            </div>"
+                    +
+                            "<div  class=\"collapse\">\n" +
+                           " <pre  name=\"all_gind_json\"></pre>"+
+
+                        "</div>"
+                    if (data.hasOwnProperty('data'))
+                    {
+                        $('#find_result').empty()
+                    }
+                    else
+                    {
+                        alert('error')
+                    }
+                    var statu="1"
+                    $.each(data.data,function(k,i){
+                        var id_statu=_getRandomString(12)
+                        $('#find_result').append(u)
+
+                            $('#find_result').find('[ role="alert"]').eq(-1).html(JSON.stringify(i[0]))
+                            $('#find_result').find('[ role="alert"]').eq(-1).attr('all_data_json',i[1])
+                            $('[name="all_gind_json"]').eq(-1).html(i[1])
+                            $('#find_result').find('[class="collapse"]').eq(-1).attr('id',id_statu)
+                            $('#find_result').find('[ role="alert"]').eq(-1).attr('data-target',"#"+id_statu)
+
+                    })
+                })
+        }
+    })
+</script>

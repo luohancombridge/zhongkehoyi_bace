@@ -1,0 +1,172 @@
+{% extends "/hualala/pages/base.html" %}
+
+{% block content %}
+
+<style type="text/css">
+.mt-10{margin-top:30px;}
+</style>
+ <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">server管理</h1>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+            </div>
+ <div class="container-fluid"  id='git_insert'    >
+
+        <div class="row  mt-10"   >
+            <div class="col-md-3">
+              <div class="input-group">
+                  <span class="input-group-addon" >server  ip</span>
+                  <input type="text" spellcheck="false"  id="add_name" class="form-control" placeholder="username" aria-describedby="basic-addon2">
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon2">端口号</span>
+                  <input type="text" spellcheck="false"  id="add_pass" class="form-control" placeholder="password" aria-describedby="basic-addon2">
+              </div>
+            </div>
+            <div class="col-md-3">
+               <div class="btn-group">
+                  <button type="button" class="btn btn-default" id ='add_user'>新增server</button>
+               </div>
+            </div>
+        </div>
+
+
+  <div class="row  mt-10"  id="alert" style="display: none" >
+            <div class="col-md-10">
+
+                <div class="alert alert-warning" >
+                     <a class="close" data-dismiss="alert">×</a>
+                    <div id="alert_text">
+                     <strong>Fail!</strong>You have successfully done it.
+                    </div>
+                     </div>
+                 </div>
+        </div>
+
+
+
+
+     </div>
+
+ <div class="container-fluid"    >
+  <div class="row  mt-10"   >
+    <table class="table">
+		<caption><h3>server列表　</h3></caption>
+		<thead>
+			<tr>
+				<th>ip地址</th>
+				<th>端口号</th>
+				<th>线程数</th>
+                <th>删除</th>
+                 <th>是否启用<</th>
+			</tr>
+		</thead>
+		<tbody>
+        {% for i in  user_detail %}
+			<tr>
+				<td>{{i[1]}}</td>
+				<td>{{i[2]}}</td>
+				<td>{{i[-1]}}</td>
+                        <td>
+
+            <button type="button" class="btn btn-default" aria-label="Left Align">
+                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </button>
+
+
+            </td>
+                <td>
+    {%  if i[-2]=="1" %}
+ <input type="checkbox" name="my-checkbox"   statu={{i[0]}}>
+                    {% else %}
+                    <input type="checkbox" name="my-checkbox"  checked statu={{i[0]}}>
+{% endif %}
+
+
+
+                 </td>
+
+			</tr>
+         {% endfor %}
+		</tbody>
+</table>
+     </div>
+  </div>
+
+    <script src="{{ url_for('static', filename='hualala/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap-switch/dist/js/bootstrap-switch.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='socket.io/socket.io.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='layer-v3.0/layer/layer.js') }}"></script>
+    <script>
+    var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+ $(document).ready(function(){
+$("[name='my-checkbox']").bootstrapSwitch({
+        onText:"启用",
+        offText:"停止",
+        onColor:"success",
+        offColor:"warning",
+        size:"small",
+        onSwitchChange:function(event,state){
+        var ip=$(this).attr('statu')
+  $.post($SCRIPT_ROOT + '/change_server', {change_id: ip,statu:state},
+                function (data) {
+                }
+            )
+        }
+    })
+    })
+
+//增加server
+$('#add_user').click(function()
+{
+var ip=$('#add_name').val()
+var duankou=$('#add_pass').val()
+ $.post($SCRIPT_ROOT + '/add_server', {ip: ip,duankou:duankou},
+                function (data) {
+     if(data.a!="1")
+     {
+         $('#alert_text').empty()
+         $('#alert_text').append('<strong>Fail  !  </strong>'+data.a)
+$('#alert').show()
+         setTimeout(function(){
+$('#alert').hide();
+},3000);
+     }
+     else
+     {
+         window.location.reload()
+     }
+                }
+            )
+}
+)
+
+//删除server
+
+   $('.glyphicon-remove').parent().each(function() {
+           $(this).click(function () {
+                   var ip = $(this).parent().parent().find('td').html()
+                   $.post($SCRIPT_ROOT + '/delete_server', {ip: ip},
+                       function (data) {
+                             if (data.statu=='success')
+                             {
+                                  window.location.reload()
+                             }
+
+                       })
+               }
+           )
+       }
+    )
+
+    </script>
+{% endblock %}
+
+

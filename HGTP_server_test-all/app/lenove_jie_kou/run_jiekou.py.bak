@@ -1,0 +1,230 @@
+# -*- coding: utf-8 -*-
+__author__ = 'SUNZHEN519'
+#批量运行结果页面
+from tempfile import mktemp
+from .assert_run import  *
+from app import app
+from flask import send_from_directory,send_file,Response
+import socket
+import os
+import time
+import sqlite3
+from flask import render_template, flash, redirect,request,g,Response,stream_with_context
+from flask import current_app
+from flask import Flask, render_template, session, redirect, url_for, flash,jsonify
+import json
+import demjson
+from functools import wraps
+#不是自动打开的页面，可以查看调试信息
+def piliangjiekou_result(func):
+  @wraps(func)
+  def ceshi():
+    func()
+    ip = request.headers.get('X-Real-IP')
+    db = sqlite3.connect(current_app.config.get('JIE_KOU'))
+    cu = db.cursor()
+    if request.method == "GET":
+        s_assert=assert_run()
+        #根据ip地址读取测试数据
+        data = cu.execute('select * from  jiekou_result where ip=?', (ip,)).fetchall()
+        tim=time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(float(data[-1][-3])))
+        all=[]
+        all_success=0
+        all_fail=0
+        if len(data)!=0:
+             for i in data:
+                 name=i[0]
+                 detail=[]
+                 statu=0
+                 count=len(json.loads(i[2]))
+                 fail=0
+                 succ=0
+                 for k,z in json.loads(i[2]).items():
+                     #result=json.dumps(json.loads(json.dumps(demjson.decode(json.dumps(z['respons']))), parse_int=int), indent=4, sort_keys=False,
+                                   #ensure_ascii=False)
+                     result=json.dumps(z['respons'],indent=4,ensure_ascii=False)
+                     id=int(k)
+                     if z['case_assert']!='':
+                         if z['case_assert']=='':
+                             assert_data=''
+                         elif '&&' in z['case_assert']:
+                             assert_data="调用断言函数：%s" % z['case_assert'].split('&&')[-1]
+                         else:
+                             try:
+                                 if type(z['case_assert'])  in ['str','unicode']:
+                                     assert_data=json.loads(z['case_assert'])
+                                 else:
+                                     assert_data=z['case_assert']
+                             except:
+                                 assert_data={"assert_detail":z['case_assert']}
+                     else:
+                         assert_data=z['case_assert']
+                     case_assert=json.dumps(json.loads(json.dumps(demjson.decode(json.dumps(assert_data))), parse_int=int), indent=4,
+                                    sort_keys=False,
+                                    ensure_ascii=False)
+                     comment=z['case_name']
+                     req_url=z['req_url']
+                     req=z['req']
+                     req = json.dumps(json.loads(json.dumps(demjson.decode(json.dumps(req))), parse_int=int), indent=4,
+                                    sort_keys=False,
+                                    ensure_ascii=False)
+                     if z['assert_result']==False:
+                         statu=1
+                         fail+=1
+                         all_fail+=1
+                         detail.append(["failCase",id,comment,case_assert,result,req,req_url])
+                     else:
+                         all_success+=1
+                         succ+=1
+                         detail.append(["passCase", id, comment, case_assert,result,req,req_url])
+                 detail=sorted(detail,key=lambda x:x[1])
+                 if statu==1:
+                         all.append([name,"failClass",[count,succ,fail,count],detail])
+                 elif statu==0:
+                         all.append([name,"passClass", [count, succ, fail, count], detail])
+        #z中元素第一个接口名字，第二个接口的count，第三个用例状态，最后一个列表d第一个为用例状态，第二个用例id，第三个用例comment，第四个用例的接口数据
+        db.close()
+        return render_template('/hualala/jiekou_test/test_result_local.html',z=all,time=tim,success=all_success,fail=all_fail)
+  return ceshi
+##接收接口测试返回过来的批量接口数据，并存入数据库中
+def jiekou_result(func):
+    def resultee():
+        func()
+        #接口名和接口运行数据的列表
+        data=request.form['data']
+        time=request.form['time']
+        ip=request.form['ip']
+        #将获取的数据存入数据库jiekoui_test表中
+        db = sqlite3.connect(current_app.config.get('JIE_KOU'))
+        cu = db.cursor()
+        #删除原有数据根据ip地址
+        cu.execute('delete  from jiekou_result where ip=? and time!=?',[ip,str(time)])
+        db.commit()
+        for k,i in eval(data).items():
+            cu.executemany('INSERT INTO  jiekou_result(name,ip,data,time) VALUES (?,?,?,?,null)', [(k,ip,str(i),str(time))])
+            db.commit()
+        #cu.executemany('INSERT INTO  jiekou_result(name,ip,data,time) VALUES (?,?,?,?)', [(1,2,3,time.time())])
+        db.close()
+        return jsonify(a='1')
+    return resultee
+#反悔接口平台首页
+def jiekou_gitce(func):
+    def jiekou_git():
+        func()
+        db = sqlite3.connect(current_app.config.get('DB_DIZHI'))
+        cu = db.cursor()
+        db_jeikou = sqlite3.connect(current_app.config.get('JIE_KOU'))
+        cu_jiekou = db_jeikou.cursor()
+        name = cu.execute(
+            'select name from user where ip="%s" order by time desc limit 0,1' % request.headers.get('X-Real-IP')).fetchall()
+        if len(name) == 0:
+            return redirect(url_for('login_new'))
+        else:
+            name = name[0][0]
+        if request.method == 'GET':
+            user_team=cu.execute('select team from  user_team where user="%s" ' % (name)).fetchall()
+            if len(user_team)>0 and user_team[0][0]=="资产" or  name in current_app.config.get('ZICHAN_QUANXIAN'):
+               git_detail = [list(i) for i in cu_jiekou.execute('select * from git_detail  ').fetchall()]
+            else:
+                zichan_all_user=cu.execute('select user from  user_team where team="%s" ' % ('资产')).fetchall()
+                git_detail = [list(i) for i in cu_jiekou.execute('select * from git_detail  ').fetchall()  ]
+            team_detail=[i[0] for i in cu.execute('select team from team').fetchall()]
+            team_detail.append('其他')
+            for i in git_detail:
+                i[3] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(float(i[3])))
+            email_detail = [i[0] for i in
+                            cu.execute('select address from email_address where user="%s"' % (name)).fetchall()]
+            fajianren = [i[0] for i in db.execute('select email_user from fajianren where name="%s"' % name).fetchall()]
+            dingshi_detail = [[i[1], i[2], i[4], i[6]] for i in cu.execute(
+                'select * from dingshi_run where name="%s" and statu in ("3","4","5") order by update_time desc ' % (name)).fetchall()]
+            jobs = [[i[4],i[6]] for i in db.execute('select * from jekins ' ).fetchall()]
+            for k, i in enumerate(dingshi_detail):
+                i.insert(0, i[0])
+                i[1] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(float(i[0])))
+                if i[-2].strip() == '0':
+                    i[-2] = 'ready'
+                elif i[-2].strip() == '1':
+                    i[-2] = 'running'
+                elif i[-2].strip() == '2':
+                    i[-2] = 'over'
+            time_date = time.strftime('%Y-%m-%d ', time.localtime(time.time()))
+            server_detail = [i[1] for i in cu.execute('select * from all_server where statu="1"').fetchall()]
+            db.close()
+            db_jeikou.close()
+            #查看超级用户权限
+            if  name  in current_app.config.get('ZICHAN_QUANXIAN').split(','):
+                quanxian='super'
+            else:
+                quanxian='simple'
+            return render_template('/hualala/pages/jiekou_git.html', git_detail=git_detail, email_detail=email_detail,
+                                   time_date=time_date, dingshi_detail=dingshi_detail, fajianren=fajianren, jobs=jobs,
+                                   server_detail=server_detail,user_name=name,team_detail=team_detail,quanxian=quanxian)
+        else:
+            git_url = request.form['git'].strip()
+            git_beizhu = request.form['beizu'].strip()
+            git_branch = request.form['branch'].strip()
+            if  len(cu_jiekou.execute('select * from git_detail where name=? and  branch=?',(git_url,git_branch)).fetchall())>0:
+                return jsonify(a='git地址及分支重复')
+            if git_url.strip() != '' and git_beizhu.strip() != '':
+                cu_jiekou.executemany('INSERT INTO git_detail VALUES (?,?,?,?,?,?)',
+                               [(git_url, git_beizhu, name, str(time.time()), '', git_branch)])
+            #向ci同级表中插入数据
+            timeStamp = time.time()
+            timeArray = time.localtime(timeStamp)
+            chushi_date = time.strftime("%Y-%m-%d", timeArray)
+            if len(cu.execute('select * from ci_tongji where git_url=? and time=?',(git_url,chushi_date,)).fetchall())==0:
+                user_number=0
+                cishu=0
+                fail_case_num=json.dumps({name:0})
+                pass_case_num=json.dumps({name:0})
+                cu.executemany('INSERT INTO ci_tongji VALUES (null,?,?,?,?,?,?,?,?)',
+                                      [(name, git_url, user_number, cishu, fail_case_num,pass_case_num,chushi_date,git_branch)])
+            else:
+                cu.execute('UPDATE ci_tongji SET submiter_user=? WHERE git_url=?',
+                           (name,git_url))
+            db_jeikou.commit()
+            db_jeikou.close()
+            db.commit()
+            db.close()
+            return jsonify(a='1')
+    return jiekou_git
+
+import functools
+
+def dingshi_jiekou_insert(fun):
+    @functools.wraps(fun)
+    def dingshi_jiekou_insert():
+
+        return jsonify(statu='scuess')
+    return dingshi_jiekou_insert
+
+
+#关联ip地址
+def guanlian_ip_dizhi(func):
+  def ceshi_ip():
+      func()
+      db = sqlite3.connect(current_app.config.get('JIE_KOU'))
+      cu = db.cursor()
+      client_ip=request.headers.get('X-Real-IP')
+      if len (cu.execute('select * from guanlian_ip where client_ip=?',(request.form['ip_dizhi'],)).fetchall())==0:
+         cu.executemany('INSERT INTO  guanlian_ip VALUES (?,?,?)',
+                     [(client_ip,request.form['ip_dizhi'],time.time())])
+      else:
+          cu.execute('UPDATE guanlian_ip SET server_ip=? WHERE client_ip=?',
+                       (request.headers.get('X-Real-IP'),json.dumps(client_ip)))
+      db.commit()
+      return jsonify(statu='success')
+  return ceshi_ip
+
+#根据关联地址返回异地调试页面
+def debugging(func):
+    def debugging_run():
+        func()
+        db = sqlite3.connect(current_app.config.get('JIE_KOU'))
+        cu = db.cursor()
+        if len(cu.execute('select * from guanlian_ip where client_ip=?', (request.headers.get('X-Real-IP'),)).fetchall()) == 0:
+               return "没有关联ip"
+        else:
+            session['yidi_mulu_ip']=cu.execute('select server_ip from guanlian_ip where client_ip=?', (request.headers.get('X-Real-IP'),)).fetchall()[0][0]
+        return redirect(url_for('shishitiaoshi'))
+    return debugging_run

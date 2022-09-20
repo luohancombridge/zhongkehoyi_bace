@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+{% block content %}
+<p style="text-align:center">文件列表</p>
+       <style type="text/css">
+table.zyhovertable {
+
+
+    font-family:
+    verdana,arial,sans-serif;
+    font-size:11px;
+    color:#333333;
+    border-width: 1px;
+    border-color: #999999;
+    border-collapse:
+    collapse;
+}
+
+table.zyhovertable th {
+    background-color:#C3DDE0;
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #999999;
+}
+
+table.zyhovertable tr {
+    background-color:#DCDCDC;
+}
+
+table.zyhovertable td {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #999999;
+}
+</style>
+ <div id="fenye"   style="position: relative; left: 50px; top: 40px;">
+    {% for i in  biaoqian %}
+
+  <input type="button" class="fenye" value={{i}}  style="text-align:left;width:80px;high:40px">
+       {% endfor %}
+ </div>
+<table class="zyhovertable" style="text-align:left; margin-top:50px" id="table">
+<tr>
+<th width="5%"><label><input name="F" id="quanxuan" type="checkbox" value="全选" /> </label></th><th width="10%">脚本名</th><th width="10%">类名</th><th width="5%">所属仓库</th><th width="40%">备注</th><th width="40%">编辑</th>
+</tr>
+            {% for i in  mulu %}
+<tr onmouseover="this.style.backgroundColor='#FFFF66';"onmouseout="this.style.backgroundColor='#DCDCDC';"><td><label><input name="Fruit" class={{i[0]}} type="checkbox" value={{i}} /> </label></td><td> {{i[0]}}</td><td> {{i[1]}}</td><td>{{i[2]}}</td><td>{{i[3]}}</td><td><label><input name="allbianji" id={{i[0]}} type="button"  value="编辑"  /> </label></td></tr>
+<tr onmouseover="this.style.backgroundColor='#FFFF66';"onmouseout="this.style.backgroundColor='#DCDCDC';">
+<tr onmouseover="this.style.backgroundColor='#FFFF66';"onmouseout="this.style.backgroundColor='#DCDCDC';">
+    {% endfor %}
+</table>
+
+</div></div>
+<p><input type="button" id="resulte" value="删除" style="text-align: left; margin-top: 50px; position: relative; left: 170px;">
+
+    <form action="/update" method="POST" enctype="multipart/form-data">
+     <select  name="biao_select"  style="width: 70px; position: relative; left: 150px;">
+          {% for i in  biaoqian %}
+  <option value ={{i}}>{{i}}</option>
+
+        {% endfor %}
+    <input type="file" name="file"  style="position: relative; left: 170px;" />
+        <input type="submit"  style="line-height: 1.5; position: relative; left: 170px;"  value="提交"  id="fileti" />
+    </form>
+        </div>
+    </div>
+
+</div>
+<div id="souup"   style="position: absolute; left: 370px; top: 137px;">
+<input type="text" id="sousuo" style="width:140px;"  />
+<input type="submit"  style="line-height:1.5;"  value="搜索"  id="sousuoti" />
+    </div>
+<form action="" method="post" align="center"  hidden="hidden" id="allbianji"  style="position: relative; top: 100px; left: -100px;">
+
+<textarea id="yj" cols=100   rows="5"  spellcheck="false">
+
+</textarea>
+<input type="button" id="add_update" value="更新"  style="position: relative;  left: -100px;">
+</form>
+
+
+
+
+        <input type="submit" id="download" name="name" value="下载" style="margin-top: 50px; position: absolute; left: 410px; top: 413px;"   />
+
+<script src="{{url_for('static', filename='jquery-1.8.0.js')}}"></script>
+<script type=text/javascript>
+var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+</script>
+<script type=text/javascript>
+
+
+    $("#down").hide();
+var offsetleft=$("#resulte").offset().left;
+var offsettop=$("#resulte").offset().top;
+var topp=$("#logout").offset().top;
+       $('select[name="biao_select"]').css({position: "relative  ",'left':150});
+$("#resulte").css({position: "relative ",'left':170});
+$('[name="file"]').css({position: "relative  ",'left':170});
+$('#fileti').css({position: "relative  ",'left':170});
+$('#download').css({position: "absolute",'left':410,'top':offsettop-50});
+
+var checkbox=$('input[name="Fruit"]');
+    //绑定搜索按钮
+     $('#sousuoti').click(function() {
+         var sou = $('#sousuo').val();
+         $.post($SCRIPT_ROOT + '/sousuo', {ame: sou},
+                 function (data) {
+
+                     window.location.reload();
+                 }
+         )
+     }
+     )
+     $('#quanxuan').click(function () {
+         if ($('#quanxuan').attr("checked")) {
+             for (var i = 0; i < checkbox.length; i++) {
+                 checkbox.eq(i).attr("checked", "checked");
+
+             }
+
+         }
+                 else{
+ for (var i = 0; i < checkbox.length; i++) {
+                checkbox.eq(i).attr("checked", false);
+
+             }
+
+
+         }
+
+     }
+     )
+
+//删除操作绑定
+
+ var jiaoben="";
+    $('#resulte').click(function() {
+
+                $('input[name="Fruit"]:checked').each(function(i){
+
+
+
+     jiaoben=jiaoben+';'+$(this).attr("class" )
+
+
+
+});
+
+ $.post($SCRIPT_ROOT + '/delete', {jiaoben:jiaoben},
+                function (data) {
+window.location.reload()
+                });
+    }
+    )
+
+
+    //绑定编辑操作
+
+        $('input[name="allbianji"]').click(function() {
+             var names=$(this).attr('id');
+                    var offsettop=$("#resulte").offset().top;
+                    var offsetleft=$("#resulte").offset().left;
+               $.post($SCRIPT_ROOT + '/allbianji', {names:names},
+                function (data) {
+                    $('#allbianji').show();
+$('#add_update').css({position: "absolute",'top':offsettop+90,'left':offsetleft+70});
+                     $('#yj').val(data.namename);
+                     $('#yj').attr("rows",data.le);
+                    $('#yj').css({position: "relative  ",'top':100,'left':-100});
+                }
+               )}
+        )
+
+
+    //保存编辑操作
+
+        $('#add_update').click(function() {
+            var names=$('#yj').val();
+               $.post($SCRIPT_ROOT + '/allbaocun', {names:names},
+                function (data) {
+                    $('#allbianji').hide();
+
+                }
+               )}
+        )
+//绑定下载按钮，执行下载操作
+
+    $('#download').click(function() {
+
+        $('input[name="Fruit"]:checked').each(function (i) {
+                    var jiaoben = $(this).attr("class");
+                    $.post($SCRIPT_ROOT + '/download', {name: jiaoben},
+                            function (data) {
+
+                                //window.location = $SCRIPT_ROOT + '/downloads' + '/' + data.root;
+
+window.open($SCRIPT_ROOT + '/downloads' + '/' + data.root)
+                            }
+                    )
+                    setTimeout("GetWeibo(1)",5000);
+                }
+        )
+    })
+
+
+//绑定分页标签，根据分页标签确定返回什么结果
+$('input[class="fenye"]').each(function()
+{
+    $(this).click(function()
+    {
+         $.post($SCRIPT_ROOT + '/biao_data',{valu: $(this).attr('value')},
+        function (data)
+        {
+           window.location.reload()
+
+        }
+        )
+
+    })
+
+
+
+})
+//根据点击元素修改元素颜色
+$(document).ready(function () {
+    $.post($SCRIPT_ROOT + '/change_colour',{value:"33"},
+            function (data) {
+
+                $('input[class="fenye"]').each(function () {
+
+
+                    if ($(this).attr("value")==data.fenye)
+                    {
+                   $(this).css("background-color","BlanchedAlmond");
+
+                    }
+
+                })
+
+
+            }
+
+
+
+    )
+
+})
+
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+       <style type="text/css">
+table.zyhovertable {
+    font-family:
+    verdana,arial,sans-serif;
+    font-size:11px;
+    color:#333333;
+    border-width: 1px;
+    border-color: #999999;
+    border-collapse:
+    collapse;
+}
+table.zyhovertable th {
+    background-color:#C3DDE0;
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #999999;
+}
+table.zyhovertable tr {
+    background-color:#DCDCDC;
+}
+table.zyhovertable td {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #999999;
+}
+</style>
+<form action="/yuansuadd" method="POST"   id="addyuansu"  enctype="multipart/form-data">
+    新增元素
+ <p>元素编号<input type="text" name="id" value={{nid}}  style="width:140px;"  /> 元素所在页面<input type="text" name="url"   style="width:140px;"  />   元素名 <input type="text" name="yuansuming"  style="width:140px;" />定位方式 <input type="text" name="dingweifangshi"  style="width:140px;" />定位参数 <input type="text"  name="dingweicanshu" style="width:140px;" />
+<input name='yuansubao' type="submit" value="保存">
+</form>
+<input name="excel" id='excelee' type="submit" value="生成excel表格">
+<div   id="quancan">
+    元素列表
+            {% for i in  canshu %}
+    <form action="/yuansuadd" method="POST"   id={{i[0]}}  enctype="multipart/form-data">
+ <p>元素编号<input type="text" id="id"    name="id" value={{i[0]}}  style="width:140px;"  disabled="true" /> 元素所在页面<input type="text" id="url"   name="url" value={{i[1]}}  style="width:140px;"  />   元素名 <input type="text" value={{i[2]}} id="yuansuming"    name="yuansuming" style="width:140px;" />定位方式 <input type="text" id="dingweifangshi"  name="dingweifangshi" value={{i[3]}} style="width:140px;" />定位参数 <input type="text"  value={{i[4]}} id="dingweicanshu"  name="dingweicanshu" style="width:140px;" />
+<input name={{i[1]}} id='yuansubao' type="submit" value="保存">
+     <input name={{i[0]}} id='yuansudelee' type="button" value="删除">
+ </p>
+</form>
+    <hr  name ='xian'style=" height:2px;border:none;border-top:2px dotted #185598;width:1164px;" />
+    {% endfor %}
+</div>
+<script src="{{url_for('static', filename='jquery-1.8.0.js')}}"></script>
+<script type=text/javascript>
+var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+</script>
+<script type=text/javascript>
+ $(document).ready(function() {
+$("#addyuansu").css({position: "relative ",'left':60,'top':+80});
+$("#excelee").css({position: "relative ",'left':60,'top':+100});
+$("#quancan").css({position: "relative ",'left':60,'top':+140});
+$("[ name ='xian']").css({position: "relative ",'left':-340});
+        $('#yuansudele').click(function() {
+                    location.href = $SCRIPT_ROOT + '/manage'
+                    //window.open($SCRIPT_ROOT + '/user_manage')
+                }
+        )
+}
+)
+            $('#yuansudelee').click(function() {
+ var ss= $('#yuansudelee').attr('name')
+  $.post($SCRIPT_ROOT + '/yuansudelee', {num: ss},
+          function (data) {
+             window.location.reload()
+          }
+  )
+                        }
+)
+//绑定生成excel表格按钮
+ $('#excelee').click(function() {
+  $.post($SCRIPT_ROOT + '/down/excel', {num: "download"},
+          function (data) {
+  window.open($SCRIPT_ROOT + '/down/file')
+          }
+  )
+                        }
+)
+</script>
+{% endblock %}
+

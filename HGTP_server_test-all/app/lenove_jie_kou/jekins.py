@@ -1,0 +1,56 @@
+# -*- coding: utf-8 -*-
+__author__ = 'SUNZHEN519'
+#根据列表执行运行文件
+from tempfile import mktemp
+from app import app
+from flask import send_from_directory,send_file,Response
+import socket
+import os
+import time
+import shutil
+import sqlite3
+from flask import render_template, flash, redirect,request,g,Response,stream_with_context
+from flask import current_app
+from flask import Flask, render_template, session, redirect, url_for, flash,jsonify
+import json
+import demjson
+import datetime
+from functools import wraps
+def signal_job_detail(func):
+    def ceshi_job():
+        func()
+        id=request.form['id']
+        db = sqlite3.connect(current_app.config.get('DB_DIZHI'))
+        cu = db.cursor()
+        job_detail = cu.execute('select * from jekins where id=%s' % str(id)).fetchall()[0]
+        db.close()
+        return jsonify(statu="1",jekins_user_second=job_detail[0],token_id=job_detail[2],job_name=job_detail[3],url=job_detail[5],beizhu=job_detail[6],canshu=job_detail[7])
+    return ceshi_job
+
+#更新jekins  job
+def job_gengxin(func):
+    def ajdfiefafe():
+        func()
+        db = sqlite3.connect(current_app.config.get('DB_DIZHI'))
+        cu = db.cursor()
+        data=json.loads(request.form['data'])
+        print((22222222222222222222222222222222222222222222222))
+        print((list(data.keys())))
+        cu.executemany('update  jekins  set user=?,token_id=?,job_name=?,url=?,beizhu=?,canshu=? where id=?',
+                       [(data['user'],data['token'],data['job_name'],data['url'],data['beizhu'],data['canshu'],data['data_id'])])
+        db.commit()
+        db.close()
+        return jsonify(statu='success')
+    return ajdfiefafe
+#删除jekins  job
+def delete_server(func):
+    def ceshi_zhong():
+        func()
+        ip=request.form['ip']
+        db = sqlite3.connect(current_app.config.get('DB_DIZHI'))
+        cu = db.cursor()
+        cu.execute('delete from all_server where ip="%s"' % (str(ip)))
+        db.commit()
+        db.close()
+        return jsonify(statu="success")
+    return ceshi_zhong

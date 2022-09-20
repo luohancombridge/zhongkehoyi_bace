@@ -1,0 +1,1047 @@
+{% extends "/hualala/pages/base.html" %}
+{% block content %}
+    <style type="text/css">
+        .mt-10 {
+            margin-top: 30px;
+        }
+    </style>
+    <div class="container" id='change_password_alert' style="display: none;">
+        <div class="row  mt-10">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-addon">新密码 </span>
+                    <input type="text" spellcheck="false" name="change_password_alert" class="form-control"
+                           placeholder="change_password" aria-describedby="basic-addon2">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="demo_job" style="display: none;">
+        <div class="row mt-10" name="demo_job">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-addon">参数   </span>
+                    <input type="text" spellcheck="false" name="jekins_key" class="form-control"
+                           aria-describedby="basic-addon2">
+                    <span class="input-group-addon">value  </span>
+                    <input type="text" spellcheck="false" detail="value" name="jekins_value" class="form-control"
+                           aria-describedby="basic-addon2">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" id='email_insert' style="display: none;">
+        <div class="row  mt-10">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-addon">邮箱地址 </span>
+                    <input type="text" spellcheck="false" id="email_add_input" class="form-control"
+                           placeholder="email address" aria-describedby="basic-addon2">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-10">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon2">邮箱备注    </span>
+                    <input type="text" spellcheck="false" id="beizhu_add_input" class="form-control"
+                           placeholder="email detail" aria-describedby="basic-addon2">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-10">
+            <div class="col-md-5">
+                <div class="btn-group" role="group" aria-label="...">
+                    <button type="button" class="btn btn-default" 　 id="alert_add_email_a"> 增加</button>
+                    <button type="button" class="btn btn-default" id="alert_huanyuan">还原</button>
+                </div>
+            </div>
+        </div>
+        <div class="row  mt-10">
+            <div class="col-md-6">
+                <table class="table table-condensed" id="email_list_alert">
+                    <caption><h3>邮箱列表　</h3></caption>
+                    <thead>
+                    <tr>
+                        <th>邮箱名</th>
+                        <th>备注</th>
+                        <th>删除</th>
+                        <th>编辑</th>
+                    </tr>
+                    </thead>
+                    <tbody id="insert_emali_body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="container" id='fajianren' style="display: none;">
+        <div class="row  mt-10">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-addon">邮箱地址 </span>
+                    <input type="text" spellcheck="false" id="email_add_input_fa" class="form-control"
+                           placeholder="email address" aria-describedby="basic-addon2">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row mt-10">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon2">邮箱密码    </span>
+                    <input type="text" spellcheck="false" id="mima_add_input_fa" class="form-control"
+                           placeholder="email password" aria-describedby="basic-addon2">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-10">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon2">邮箱备注   </span>
+                    <input type="text" spellcheck="false" id="beizhu_add_input_fa" class="form-control"
+                           placeholder="email detail" aria-describedby="basic-addon2">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-10">
+            <div class="col-md-5">
+                <div class="btn-group" role="group" aria-label="...">
+                    <button type="button" class="btn btn-default" 　 id="alert_add_email_a_fa"> 增加</button>
+                    <button type="button" class="btn btn-default" id="alert_huanyuan_fa">还原</button>
+                </div>
+            </div>
+        </div>
+        <div class="row  mt-10">
+            <div class="col-md-6">
+                <table class="table table-condensed" id="email_list_alert_fa">
+                    <caption><h3>邮箱列表　</h3></caption>
+                    <thead>
+                    <tr>
+                        <th>邮箱名</th>
+                        <th>备注</th>
+                        <th>删除</th>
+                    </tr>
+                    </thead>
+                    <tbody id="insert_emali_body_fa">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="container" id='jekins_alert' style="display: none;">
+        <div class="row  mt-10">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-addon">jekins地址 </span>
+                    <input type="text" spellcheck="false" id="jekins_url" class="form-control"
+                           aria-describedby="basic-addon2">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-10">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-addon">jekins 用户名    </span>
+                    <input type="text" spellcheck="false" id="jekins_user" class="form-control"
+                           aria-describedby="basic-addon2">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-10">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-addon">jekins token    </span>
+                    <input type="text" spellcheck="false" id="jekins_token" class="form-control"
+                           aria-describedby="basic-addon2">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-10">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-addon">jekins job    </span>
+                    <input type="text" spellcheck="false" id="jekins_job" class="form-control"
+                           aria-describedby="basic-addon2">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-10">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-addon">备注     </span>
+                    <input type="text" spellcheck="false" id="jekins_beizhu" class="form-control"
+                           aria-describedby="basic-addon2">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-10">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-addon">参数   </span>
+                    <input type="text" spellcheck="false" name="jekins_key" class="form-control"
+                           aria-describedby="basic-addon2">
+                    <span class="input-group-addon">value  </span>
+                    <input type="text" spellcheck="false" detail="value" name="jekins_value" class="form-control"
+                           aria-describedby="basic-addon2">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-10">
+            <div class="col-md-5">
+                <div class="btn-group" role="group" aria-label="...">
+                    <button type="button" class="btn btn-default" 　 id="add_jekins"> 增加</button>
+                    <button type="button" class="btn btn-default" id="huanyuan_jekins">还原</button>
+                </div>
+            </div>
+        </div>
+        <div class="row  mt-10">
+            <div class="col-md-6">
+                <table class="table table-condensed" id="jekins_list">
+                    <caption><h3>job列表　</h3></caption>
+                    <thead>
+                    <tr>
+                        <th>job名</th>
+                        <th>备注</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="jekins_body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">用户管理</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <div class="container-fluid" id='git_insert'>
+        <div class="row  mt-10">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">新增用户</div>
+                    <div class="panel-body">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">用户名</span>
+                                <input type="text" spellcheck="false" id="add_name" class="form-control"
+                                       placeholder="username" aria-describedby="basic-addon2">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon2">密码</span>
+                                <input type="text" spellcheck="false" id="add_pass" class="form-control"
+                                       placeholder="password" aria-describedby="basic-addon2">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default" id='add_user'>新增用户</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">新增组名</div>
+                    <div class="panel-body">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="zu_name">组名</span>
+                                <input type="text" class="form-control"
+                                       aria-describedby="basic-addon1">
+                                <span class="input-group-btn" id="zu_name_submit">
+                             <button class="btn btn-default" type="button">提交</button>
+                    </span>
+                            </div>
+                        </div>
+
+                          <div class="col-md-6">
+                                <button class="btn btn-default btn-block btn-sm" type="submit">Button</button>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+<div class="row  mt-10"  id="user_list"   style="position: relative; top: -30px; left: 15px; z-index: 1;">
+    <table class="table">
+		<caption><h3>用户列表　</h3></caption>
+		<thead>
+			<tr>
+				<th>用户名</th>
+				<th>运行状态</th>
+				<th>登陆ip地址</th>
+                <th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+        {% for i in  user_detail %}
+			<tr>
+				<td>{{i[0]}}</td>
+				<td>{{i[-3]}}</td>
+				<td>{{i[-2]}}</td>
+                <td>
+                    <div class="btn-group"   role="group" name={{i[0]}}>
+                    <button type="button" class="btn btn-default" name ='delete_user' id={{i[0]}}>删除用户</button>
+                        <button type="button" class="btn btn-default" name ='change_password'>修改密码 </button>
+                <button type="button" class="btn btn-default" name ='email_manage' >收件人管理</button>
+                        <button type="button" class="btn btn-default" name ='fajianren' >发件人管理</button>
+                         <button type="button" class="btn btn-default" name ='jekins' >jekins管理</button>
+                         <button type="button" class="btn btn-default" name ='suite' >suite 置空</button>
+                        <button type="button" class="btn btn-default" name ='suite' >suite 置空</button>
+                        <div class="btn-group" role="group"   name="user_team">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                <a  style="color:black">
+                                    {{i[-1]}}</a>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                 {% for i in  team_user %}
+                                <li><a>{{ i }}</a></li>
+                                {%  endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </td>
+			</tr>
+         {% endfor %}
+		</tbody>
+</table>
+     </div>
+  </div>
+    <!-- Modal -->
+<div class="modal fade" id="myModa2" tabindex="-1" role="dialog" aria-labelledby="myModalLabe2"  z-index="111111111">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">job  详情</h4>
+      </div>
+      <div class="modal-body">
+        <div class="container"  id='jekins_alert'    >
+        <div class="row  mt-10"   >
+            <div class="col-md-5">
+              <div class="input-group">
+                  <span class="input-group-addon" >jekins地址 </span>
+                  <input type="text" spellcheck="false"  id="jekins_url_second" class="form-control"  aria-describedby="basic-addon2">
+              </div>
+            </div>
+        </div>
+    <div class="row mt-10">
+            <div class="col-md-5">
+              <div class="input-group">
+                  <span class="input-group-addon" >jekins 用户名    </span>
+                  <input type="text" spellcheck="false"  id="jekins_user_second" class="form-control" aria-describedby="basic-addon2">
+              </div>
+            </div>
+        </div>
+  <div class="row mt-10">
+            <div class="col-md-5">
+              <div class="input-group">
+                  <span class="input-group-addon" >jekins token    </span>
+                  <input type="text" spellcheck="false"  id="jekins_token_second" class="form-control"  aria-describedby="basic-addon2">
+              </div>
+            </div>
+        </div>
+              <div class="row mt-10">
+            <div class="col-md-5">
+              <div class="input-group">
+                  <span class="input-group-addon" >jekins job    </span>
+                  <input type="text" spellcheck="false"  id="jekins_job_second" class="form-control"  aria-describedby="basic-addon2">
+              </div>
+            </div>
+        </div>
+<div class="row mt-10">
+            <div class="col-md-5">
+              <div class="input-group">
+                  <span class="input-group-addon" >备注     </span>
+                  <input type="text" spellcheck="false"  id="jekins_beizhu_second" class="form-control"  aria-describedby="basic-addon2">
+              </div>
+            </div>
+        </div>
+           <div id="html_example">
+            <div class="row mt-10"   >
+            <div class="col-md-5">
+              <div class="input-group">
+                  <span class="input-group-addon" >参数   </span>
+                  <input type="text" spellcheck="false"  name="jekins_key_second" class="form-control"  aria-describedby="basic-addon2">
+                  <span class="input-group-addon" >value  </span>
+                  <input type="text" spellcheck="false"  detail="value" name="jekins_value_second" class="form-control"  aria-describedby="basic-addon2">
+              </div>
+            </div>
+          </div>
+               </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary"  id="job_save">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+   <script src="static/hualala/vendor/jquery/jquery.min.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="static/hualala/vendor/metisMenu/metisMenu.min.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="static/hualala/dist/js/sb-admin-2.js"></script>
+<script src="{{url_for('static', filename='layer-v3.0/layer/layer.js')}}">
+<script src="{{url_for('static', filename='jquery-1.8.0.js')}}"></script>
+	<script src="{{url_for('static', filename='layer-v3.0/layer/layer.js')}}"></script>
+    <script type=text/javascript>
+var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+//job 参数增加，页面是否增加输入框
+
+$(document).on('input propertychange','input[name="jekins_value"]',function()
+{
+var a=1
+$('input[name="jekins_value"]').each(function(index)
+
+{
+if($(this).val()=='' &&  index!=0)
+{
+a=2
+}})
+if (a==1)
+{
+$(this).parent().parent().parent().after($('#demo_job').html())
+
+}})
+$('#add_user').click(function()
+    {
+
+        $.post($SCRIPT_ROOT + '/user_manage', {name: $('#add_name').val(),pass:$('#add_pass').val(),statu: 'add_use'},
+                 function (data) {
+                 if (data.a=="success")
+                 {
+
+                      window.location.reload();
+                 }
+                        else
+                 {
+
+                     layer.msg(data.a);
+                 }
+
+
+                 }
+        )
+
+    }
+)
+
+ $('button[name ="delete_user"]').each(function() {
+         $(this).click(function () {
+                 $.post($SCRIPT_ROOT + '/user_manage', {name: $(this).attr('id'), statu: 'delete_use'},
+                     function (data) {
+
+                        if (data.a=='delete-success')
+                        {
+                         window.location.reload();
+                        }
+
+                     }
+                 )
+
+
+             }
+         )
+     }
+ )
+
+
+
+$('button[name="email_manage"]').each(function() {
+    $(this).click(function () {
+            var user=$(this).prev().prev().attr('id');
+    $('#email_add_input').attr('name',user)
+            layer.open({
+                title:"邮箱管理",
+                type: 1,
+                shadeClose: true,
+                end:function(layero, index){
+
+                    $('#insert_emali_body').empty()
+                },
+                   success: function(layero, index){
+                    $('#email_add_input').val('')
+                       $('#beizhu_add_input').val('')
+                  var user=$('#email_add_input').attr('name');
+
+                     $.post($SCRIPT_ROOT + '/emali_list_all', {name:user},
+                     function (data) {
+
+                          $('#insert_emali_body').append(data.html)
+
+                     }
+  )
+
+
+
+
+
+  },
+                btn: ['关闭弹出框'],
+                yes: function (index, layero) {
+                    //do something
+                    layer.close(index); //如果设定了yes回调，需进行手工关闭
+                },
+area: ['600px', '750px'],
+            skin: 'layui-layer-rim',
+  title: false, //不显示标题
+  content: $('#email_insert'),
+        }
+    )
+
+})})
+
+$('#alert_add_email_a').click(function()
+
+        {
+
+            var email=$('#email_add_input').val()
+            var beizhu=$('#beizhu_add_input').val()
+            var user=$('#email_add_input').attr('name')
+  $.post($SCRIPT_ROOT + '/add_email', {email: email, beizhu: beizhu,name:user},
+                     function (data) {
+
+                        if (data.a=='add-success')
+                        {
+$('#email_list_alert').find('tr').eq(-1).after(data.html)
+                        }
+
+                     }
+  )
+
+
+
+
+        }
+
+    )
+
+$(document).ready(function()
+
+
+{
+
+    $('button[type="button"][name]').attr('disabled',true)
+$('button[data-toggle="dropdown"]').attr('disabled',true)
+ $('button[type="button"][name="add_job_canshu"]').attr('disabled',false)
+             $.post($SCRIPT_ROOT + '/user_manage', {statu:"quanxian"},
+                     function (data) {
+
+                        if (data.name!='all')
+                        {
+
+
+                  $('div[class="btn-group"][name="'+data.name+'"]').children().removeAttr('disabled')
+                  $('div[class="btn-group"][name="'+data.name+'"]').find('[data-toggle="dropdown"]').removeAttr('disabled')
+
+                        }
+                        else
+                        {
+
+                             $('div[class="btn-group"]').children().removeAttr('disabled')
+                        }
+
+                     }
+  )
+
+}
+
+)
+
+
+$(document).on("click",'button[name="delete_email"]',function(){
+
+                 var detail=$(this).attr('id')
+    var z=$(this)
+                 $.post($SCRIPT_ROOT + '/delete_email', {detail:detail},
+                     function (data) {
+
+                        if (data.a=='1')
+                        {
+
+           z.parent().parent().parent().remove()
+
+
+                        }
+
+                     }
+  )
+
+
+
+
+            }
+
+
+        )
+
+
+$('#alert_huanyuan').click(function()
+
+    {
+
+        $('#email_add_input').val('')
+        $('#beizhu_add_input').val('')
+
+
+    }
+)
+
+
+
+
+
+
+
+
+$('button[name="change_password"]').each(function() {
+    $(this).click(function () {
+            var user=$(this).prev().attr('id');
+            layer.open({
+                type: 1,
+                shadeClose: true,
+                btn: ['提交'],
+                yes: function (index, layero) {
+                    //do something
+                      var password=$('input[name="change_password_alert"]').val()
+
+                      $.post($SCRIPT_ROOT + '/user_manage', {statu:'change_password',name:user,password:password},
+                     function (data) {
+
+                        if (data.a=='1')
+                        {
+
+           z.parent().parent().parent().remove()
+
+
+                        }
+
+                     }
+  )
+
+
+                    layer.close(index); //如果设定了yes回调，需进行手工关闭
+                },
+area: ['500px', '300px'],
+            skin: 'layui-layer-rim',
+  title: '修改密码', //不显示标题
+  content: $('#change_password_alert'),
+        }
+    )
+
+})})
+
+
+
+//发件人管理弹出框
+
+    $('button[name="fajianren"]').each(function() {
+    $(this).click(function () {
+
+$('#insert_emali_body_fa').empty()
+            var name=$(this).parent().attr('name')
+
+                  $.get($SCRIPT_ROOT + '/show_fajianren', {name:name},
+                     function (data) {
+                        if (data.a=='add-success')
+                        {
+                            $('#insert_emali_body_fa').empty()
+$('#insert_emali_body_fa').append(data.html)
+                        }
+
+                     }
+  )
+
+            var user=$(this).prev().prev().prev().attr('id');
+    $('#email_add_input_fa').attr('name',user)
+            layer.open({
+                title:"邮箱管理",
+                type: 1,
+                shadeClose: true,
+                end:function(layero, index){
+
+                    $('#insert_emali_body').empty()
+                },
+                btn: ['关闭弹出框'],
+                yes: function (index, layero) {
+                    //do something
+                    layer.close(index); //如果设定了yes回调，需进行手工关闭
+                },
+area: ['600px', '750px'],
+            skin: 'layui-layer-rim',
+  title: false, //不显示标题
+  content: $('#fajianren'),
+        }
+    )
+
+})})
+
+
+
+
+
+
+    $('#alert_add_email_a_fa').click(function()
+
+        {
+
+            var email=$('#email_add_input_fa').val()
+            var email_password=$('#mima_add_input_fa').val()
+             var beizhu=$('#beizhu_add_input_fa').val()
+            var user=$('#email_add_input_fa').attr('name')
+  $.post($SCRIPT_ROOT + '/add_fajianren', {email: email, beizhu: beizhu,name:user,email_password:email_password},
+                     function (data) {
+
+                        if (data.a=='add-success')
+                        {
+$('#email_list_alert_fa').find('tr').eq(-1).after(data.html)
+                        }
+
+                     }
+  )
+
+
+
+
+        }
+
+    )
+
+
+
+
+    //再发件人列表种删除
+
+$(document).on('click','button[name="delete_email_fa"]',function()
+
+    {
+        var z=$(this)
+
+            $.get($SCRIPT_ROOT + '/delete_fajianren', {id:$(this).attr('id')},
+                     function (data) {
+                        if (data.a=='delete-success')
+                        {
+
+ z.parent().parent().parent().remove()
+                        }
+
+                     }
+  )
+
+
+
+
+
+
+
+    }
+
+
+
+)
+
+
+
+
+//jekins管理弹出框
+
+    $('button[name="jekins"]').each(function() {
+    $(this).click(function () {
+
+$('#jekins_body').empty()
+            var name=$(this).parent().attr('name')
+$('#jekins_body').attr('name',name)
+$('#add_jekins').attr('name',name)
+                  $.get($SCRIPT_ROOT + '/jekins_list', {name:name},
+                     function (data) {
+                        if (data.a=='add-success')
+                        {
+                            $('#jekins_body').empty()
+                            $('#jekins_url').val(data.tongyong_detail[2])
+                            $('#jekins_token').val(data.tongyong_detail[1])
+                            $('#jekins_user').val(data.tongyong_detail[0])
+                            $('#jekins_job').val(data.tongyong_detail[3])
+$('#jekins_body').append(data.html)
+                        }
+
+                     }
+  )
+
+
+            layer.open({
+                title:"邮箱管理",
+                type: 1,
+                shadeClose: true,
+                end:function(layero, index){
+
+                    $('#insert_emali_body').empty()
+                },
+                btn: ['关闭弹出框'],
+                yes: function (index, layero) {
+                    //do something
+                    layer.close(index); //如果设定了yes回调，需进行手工关闭
+                },
+
+area: ['650px', '750px'],
+                zIndex:10,
+            skin: 'layui-layer-rim',
+  title: false, //不显示标题
+  end: function()
+  {
+  $('input[name="jekins_value"]').val('')
+  $('input[name="jekins_key"]').val('')
+  $('div[name="demo_job"]').each(function(index)
+  {
+  if (index!=0)
+  {
+  $(this).remove()
+
+  }
+
+  }
+  )
+  },
+
+  content: $('#jekins_alert'),
+        }
+    )
+
+})})
+
+
+
+//增加jekins
+
+$('#add_jekins').click(function()
+
+{
+  var a={}
+  $('input[name="jekins_key"]').each(function(index)
+                                   {
+if ($(this).val().trim()!='')
+{
+a[$(this).val().trim()]=$('input[name="jekins_value"]').eq(index).val().trim()
+
+}
+}
+)
+  var url=$('#jekins_url').val()
+  var jekins_user=$('#jekins_user').val()
+  var token=$('#jekins_token').val()
+  var job=$('#jekins_job').val()
+  var name=$(this).attr('name')
+  var beizhu=$('#jekins_beizhu').val()
+   $.post($SCRIPT_ROOT + '/add_jekins', {url:url,jekins_user:jekins_user,token:token,job:job,name:name,beizhu:beizhu,canshu:JSON.stringify(a)},
+                     function (data) {
+                        if (data.a=='add-success')
+                        {
+
+$('#jekins_body').append(data.html)
+                        }
+
+                     }
+  )
+
+
+
+}
+
+)
+
+
+//删除jekins
+
+
+$(document).on('click','button[name="delete_jekins"]',function(){
+ var id =$(this).parent().parent().parent().attr('name')
+   $.post($SCRIPT_ROOT + '/jekins_delete', {id:$(this).parent().parent().parent().attr('name')},
+                     function (data) {
+                        if (data.a=='delete-success')
+                        {
+
+            $('tr'+'[name="'+id+'"]').remove()
+
+                        }
+
+                     }
+  )
+
+
+})
+
+
+
+$('button[name ="suite"]').each(function()
+
+{
+$(this).click(function(){
+ $.post($SCRIPT_ROOT + '/suite_delete', {name:$(this).parent().attr('name')},
+                     function (data) {
+                        if (data.a=='delete-success')
+                        {
+
+         layer.msg('删除成功', {
+                            shade: [0.3, '#fff'],
+                            shadeClose: true,
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        });
+
+                        }
+
+                     }
+  )
+
+
+
+
+
+})
+
+}
+
+
+)
+//job详情模态框关闭后删除参数html
+$('#myModa2').on('hide.bs.modal', function () {
+    $('#html_example').find('.row').each(function(a,b)
+        {
+
+            if (a!=0)
+            {
+
+                $(this).remove()
+            }
+        }
+    )
+
+})
+
+//点击save 按钮关闭job详情狂
+$('#job_save').click(function()
+
+    {
+         var id=$('#html_example').attr('name')
+       var url= $('#jekins_url_second').val()
+                           var user= $('#jekins_user_second').val()
+                           var token=  $('#jekins_token_second').val()
+                            var job_name=$('#jekins_job_second').val()
+                            var beizhu=$('#jekins_beizhu_second').val()
+        var canshu={}
+        $('input[name="jekins_key_second"]').each(function(z,k){
+
+            canshu[$(this).val()]=$('input[name="jekins_value_second"]').eq(z).val()
+           })
+        var data={'data_id':id,'url':url,'user':user,'token':token,'job_name':job_name,'beizhu':beizhu,'canshu':JSON.stringify(canshu)}
+          $("#myModa2").modal('hide');
+ $.post($SCRIPT_ROOT + '/job_gengxin', {data:JSON.stringify(data)},
+                     function (data) {
+
+
+                        }
+ )
+
+    }
+)
+
+    //弹出编辑框
+
+    $(document).on("click",'button[name="wirte_jekins"]',function(){
+                  layer.closeAll();
+         var id=$(this).parent().parent().parent().attr('name')
+                 $.post($SCRIPT_ROOT + '/signal_job_detail', {id:id},
+                     function (data) {
+
+                        if (data.statu=='1')
+                        {
+                            $('#html_example').attr('name',id)
+                                 $("#myModa2").modal();
+$('#jekins_url_second').val(data.url)
+                            $('#jekins_user_second').val(data.jekins_user_second)
+                            $('#jekins_token_second').val(data.token_id)
+                            $('#jekins_job_second').val(data.job_name)
+                            $('#jekins_beizhu_second').val(data.beizhu)
+                            var dataObj=eval("("+data.canshu+")")
+                           var html=$('#html_example').html()
+                            var indexx=0
+
+                              $.each(dataObj,function(idx,item){
+                                  if (indexx!=0) {
+                                      $('#html_example').append(html)
+                                  }
+                                  indexx=1
+                                              $('input[name="jekins_key_second"]').eq(-1).val(idx)
+                                $('input[name="jekins_value_second"]').eq(-1).val(item)
+                             })
+                        }
+                     }
+  )
+            }
+        )
+
+
+//添加用户组
+$('#zu_name_submit').click(function()
+                           {
+var  team_name=$('#zu_name').next().val()
+ $.post($SCRIPT_ROOT + '/add_user_team', {data:team_name},
+                     function (data) {
+                     if(data.statu=='success')
+                     {
+        $('#zu_name').next().val('')
+layer.msg('添加成功', {
+                            shade: [0.3, '#fff'],
+                            shadeClose: true,
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        })
+                        }
+                        if (data.statu=='重复')
+                        {
+                        layer.msg('组名重复', {
+                            shade: [0.3, '#fff'],
+                            shadeClose: true,
+                            icon: 2,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        })
+                        }
+                        window.location.reload()
+                        }
+ )
+}
+)
+//选择更换用户组
+$('[data-toggle="dropdown"]').next().find('li').find('a').each(function(){
+$(this).click(
+function()
+    {
+    $(this).parent().parent().prev().find('a').html($(this).html())
+  var name=$(this).parent().parent().parent().parent().attr('name')
+    $.post($SCRIPT_ROOT + '/gengxin_team', {team_name:$(this).html(),name:name},
+                     function (data) {
+
+
+                        }
+ )
+
+    }
+)})
+
+</script>
+{% endblock %}

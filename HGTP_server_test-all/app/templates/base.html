@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>首页</title>
+    <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='css/style.css') }}>
+    <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='css/style.css') }}>
+    <link rel="stylesheet" href= {{ url_for('static', filename='jquery-ui-1.12.1/jquery-ui.css') }}>
+    <script src="{{ url_for('static', filename='jquery-1.8.0.js') }}"></script>
+    <script type="text/javascript" src={{ url_for('static', filename='js/index.js') }}></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='jquery-ui-1.12.1/jquery-ui.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='jquery-ui-1.12.1/jquery-ui.min.js') }}"></script>
+</head>
+<body>
+<div class="nav-top">
+    <span>系统</span>
+    <div class="nav-topright">
+        <span>您好：{{ user }}</span><span id="logout">注销</span>
+    </div>
+</div>
+<div class="nav-down" style="position:relative;
+z-index:200;">
+    <div class="leftmenu2">
+        <ul>
+            <li>
+                <a class="j_a_list j_a_list1"></a>
+                <div class="j_menu_list j_menu_list_first">
+                    <span class="sp1"><i></i>脚本运行</span>
+                    {% for i in  names %}
+                        <a href="#" id={{ i }}>{{ i }}</a>
+                    {% endfor %}
+                </div>
+            </li>
+            <li>
+                <a class="j_a_list j_a_list2"></a>
+                <div class="j_menu_list">
+                    <span class="sp2"><i></i>文件管理</span>
+                    {% for i in  names %}
+                        <a href="##" id={{ i }}>{{ i }}</a>
+                    {% endfor %}
+                </div>
+            </li>
+            <li>
+                <a class="j_a_list j_a_list3"></a>
+                <div class="j_menu_list">
+                    <span class="sp3"><i></i>用户管理</span>
+                    <a href="###" id="user_mange">用户信息</a>
+                    <a href="adduser" id="add_user">增删用户</a>
+                    <a href="common" id="user_mange">通用配置</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="rightcon">
+    <div class="right_con">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+<script type=text/javascript>
+    var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+</script>
+<script type=text/javascript>
+    $("#add_user").hide();
+    $('a[href="#"]').each(function () {
+            $(this).click(function () {
+                    var url = $(this).attr('id');
+                    $.post($SCRIPT_ROOT + '/change', {xiangmu: url, ame: "bianji"},
+                        function (data) {
+                            //window.location.reload()
+                            location.href = $SCRIPT_ROOT + '/exe'
+                        });
+                }
+            )
+        }
+    )
+    $('a[href="##"]').each(function () {
+            $(this).click(function () {
+                    var url = $(this).attr('id');
+                    $.post($SCRIPT_ROOT + '/change', {xiangmu: url, ame: "allben"},
+                        function (data) {
+                            //window.location.reload()
+                            location.href = $SCRIPT_ROOT + '/exe'
+                        });
+                }
+            )
+        }
+    )
+    //用户管理点击操作
+    $('#user_mange').click(function () {
+            location.href = $SCRIPT_ROOT + '/manage'
+            //window.open($SCRIPT_ROOT + '/user_manage')
+        }
+    )
+    //增加用户操作
+    $('#user_mange').click(function () {
+            location.href = $SCRIPT_ROOT + '/manage'
+            //window.open($SCRIPT_ROOT + '/user_manage')
+        }
+    )
+    //根据用户名验证是否显示增加用户功能
+    $(document).ready(function () {
+            $.post($SCRIPT_ROOT + '/adduser', {ame: "adduser"},
+                function (data) {
+                    if (data.root == '1') {
+                        $("#add_user").show()
+                    }
+                }
+            )
+        }
+    )
+    //绑定增加用户页面
+    $("#add_user").click(function () {
+            location.href = $SCRIPT_ROOT + '/adduser'
+        }
+    )
+    //注销按钮
+    $("#logout").click(function () {
+            location.href = $SCRIPT_ROOT + '/login'
+            $.post($SCRIPT_ROOT + '/delete_login', {a: 222},
+                function (data) {
+                })
+        }
+    )
+    //根据权限选择隐藏那些标签
+    $(document).ready(function () {
+            $.post($SCRIPT_ROOT + '/yincang', {ame: "adduser"},
+                function (data) {
+                    $('a[href="##"]').each(function () {
+                            if (String(data.root).indexOf($(this).attr('id')) >= 0) {
+                            } else {
+                                $(this).hide();
+                            }
+                        }
+                    )
+                }
+            )
+        }
+    )
+</script>
+</body>
+</html>

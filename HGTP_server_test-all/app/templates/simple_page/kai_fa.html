@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<meta name="author" content="Mobify">
+<title>接口调试信息</title>
+<link rel="stylesheet" href="/static/new/css/bellows.min.css">
+<link rel="stylesheet" href="/static/new/css/bellows-theme.min.css">
+<link rel="stylesheet" href="/static/new/css/main.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body class="-bellows">
+
+<div class="viewport"  >
+	<div class="main-content"  id="sunzhen">
+		<h2 id="demo">Demo</h2>
+		<div class="bellows"  >
+			<div class="bellows__item bellows--is-open"  name="success">
+				<div class="bellows__header">
+					<h3  id="bug1" class="text1" name={{ c }}>报错{{ c }}</h3>
+				</div>
+				<div class="bellows__content"  name={{ c }}>
+					 <pre style="font-size:17px">输入</pre><br>
+                    <br />
+					<pre id="1"  style="font-size:13px">{{ a[0] }}</pre>
+                    <br />
+                    <pre style="font-size:17px">输出</pre><br>
+                    <br />
+					<pre   id="2"  style="font-size:13px">{{ a[1] }}</pre>
+                    <div id="bu">
+                       <input type="button" id="logs"  name="log"  value="查看日志" class="bug_log"   style="position: relative;  left: -100px;">
+                        <input type="button" id="run_jie"  name="run_jie"  value="调试运行" class="bug1"   style="position: relative;  left: -100px;">
+                        </div>
+				</div>
+			</div>
+			<div class="bellows__item">
+				<div class="bellows__header">
+					<h3  id="tiao1"  class="title" name={{ d }}>调试{{ d }}</h3>
+				</div>
+				<div class="bellows__content" name={{ c }}>
+					 <pre style="font-size:17px">输入</pre><br>
+                    <br />
+					<pre id="3"   style="font-size:13px">{{ b[0] }}</pre>
+                    <br />
+                    <pre   style="font-size:17px">输出</pre><br>
+                    <br />
+					<pre id="4"   style="font-size:13px">{{ b[1] }}</pre>
+                    <input type="button" id="log"  name="log"  value="查看日志" class="tiaoshi_log"   style="position: relative;  left: -100px;">
+                    <input type="button" id="run_jie"  name="run_jie"  value="调试运行" class="tiao1"   style="position: relative;  left: -100px;">
+				</div>
+			</div>
+		</div>
+		<!-- JavaScript -->
+        <script src="{{url_for('static', filename='jquery-1.8.0.js')}}"></script>
+		<script src="/static/new/js/jquery-1.10.1.min.js"></script>
+		<script src="/static/new/js/highlight.pack.js"></script>
+		<script src="/static/new/js/velocity.min.js"></script>
+		<script src="/static/new/js/bellows.min.js"></script>
+        <script src="/static/layer-v3.0/layer/layer.js"></script>
+<script type=text/javascript>
+var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+</script>
+		<script>
+$('input[class="tiaoshi_log"]').css({position: "relative ",'left':2});
+$('input[class="bug_log"]').css({position: "relative ",'left':2});
+$('#run_jie').css({position: "relative ",'left':20});
+$('.tiao1').css({position:'relative','left':50})
+			$(function(){
+			$('.bellows').bellows();
+			 });
+            $("#sunzhen").css({ height: "200px"});
+
+
+            $(document).ready(function(){
+ setInterval(function () {
+       $.post($SCRIPT_ROOT + '/kai_fa', {shi: $(this).attr("name")},
+                 function(data)
+                 {
+                     $('#1').html(data.a);
+                      $('#2').html(data.b);
+                     $('#3').html(data.c);
+                      $('#4').html(data.d);
+$('#bug1').html("报错"+data.bugname);
+$('#bug1').attr("name",data.bugname);
+$('#tiao1').html("调试"+data.tiaoshiname);
+                     $('#tiao1').attr("name",data.tiaoshiname);
+
+    })
+
+
+
+    }, 3000);
+});
+
+
+
+$('input[name="log"]').each(function()
+
+        {
+
+ $(this).click(function()
+                    {
+
+
+                         $.get($SCRIPT_ROOT + '/read_logs', {shi: $(this).attr("class"),name:$('#logs').closest('.bellows__content').attr('name')},
+                 function(data)
+                 {
+
+
+                      layer.open({
+  type: 1,
+                           title:"日志信息",
+  area: ['1200px', '560px'],
+  shadeClose: true, //点击遮罩关闭
+  content: '\<\pre style="padding:20px;">'+data.data+'\<\/pre>'
+  });
+    })
+
+
+                    }
+
+            )
+
+
+
+        }
+
+
+
+)
+
+//调试运行按钮
+
+
+
+$('input[name="run_jie"]').each(function()
+        {
+
+
+            $(this).click(function()
+
+                    {
+                       var z= $(this).attr("class");
+                       $.get($SCRIPT_ROOT + '/jie_run', {shi: $(this).attr("name")},
+                               function(data)
+                               {
+
+
+
+                      layer.open({
+  type: 2,
+                           title:$('#'+z).attr("name"),
+  area: ['1100px', '560px'],
+  shadeClose: true, //点击遮罩关闭
+  content: $SCRIPT_ROOT +'jie_run'
+  })
+
+
+
+
+
+
+
+
+                               }
+                       )
+
+
+                    }
+
+
+
+
+            )
+
+
+        }
+)
+
+
+		</script>
+	</div>
+</div>
+<div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';">
+</div>
+</body>
+</html>

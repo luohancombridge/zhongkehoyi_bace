@@ -1,0 +1,1103 @@
+{% extends "/hualala/pages/base.html" %}
+{% block content %}
+    <style type="text/css">
+        .mt-10 {
+            margin-top: 25px;
+        }
+
+        .mt-low {
+            margin-top: 15px;
+        }
+
+        .textarea {
+            width: 650px;
+            min-height: 420px;
+            max-height: 420px;
+            _height: 120px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 3px;
+            outline: 0;
+            border: 1px solid #a0b3d6;
+            font-size: 12px;
+            line-height: 24px;
+            padding: 2px;
+            word-wrap: break-word;
+            overflow-x: hidden;
+            overflow-y: auto;
+            border-color: rgba(82, 168, 236, 0.8);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+        }
+
+        .row.no-gutter {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    </style>
+    <div class="container-fluid">
+        <div class="row mt-10">
+            <div class="col-xs-12">
+                <div class="row ">
+                    <form class="form-horizontal form-group-sm">
+                        <div class="form-group">
+                            <input type="text" style="display:none;">
+                            <div class="col-xs-5">
+                                <div class="col-xs-5">
+                                    <div class="input-group  input-group-sm">
+                                        <span class="input-group-addon">搜索类型</span>
+                                        <select class="form-control  input-sm" id="sousuo_leixing">
+                                            <option>借用人</option>
+                                            <option>机型</option>
+                                            <option>品牌</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-7">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control"
+                                               aria-describedby="basic-addon1" id="user_sousuo_detail"
+                                               autocomplete="off">
+                                        <span class="input-group-btn">
+                                    <button class="btn btn-info btn-xs" type="button" id="user_sousuo">搜索</button>
+                                </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="form-group  form-group-sm  ">
+                                    <div class="btn-group" role="group" aria-label="...">
+                                        {% if user_statu==1 %}
+                                            <button type="button" class="btn btn-success btn-sm" id="add"
+                                                    data-toggle="modal" data-target="#take_linux_log_kuang">增加
+                                            </button>
+                                            <button type="button" class="btn btn-info btn-sm" id="changliang"
+                                                    data-toggle="modal" data-target="#add_changliang">常用设置
+                                            </button>
+
+                                               <button type="button" class="btn btn-warning btn-sm" id="daoru"
+                                                    data-toggle="modal" data-target="#file_up">导入表格
+                                            </button>
+                                                  <button type="button" class="btn btn-danger btn-sm" id="daochu"
+                                                    >导出表格
+                                            </button>
+                                               <button type="button" class="btn btn-default btn-sm" id="delete_all"
+                                                     >全部删除
+                                            </button>
+                                        {% else %}
+                                            <button type="button" class="btn btn-success btn-sm" id="add"
+                                                    data-toggle="modal" data-target="#take_linux_log_kuang"
+                                                    disabled=“disabled”>增加
+                                            </button>
+                                            <button type="button" class="btn btn-info btn-sm" id="changliang"
+                                                    data-toggle="modal" data-target="#add_changliang"
+                                                    disabled=“disabled”>常用设置
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-3">
+                                <div class="form-group  form-group-sm  ">
+                                    <div class="btn-group" role="group" aria-label="..." id="statu_click">
+                                        <button type="button" class="btn btn-primary btn-sm" id="statu_all">全部显示
+                                        </button>
+                                        <button type="button" class="btn btn-warning btn-sm" id="statu_yiyuding">已预订
+                                        </button>
+                                        <button type="button" class="btn btn-success btn-sm" id="statu_weichujie">未出借
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-sm" id="statu_yichujie">已出借
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="row  ">
+                    <div class="col-xs-12 ">
+                    <div class="table-responsive  "  >
+
+                        <table class="table table-hover  table-condensed "
+
+                               >
+                            <thead  >
+                            <tr>
+                                <th>品牌</th>
+                                <th>机型</th>
+                                <th>系统</th>
+                                <th>尺寸</th>
+                                <th>资产编号</th>
+{#                                <th>业务线</th>#}
+                                <th>密码</th>
+                                <th>业务线</th>
+{#                                <th>颜色</th>#}
+                                <th>借用人员</th>
+                                <th>借用日期</th>
+                                <th>归还日期</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="xiangmu_body">
+                            {% for i in phone_detail %}
+                                {% if  i[12]=="未出借" %}
+                                    <tr name={{ i[0] }} class="success">
+                                {% endif %}
+                            {% if  i[12]=="已出借" %}
+                                <tr name={{ i[0] }} class="danger">
+                            {% endif %}
+                            {% if  i[12]=="已预订" %}
+                                <tr name={{ i[0] }} class="warning">
+                            {% endif %}
+                            <td >{{ i[1] }}</td>
+                            <td  style="max-width:170px;">{{ i[2] }}</td>
+                            <td>{{ i[3] }}</td>
+                            <td>{{ i[4] }}</td>
+                            <td>{{ i[5] }}</td>
+{#                            <td>{{ i[6] }}</td>#}
+                            <td>{{ i[7] }}</td>
+                            <td>{{ i[8] }}</td>
+{#                            <td>{{ i[13] }}</td>#}
+                            <td>{{ i[9] }}</td>
+                            <td>{{ i[10] }}</td>
+                            <td>{{ i[11] }}</td>
+                            <td name="tr_statu">{{ i[12] }}</td>
+                            <td  style="width:200px;">
+                                <div class="btn-group" role="group" aria-label="...">
+                                    {% if i[12]=="未出借" %}
+                                        <button type="button" class="btn btn-default btn-xs" name="yuding"
+                                                data-toggle="modal" data-target="#yuding_modal">预定
+                                        </button>
+                                    {% else %}
+                                        <button type="button" class="btn btn-default btn-xs" name="yuding"
+                                                disabled=“disabled” data-toggle="modal"
+                                                data-target="#yuding_modal">预定
+                                        </button>
+                                    {% endif %}
+                                    {% if user_statu==1 %}
+                                        <button type="button" class="btn btn-info btn-xs" name="bianji"
+                                                data-toggle="modal" data-target="#bianji_phone">编辑
+                                        </button>
+                                        <button type="button" class="btn btn-success btn-xs" name="guihuan">
+                                            归还
+                                        </button>
+                                        <button type="button" class="btn btn-warning btn-xs" name="chujie">
+                                            出借
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-xs" name="shanchu">
+                                            删除
+                                        </button>
+                                    {% else %}
+                                        <button type="button" class="btn btn-info btn-xs" name="bianji"
+                                                data-toggle="modal" data-target="#bianji_phone"
+                                                disabled=“disabled”>编辑
+                                        </button>
+                                        <button type="button" class="btn btn-success btn-xs" name="guihuan"
+                                                disabled=“disabled”>归还
+                                        </button>
+                                        <button type="button" class="btn btn-warning btn-xs" name="chujie"
+                                                disabled=“disabled”>出借
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-xs" name="shanchu"
+                                                disabled=“disabled”>删除
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                                                    <div>
+                        <ul class="pagination" id="fenye_first">
+                            <li><a href="#">&laquo;</a></li>
+                            <li><a href="#">&raquo;</a></li>
+                        </ul>
+                    </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="take_linux_log_kuang" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" style="width:400px">
+            <div class="modal-content">
+                <div class="modal-header  " style="height:50px">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">添加机器</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">品牌</span>
+                                    <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="add_pinpai">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row  mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">机型</span>
+                                    <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="add_jixing">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">系统</span>
+                                    <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="add_xitong">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row  mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">资产编号</span>
+                                    <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="add_xuliehao">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  ">
+                                    <span class="input-group-addon">尺寸</span>
+                                    <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="add_chicun">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  ">
+                                    <span class="input-group-addon">分辨率</span>
+                                    <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="add_fenbianlv">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">颜色</span>
+                                    <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="add_yanse">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group ">
+                                    <span class="input-group-addon">密码</span>
+                                    <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="add_mima">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  ">
+                                    <span class="input-group-addon">业务线</span>
+                                    <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="add_shoushimima">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning btn-sm" name="close">关闭</button>
+                    <button type="button" class="btn btn-success btn-sm" name="phone_add_modal">提交</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <div class="modal fade" id="add_changliang" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" style="width:400px">
+            <div class="modal-content">
+                <div class="modal-header  " style="height:50px">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">添加常量</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon  ">品牌</span>
+                                    <input id="all_pinpai" type="text" class="form-control "
+                                           aria-describedby="basic-addon1">
+                                    <span class="input-group-btn">
+        <button class="btn btn-default" type="button" name="changliang_submit">提交!</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                    数据列表 <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                      {% for i in all_pinpai %}
+                                          <li><a href="#">{{ i[0] }}</a></li>
+                                      {% endfor %}
+                                </ul>
+      </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon  ">系统</span>
+                                    <input id="all_xitong" type="text" class="form-control input-sm"
+                                           aria-describedby="basic-addon1">
+                                    <span class="input-group-btn">
+        <button class="btn btn-default" type="button" name="changliang_submit">提交!</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                    数据列表 <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                          {% for i in all_xitong %}
+                                              <li><a href="#">{{ i[0] }}</a></li>
+                                          {% endfor %}
+                                </ul>
+
+      </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon  ">尺寸</span>
+                                    <input id="all_chicun" type="text" class="form-control input-sm"
+                                           aria-describedby="basic-addon1">
+                                    <span class="input-group-btn">
+        <button class="btn btn-default" type="button" name="changliang_submit">提交!</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                    数据列表 <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                          {% for i in all_chicun %}
+                                              <li><a href="#">{{ i[0] }}</a></li>
+                                          {% endfor %}
+                                </ul>
+      </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon  ">分辨率</span>
+                                    <input id="all_fenbianlv" type="text" class="form-control input-sm"
+                                           aria-describedby="basic-addon1">
+                                    <span class="input-group-btn">
+        <button class="btn btn-default" type="button" name="changliang_submit">提交!</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                    数据列表 <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                           {% for i in all_fenbianlv %}
+                                               <li><a href="#">{{ i[0] }}</a></li>
+                                           {% endfor %}
+                                </ul>
+      </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="bianji_phone" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" style="width:400px">
+            <div class="modal-content">
+                <div class="modal-header  " style="height:50px">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">编辑信息</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">品牌</span>
+                                <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="bianji_pinpai">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row  mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">机型</span>
+                                    <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="bianji_jixing">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">系统</span>
+                                <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="bianji_xitong">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">尺寸</span>
+                                <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="bianji_chicun">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row  mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">资产编号</span>
+                                    <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="bianji_xuliehao">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">分辨率</span>
+                                <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="bianji_fenbianlv">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">密码</span>
+                                    <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="bianji_mima">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">业务线</span>
+                                    <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="bianji_shoushimima">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">颜色</span>
+                                    <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="bianji_yanse">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">出借人</span>
+                                    <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="bianji_chujieren">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">出借日期</span>
+                                    <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="bianji_chujieriqi">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">归还日期</span>
+                                    <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="bianji_guihuanriqi">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">状态</span>
+                                    <select class="form-control" id="bianji_zhuangtai">
+                                        <option>未出借</option>
+                                        <option>已出借</option>
+                                        <option>已预订</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning btn-sm" name="close">关闭</button>
+                    <button type="button" class="btn btn-success btn-sm" name="bianji_submit">提交</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <div class="modal fade" id="yuding_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" style="width:400px">
+            <div class="modal-content">
+                <div class="modal-header  " style="height:50px">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">预订信息</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">借用人员</span>
+                                    <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="yuding_user">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row  mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">借用日期</span>
+                                    <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="yuding_jieyongriqi" placeholder={{ today }} value={{ today }} >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row  mt-low ">
+                            <div class="col-xs-12">
+                                <div class="input-group  input-group-sm">
+                                    <span class="input-group-addon">归还日期</span>
+                                    <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                           id="yuding_guihuanriqi" placeholder={{ today }}>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning btn-sm" name="close">关闭</button>
+                    <button type="button" class="btn btn-success btn-sm" row_id="null" name="yuding_submit">提交</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <!-- 模态框（Modal） -->
+<div class="modal fade" id="file_up" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog"  style="width:400px">
+		<div class="modal-content">
+            <form action="/phone_submit" method="post" enctype="multipart/form-data">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+				</button>
+				<h4 class="modal-title" >
+					上传表格
+				</h4>
+			</div>
+			<div class="modal-body">
+                 <div class="container-fluid  ">
+                        <div class="row mt-10">
+                            <div class="col-lg-12">
+                                <div class="form-group" id="file_container">
+                                         <input type="file" name="files" multiple>
+                                </div>
+                            </div>
+                        </div>
+                 </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button " class="btn btn-default" data-dismiss="modal">
+					关闭
+				</button>
+				<button type="button submit " class="btn btn-primary" id="submit">
+					提交
+				</button>
+			</div>
+   </form>
+		</div>
+	</div>
+</div>
+    <script src="static/bootstrap-table-master/dist/locale/bootstrap-table-zh-CN.js"></script>
+    <script src="static/hualala/vendor/jquery/jquery.min.js"></script>
+    <script src="static/bootstrap-table-master/dist/bootstrap-table.min.js"></script>
+    <script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/hualala/vendor/metisMenu/metisMenu.min.js"></script>
+    <script src="static/hualala/dist/js/sb-admin-2.js"></script>
+    <script src="static/layer-v3.0/layer/layer.js"></script>
+    <script src="static/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+{#    <script src="static/fenye/fenye.js"></script>#}
+    <script type=text/javascript>
+    var $SCRIPT_ROOT = 'http://'+window.location.host
+    $(document).ready(function()
+    {
+
+        function  fenye_def(a,b,num)
+{
+    if (num==0)
+    {
+        //获取当前屏幕高度
+        var chushi_length=0
+        var screen_height=window.screen.height
+        //遍历列表，从上到下查看哪行数据的位置在最下面差距20，即为num的值
+        b.find('tr').each(function(k,d)
+        {
+            var thia_height=$(this).offset().top
+            if   (screen_height-thia_height<80  && num==0 )
+            {
+                num=k+1
+            }
+        })
+    }
+    //初始化分页元素
+    var li_length=a.find('li').length
+    a.find('li').each(function(k,z)
+    {
+        if (k!=0 && k !=li_length-1)
+        {
+           $(this).remove()
+        }
+    })
+    a.attr('this_yema','1')
+    var statu=0
+    var all_li= a.find('li')
+b.find('tr').each(function(a,b){
+    if (!$(this).is(':hidden')   ||  $(this).attr('fenye_row')!="undefined")
+    {
+      $(this).attr('fenye_row',parseInt(a/num+1))
+        if (parseInt(a/num+1)>1)
+        {
+            $(this).hide()
+        }
+    if (parseInt(a/num+1)!=statu)
+    {
+        statu=parseInt(a/num+1)
+        all_li .eq(-1).before('<li  ><a href="#">'+String(parseInt(a/num+1))+'</a></li>')
+    }
+    }
+})
+}
+
+           if (window.screen.height>=999)
+       {
+            fenye_def($('#fenye_first'),$('#xiangmu_body'),13)
+       }
+           else {
+               fenye_def($('#fenye_first'),$('#xiangmu_body'),0)
+           }
+    })
+    //全部删除
+    $('#delete_all').click(function()
+    {
+        $.post($SCRIPT_ROOT +'/all_phone_delete',{statu:"all"},
+        function(data)
+        {
+          if (data.statu=="success")
+          {
+               window.location.reload()
+          }
+        })
+    })
+    //导出
+       var $SCRIPT_ROOT = 'http://'+window.location.host
+    $('#daochu').click(function(){
+        var all_id=[]
+        $('#xiangmu_body').find('tr').each(function()
+        {
+            if ($(this).is(':visible'))
+            {
+            }
+            else{
+                var id=$(this).attr('name')
+                all_id.push(id)
+            }
+        })
+        window.location.href=$SCRIPT_ROOT +'/daochu_phone_list'
+    })
+        //根据回车键搜索
+        $(document).keydown(function (event) {
+                if (event.keyCode == 13) {
+                    $('#xiangmu_body').find('tr').show()
+                    var sousuo_detail = $('#user_sousuo_detail').val()
+                    var sousuo_type = $('#sousuo_leixing').val()
+                    $('#xiangmu_body').find('tr').each(function () {
+                        var user_name = $(this).find('td').eq(9)
+                        if (sousuo_type == "借用人") {
+                            var user_name = $(this).find('td').eq(9).html()
+                            if (user_name.toLowerCase().indexOf(sousuo_detail.toLowerCase()) >= 0) {
+                                $(this).show()
+                            } else {
+                                $(this).hide()
+                            }
+                            if ($.trim(sousuo_detail) == '') {
+                                $(this).show()
+                            }
+                        }
+                        if (sousuo_type == "机型") {
+                            var jixing_name = $(this).find('td').eq(1).html()
+                            if (jixing_name.toLowerCase().indexOf(sousuo_detail.toLowerCase()) >= 0) {
+                                $(this).show()
+                            } else {
+                                $(this).hide()
+                            }
+                            if ($.trim(sousuo_detail) == '') {
+                                $(this).show()
+                            }
+                        }
+                                            if (sousuo_type == "品牌") {
+                            var jixing_name = $(this).find('td').eq(0).html()
+                            if (jixing_name.toLowerCase().indexOf(sousuo_detail.toLowerCase()) >= 0) {
+                                $(this).show()
+                            } else {
+                                $(this).hide()
+                            }
+                            if ($.trim(sousuo_detail) == '') {
+                                $(this).show()
+                            }
+                        }
+                    })
+                }
+            }
+        )
+        //根据用户名搜索
+        $('#user_sousuo').click(function () {
+            $('#xiangmu_body').find('tr').show()
+            var sousuo_detail = $('#user_sousuo_detail').val()
+            var sousuo_type = $('#sousuo_leixing').val()
+            $('#xiangmu_body').find('tr').each(function () {
+                var user_name = $(this).find('td').eq(9)
+                if (sousuo_type == "借用人") {
+                    var user_name = $(this).find('td').eq(9).html()
+                    if (user_name.indexOf(sousuo_detail) >= 0) {
+                        $(this).show()
+                    } else {
+                        $(this).hide()
+                    }
+                    if ($.trim(sousuo_detail) == '') {
+                        $(this).show()
+                    }
+                }
+                if (sousuo_type == "机型") {
+                    var jixing_name = $(this).find('td').eq(1).html()
+                    if (jixing_name.indexOf(sousuo_detail) >= 0) {
+                        $(this).show()
+                    } else {
+                        $(this).hide()
+                    }
+                    if ($.trim(sousuo_detail) == '') {
+                        $(this).show()
+                    }
+                }
+                                    if (sousuo_type == "品牌") {
+                            var jixing_name = $(this).find('td').eq(0).html()
+                            if (jixing_name.indexOf(sousuo_detail) >= 0) {
+                                $(this).show()
+                            } else {
+                                $(this).hide()
+                            }
+                            if ($.trim(sousuo_detail) == '') {
+                                $(this).show()
+                            }
+                        }
+            })
+        })
+        //编辑窗口打开，窗口元素初始信息设置
+        $('[name="bianji"]').click(function () {
+            var row_id = $(this).parent().parent().parent().attr('name')
+            $('[name="bianji_submit"]').attr('row_id', row_id)
+        })
+        $('#bianji_phone').on('show.bs.modal', function () {
+            var row_id = $('[name="bianji_submit"]').attr('row_id')
+            var all_detail = $('tr[name="' + row_id + '"]').find('td')
+            $('#bianji_pinpai').val(all_detail.eq(0).html())
+            $('#bianji_jixing').val(all_detail.eq(1).html())
+            $('#bianji_xitong').val(all_detail.eq(2).html())
+            $('#bainji_chicun').val(all_detail.eq(3).html())
+            $('#bianji_xuliehao').val(all_detail.eq(4).html())
+            $('#bianji_fenbianlv').val(all_detail.eq(5).html())
+            $('#bianji_mima').val(all_detail.eq(6).html())
+            $('#bianji_shoushimima').val(all_detail.eq(7).html())
+            $('#bianji_yanse').val(all_detail.eq(8).html())
+            $('#bianji_chujieren').val(all_detail.eq(9).html())
+            $('#bianji_chujieriqi').val(all_detail.eq(10).html())
+            $('#bianji_guihuanriqi').val(all_detail.eq(11).html())
+            $('#bianji_zhuangtai').val(all_detail.eq(12).html())
+        })
+        //删除信息
+        $('[name="shanchu"]').click(function () {
+            var id = $(this).parent().parent().parent().attr('name')
+            var ele = $(this)
+            $.post($SCRIPT_ROOT +'phone_simple_caozuo/delete', {"row_id": id}, function (data) {
+                if (data.statu == 'success') {
+                    layer.msg('删除成功', {icon: 1})
+                    ele.parent().parent().parent().remove()
+                } else {
+                    layer.msg(data.statu, {icon: 2})
+                }
+            })
+        })
+        //预订弹出框
+        $("#xiangmu_body").on('click', '[name="yuding"]', function () {
+                var ele = $(this)
+                var id = $(this).parent().parent().parent().attr('name')
+                $('[ name="yuding_submit"]').attr('row_id', id)
+            }
+        )
+        //预订信息提交
+        $('[name="yuding_submit"]').click(function () {
+            var ele = $(this)
+            var id = $(this).attr('row_id')
+            var ele = $('tr[name="' + id + '"]')
+            var yudingriq = $('#yuding_jieyongriqi').val()
+            var guihuanriqi = $('#yuding_guihuanriqi').val()
+            var yuding_user = $('#yuding_user').val()
+            $.post($SCRIPT_ROOT +'/phone_simple_caozuo/yuding', {
+                "row_id": id,
+                "yudingriq": yudingriq,
+                "guihuanriqi": guihuanriqi,
+                "yuding_user": yuding_user
+            }, function (data) {
+                if (data.statu == 'success') {
+                    layer.msg('预定成功', {icon: 1})
+                    $('#yuding_modal').modal('hide')
+                    ele.find('td').eq(-2).html('已预订')
+                    ele.find('td').eq(-3).html(guihuanriqi)
+                    ele.find('td').eq(-4).html(yudingriq)
+                    ele.find('td').eq(-5).html(yuding_user)
+                    ele.find('td').eq(-1).find('button').eq(0).attr('disabled', true)
+                    ele.attr('class', 'warning')
+                } else {
+                    layer.msg(data.statu, {icon: 2})
+                }
+            })
+
+        })
+        //出借
+        $('[name="chujie"]').click(function () {
+            var ele = $(this)
+            var id = $(this).parent().parent().parent().attr('name')
+            $.post($SCRIPT_ROOT +'/phone_simple_caozuo/chujie', {"row_id": id}, function (data) {
+                if (data.statu == 'success') {
+                    layer.msg('出借成功', {icon: 1})
+                    ele.parent().parent().prev().html('已出借')
+                    ele.parent().parent().prev().prev().prev().html(data.riqi)
+                    ele.parent().parent().parent().attr('class', 'danger')
+                } else {
+                    layer.msg(data.statu, {icon: 2})
+                }
+            })
+        })
+        //归还
+        $('[name="guihuan"]').click(function () {
+            var id = $(this).parent().parent().parent().attr('name')
+            var ele = $(this)
+            $.post($SCRIPT_ROOT +'/phone_simple_caozuo/guihuan', {"row_id": id}, function (data) {
+                if (data.statu == 'success') {
+                    layer.msg('归还成功', {icon: 1})
+                    ele.parent().parent().prev().html('未出借')
+                    ele.prev().prev().attr('disabled', false)
+                    ele.parent().parent().prev().prev().html(data.riqi)
+                    ele.parent().parent().parent().attr('class', 'success')
+                } else {
+                    layer.msg(data.statu, {icon: 2})
+                }
+            })
+        })
+        //行状态点击
+        $('#statu_click').find('button').click(function () {
+            $('#xiangmu_body').find('tr').each(function () {
+                $(this).show()
+            })
+            var statu = $(this).attr('id')
+            if (statu == "statu_weichujie") {
+                $('[name="tr_statu"]').each(function () {
+                    if ($(this).html() != '未出借') {
+                        $(this).parent().hide()
+                    }
+                })
+
+            } else if (statu == "statu_yiyuding") {
+                $('[name="tr_statu"]').each(function () {
+                    if ($(this).html() != '已预订') {
+                        $(this).parent().hide()
+                    }
+                })
+
+            } else if (statu == "statu_yichujie") {
+                $('[name="tr_statu"]').each(function () {
+                    if ($(this).html() != '已出借') {
+                        $(this).parent().hide()
+                    }
+                })
+
+            } else if (statu == "statu_all") {
+                $('#xiangmu_body').find('tr').each(function () {
+                    $(this).show()
+                })
+            }
+
+        })
+        //删除
+        $('[name="shanchu"]').click(function () {
+            var row_id = $(this).parent().parent().parent().attr('name')
+            $.post($SCRIPT_ROOT +'/phone_changliang_delete', {"row_id": row_id}, function (data) {
+                if (data.statu == "success") {
+
+                    layer.msg('删除成功', {icon: 1})
+                    setTimeout(function () {
+                        window.location.reload()
+                    }, 2000)
+                }
+
+            })
+
+        })
+        //添加常量
+        $('[name="changliang_submit"]').click(function () {
+            var type = $(this).parent().prev().attr('id')
+            var detail = $(this).parent().prev().val()
+            var this_ele = $(this)
+            $.post($SCRIPT_ROOT +'/phone_changliang_add', {
+                "type": type,
+                "detail": detail
+            }, function (data) {
+                if (data.statu == "success") {
+                    this_ele.next().next().append(' <li><a href="#">' + detail + '</a></li>')
+                    layer.msg(data.statu, {icon: 1})
+                } else {
+
+                    layer.msg(data.statu, {icon: 2})
+                }
+
+            })
+
+        })
+        //添加常量后关闭弹出框刷新页面
+        $('#add_changliang').on('hidden.bs.modal', function () {
+            window.location.reload()
+        })
+        //常量列表弹出框弹出清空显示
+        $('#add_changliang').on('show.bs.modal', function () {
+            $(this).find('input').each(
+                function () {
+                    $(this).val('')
+                }
+            )
+
+        })
+        $('#take_linux_log_kuang').on('show.bs.modal', function () {
+            $(this).find('input').each(function () {
+                $(this).val()
+            })
+        })
+        //模态框关闭
+        $('[name="close"]').click(function () {
+            $(this).parent().parent().parent().parent().modal('hide')
+        })
+
+        //iphone 添加提交
+        $('[name="phone_add_modal"]').click(function () {
+            var add_pinpai = $('#add_pinpai').val()
+            var add_jixing = $('#add_jixing').val()
+            var add_xitong = $('#add_xitong').val()
+            var add_chicun = $('#add_chicun').val()
+            var add_fenbianlv = $('#add_fenbianlv').val()
+            var add_mima = $('#add_mima').val()
+            var add_shoushimima = $('#add_shoushimima').val()
+            var add_xuliehao = $('#add_xuliehao').val()
+            var add_yanse = $('#add_yanse').val()
+            $.post($SCRIPT_ROOT +'/add_phone_modal', {
+                "add_yanse": add_yanse,
+                "add_xuliehao": add_xuliehao,
+                "add_pinpai": add_pinpai,
+                "add_jixing": add_jixing,
+                "add_xitong": add_xitong,
+                "add_chicun": add_chicun,
+                "add_fenbianlv": add_fenbianlv,
+                "add_mima": add_mima,
+                "add_shoushimima": add_shoushimima
+            }, function (data) {
+
+                if (data.statu = 'success') {
+                    $('#take_linux_log_kuang').modal('hide')
+                    layer.msg(data.statu, {icon: 1})
+                    setTimeout(function () {
+                        window.location.reload()
+                    }, 2000);
+                } else {
+
+                    layer.msg(data.statu, {icon: 2})
+                }
+            })
+        })
+        //编辑信息提交
+        $('[name="bianji_submit"]').click(function () {
+                var row_id = $('[name="bianji_submit"]').attr('row_id')
+                var bianji_pinpai = $('#bianji_pinpai').val()
+                var bianji_jixing = $('#bianji_jixing').val()
+                var bianji_xitong = $('#bianji_xitong').val()
+                var bianji_chicun = $('#bainji_chicun').val()
+                var bianji_xuliehao = $('#bianji_xuliehao').val()
+                var bianji_fenbianlv = $('#bianji_fenbianlv').val()
+                var bianji_mima = $('#bianji_mima').val()
+                var bianji_shoushimima = $('#bianji_shoushimima').val()
+                var bianji_yanse = $('#bianji_yanse').val()
+                var bianji_chujieren = $('#bianji_chujieren').val()
+                var bianji_chujieriqi = $('#bianji_chujieriqi').val()
+                var biaji_guihuanriqi = $('#bianji_guihuanriqi').val()
+                var bianji_zhuangtai = $('#bianji_zhuangtai').val()
+                $.post($SCRIPT_ROOT +'/bianji_phone_modal', {
+                        "biaji_guihuanriqi": biaji_guihuanriqi,
+                        "bianji_chujieriqi": bianji_chujieriqi,
+                        "bianji_chujieren": bianji_chujieren,
+                        "bianji_yanse": bianji_yanse,
+                        "bianji_xuliehao": bianji_xuliehao,
+                        "bianji_pinpai": bianji_pinpai,
+                        "bianji_jixing": bianji_jixing,
+                        "bianji_xitong": bianji_xitong,
+                        "bianji_chicun": bianji_chicun,
+                        "bianji_fenbianlv": bianji_fenbianlv,
+                        "bianji_mima": bianji_mima,
+                        "bianji_shoushimima": bianji_shoushimima,
+                        "bianji_zhuangtai": bianji_zhuangtai,
+                        "row_id": row_id
+                    }, function (data) {
+                        if (data.statu = 'success') {
+                            $('#bianji_phone').modal('hide')
+                            layer.msg(data.statu, {icon: 1})
+                            setTimeout(function () {
+                                window.location.reload()
+                            }, 3000);
+                        } else {
+                            layer.msg(data.statu, {icon: 2})
+                        }
+                    }
+                )
+            }
+        )
+    </script>
+{% endblock %}

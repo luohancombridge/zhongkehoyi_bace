@@ -1,0 +1,150 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<p style="text-align:center">文件列表</p>
+       <style type="text/css">
+table.zyhovertable {
+
+
+    font-family:
+    verdana,arial,sans-serif;
+    font-size:11px;
+    color:#333333;
+    border-width: 1px;
+    border-color: #999999;
+    border-collapse:
+    collapse;
+}
+
+table.zyhovertable th {
+    background-color:#C3DDE0;
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #999999;
+}
+
+table.zyhovertable tr {
+    background-color:#DCDCDC;
+}
+
+table.zyhovertable td {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #999999;
+}
+</style>
+
+<table class="zyhovertable" style="text-align:left; margin-top:50px" id="table">
+<tr>
+<th width="5%"><label><input name="F" id="quanxuan" type="checkbox" value="全选" /> </label></th><th width="10%">脚本名</th><th width="10%">类名</th><th width="5%">所属仓库</th><th width="40%">备注</th><th width="40%">编辑</th>
+</tr>
+            {% for i in  mulu %}
+<tr onmouseover="this.style.backgroundColor='#FFFF66';"onmouseout="this.style.backgroundColor='#DCDCDC';"><td><label><input name="Fruit" class={{i[0]}} type="checkbox" value={{i}} /> </label></td><td> {{i[0]}}</td><td> {{i[1]}}</td><td>{{i[2]}}</td><td>{{i[3]}}</td><td><label><input name="Fruit" id={{i[0]}} type="button"  value="编辑"  /> </label></td></tr>
+<tr onmouseover="this.style.backgroundColor='#FFFF66';"onmouseout="this.style.backgroundColor='#DCDCDC';">
+<tr onmouseover="this.style.backgroundColor='#FFFF66';"onmouseout="this.style.backgroundColor='#DCDCDC';">
+    {% endfor %}
+</table>
+
+</div></div>
+<p><input type="button" id="resulte" value="删除" style="text-align:left; margin-top:50px">
+
+    <form action="/update" method="POST" enctype="multipart/form-data">
+    <input type="file" name="file"  />
+        <input type="submit"  style="line-height:1.5;"  value="提交"  id="fileti" />
+    </form>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="{{url_for('static', filename='jquery-1.8.0.js')}}"></script>
+<script type=text/javascript>
+var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+</script>
+<script type=text/javascript>
+var offsetleft=$("#resulte").offset().left;
+var offsettop=$("#resulte").offset().top;
+$("#resulte").css({position: "relative ",'left':170});
+$('[name="file"]').css({position: "relative  ",'left':170});
+$('#fileti').css({position: "relative  ",'left':170});
+var checkbox=$('input[name="Fruit"]');
+
+     $('#quanxuan').click(function () {
+         if ($('#quanxuan').attr("checked")) {
+             for (var i = 0; i < checkbox.length; i++) {
+                 checkbox.eq(i).attr("checked", "checked");
+
+             }
+
+         }
+                 else{
+ for (var i = 0; i < checkbox.length; i++) {
+                checkbox.eq(i).attr("checked", false);
+
+             }
+
+
+         }
+
+     }
+     )
+
+
+//绑定运行按钮，传送脚本名称
+var jiaoben="";
+    $('#resulte').click(function() {
+
+
+var shi=$("#shi").val();
+                var fen=$("#fen").val();
+                $('input[name="Fruit"]').each(function(i){
+
+    if($(this).attr("checked")) {
+
+     jiaoben=jiaoben+';'+checkbox.eq(i).attr("class" )
+
+   }
+
+});
+$("#resulte").attr("disabled","disabled")
+
+ $.post($SCRIPT_ROOT + '/add', {shi: shi,  fen: fen,jiaoben:jiaoben},
+                function (data) {
+                    if (data.result=='jihua')
+                    {
+                        window.location.reload()
+                    }
+
+$("#resulte").removeAttr("disabled");
+                });
+    }
+    )
+
+    //查看运行结果
+
+     $('#bianji').click(function () {
+
+
+                 window.open($SCRIPT_ROOT + '/result')
+             }
+
+     )
+ $('[name="index"]').click(function() {
+
+     $.post($SCRIPT_ROOT + '/laiba', {xiangmu: 'sss',  ame: "bianji"},
+                function (data) {
+                     $li1=$(data.data);
+                    $('[class="right_con"]').html($li1);
+
+
+                });
+
+
+});
+
+</script>
+
+
+{% endblock %}

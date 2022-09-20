@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="{{url_for('static', filename='csslogin/style.css')}}" rel='stylesheet' type='text/css' />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!--webfonts-->
+<link href="{{url_for('static', filename='csslogin/style.css')}}" rel='stylesheet' type='text/css'>
+<!--//webfonts-->
+</head>
+<body>
+	<div class="main">
+		<div class="user">
+			<img src="{{url_for('static', filename='imageslogin/user.png')}}" alt="">
+		</div>
+		<div class="login">
+			<div class="inset">
+				<!-----start-main---->
+				<form  id="form1" action="" method="POST" enctype="multipart/form-data">
+			         <div>
+						<span><label>Username</label></span>
+						<span><input type="text" class="textbox" id="text" name="name"></span>
+					 </div>
+					 <div>
+						<span><label>Password</label></span>
+					    <span><input type="password" class="password"  id="Password"  name="password"></span>
+					 </div>
+					<div class="sign">
+						<div class="submit">
+						  <input type="submit"  id="zzzzzz" value="LOGIN" >
+						</div>
+
+					</form>
+				</div>
+			</div>
+		<!-----//end-main---->
+		</div>
+
+	 
+</body>
+<script src="{{url_for('static', filename='jquery-1.8.0.js')}}"></script>
+<script type=text/javascript>
+var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+</script>
+<script type=text/javascript>
+
+</script>
+</html>

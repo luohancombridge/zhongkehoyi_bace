@@ -1,0 +1,109 @@
+# -*- coding: utf-8 -*-
+__author__ = 'SUNZHEN519'
+import sys
+import os
+import json
+import demjson
+import chardet
+import time
+from flask import Blueprint,jsonify,request
+import requests
+import time
+import sqlite3
+from flask import Flask, g
+from flask_cors import *
+from flask import current_app,session
+directory_tree_new = Blueprint('tree',__name__)
+#增加节点
+@directory_tree_new.route('/get_tree',methods=['POST','GET'])
+@cross_origin()
+def get_tree():
+    if 'user_name' not in session.keys():
+        conn = sqlite3.connect(current_app.config.get('DB_DIZHI'))
+        cur = conn.cursor()
+        user = cur.execute('select name from user where ip="%s"' % (request.headers.get('X-Real-IP'))).fetchall()[0][0]
+        conn.close()
+        session['user_name']=user
+    else:
+        user=session['user_name']
+    tree_resources = request.form['tree_resources']
+    tree_type=request.form['tree_type']
+    conn= sqlite3.connect(current_app.config.get('JIE_KOU'))
+    cur = conn.cursor()
+    create_time=int(time.time())
+    tree_name=request.form['tree_name']
+    if  len(cur.execute('select * from directory_tree where  classification_name="%s"'  % (tree_name)).fetchall())>0:
+        return jsonify(statu='error',detail="节点名重复")
+    if tree_type.strip()==u'添加顶级节点':
+          parent_name = ''
+          node_level=0
+    elif tree_type.strip()==u'编辑节点':
+        parent_name,node_id,parent_level=cur.execute('select parent_name,id,Node_level from directory_tree where  classification_name="%s"'  % (tree_resources)).fetchall()[0]
+        if tree_type.strip() == u'添加同级节点':
+            parent_name=parent_name
+            node_level=parent_level
+        elif tree_type.strip() == u'添加子节点':
+            parent_name = tree_resources
+            node_level=int(parent_level)+1
+    if tree_type.strip() != u'编辑节点':
+        cur.executemany('INSERT INTO directory_tree VALUES (null,?,?,?,?,?,?,?)',
+                       [(request.form['tree_name'],parent_name,create_time,create_time,user,user,node_level)])
+    else:
+        cur.execute('UPDATE directory_tree SET classification_name=?,update_user=?,update_time=? WHERE classification_name=?',
+                     (tree_name,session['user_name'],int(time.time()),tree_resources))
+        cur.execute(
+            'UPDATE directory_tree SET parent_name=?,update_user=?,update_time=? WHERE parent_name=?',
+            (tree_name, session['user_name'], int(time.time()), tree_resources))
+    conn.commit()
+    all_detail=cur.execute('select classification_name,Node_level,parent_name,id from directory_tree ').fetchall()
+    all_detail=sorted(all_detail,key=lambda all_detail_value:  all_detail_value[1],reverse=True)
+    all_node=[]
+    z_node=[]
+    for k,i in enumerate(all_detail):
+        if i[0] not in all_node:
+            if  i[2]=='':
+                all_node.append(i[0])
+                z_node.append({"text": i[0]})
+            elif i[2] not in all_node:
+                all_node.append(i[2])
+                z_node.append({"text": i[2],"nodes":[{"text": i[0]}]})
+            elif i[2]  in all_node:
+                this_index= all_node.index(i[2])
+                z_node[this_index]['nodes'].append({"text": i[0]})
+        else:
+            if i[2]!='':
+               z_node[all_node.index(i[0])]={"text":i[2],"nodes":[ z_node[all_node.index(i[0])]]}
+               all_node[all_node.index(i[0])] = i[2]
+    conn.close()
+    return jsonify(statu='success',detail="success",z_node=z_node)
+#查询节点
+@directory_tree_new.route('/query_node',methods=['POST','GET'])
+@cross_origin()
+def query_node():
+    conn= sqlite3.connect(current_app.config.get('JIE_KOU'))
+    cur = conn.cursor()
+    # all_detail=cur.execute('select classification_name from directory_tree where Node_level=0').fetchall()
+    # all_node=[]
+    # for k,i in enumerate(all_detail):
+    #     all_node.append({"text":i})
+
+    all_detail=cur.execute('select classification_name,Node_level,parent_name,id from directory_tree ').fetchall()
+    all_detail=sorted(all_detail,key=lambda all_detail_value:  all_detail_value[1],reverse=True)
+    all_node=[]
+    z_node=[]
+    for k,i in enumerate(all_detail):
+        if i[0] not in all_node:
+            if  i[2]=='':
+                all_node.append(i[0])
+                z_node.append({"text": i[0]})
+            elif i[2] not in all_node:
+                all_node.append(i[2])
+                z_node.append({"text": i[2],"nodes":[{"text": i[0]}]})
+            elif i[2]  in all_node:
+                this_index= all_node.index(i[2])
+                z_node[this_index]['nodes'].append({"text": i[0]})
+        else:
+            if i[2]!='':
+               z_node[all_node.index(i[0])]={"text":i[2],"nodes":[ z_node[all_node.index(i[0])]]}
+               all_node[all_node.index(i[0])] = i[2]
+    return jsonify(all_detail=z_node)

@@ -1,0 +1,967 @@
+{% extends "/hualala/pages/base.html" %}
+{% block content %}
+    <style type="text/css">
+        .mt-10 {
+            margin-top: 25px;
+        }
+        .mt-low {
+            margin-top: 15px;
+        }
+.textarea{
+    width: 650px;
+    min-height: 220px;
+    max-height: 300px;
+    _height: 120px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 3px;
+    outline: 0;
+    border: 1px solid #a0b3d6;
+    font-size: 12px;
+    line-height: 24px;
+    padding: 2px;
+    word-wrap: break-word;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-color: rgba(82, 168, 236, 0.8);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+}
+        .row.no-gutter {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    </style>
+    <div class="container-fluid">
+        <div class="row mt-low">
+            <div class="col-md-12">
+                <form class="form-inline">
+                    <div class="input-group input-group-lg">
+                        <div class="input-group-btn">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button class="btn btn-primary btn-sm" type="button" id="run_now_chonggou">运行</button>
+                                <button class="btn btn-info btn-sm" type="button" name="add_beizhu"
+                                        data-toggle="modal" data-target="#shishi_youjian">邮件发送
+                                </button>
+                                <button id="dingshi_simple_check" type="button"
+                                        class="btn btn-default  btn-sm dropdown-toggle"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">自动分发
+                                    <span class="caret"></span></button>
+                                <ul class="dropdown-menu dropdown-menu-right" 　>
+                                    {% for i in server_detail %}
+                                        <li><a href="#" name="dingshi_simple_check">{{ i }} </a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button class="btn btn-warning btn-sm" type="button" name="all_resul_show"
+                                        disabled="true">
+                                    查看结果
+                                </button>
+                                <button class="btn btn-success btn-sm" type="button"
+                                        data-toggle="modal" data-target="#add_git">添加git
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <label for="firstname" class="control-label">定时任务：</label>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon3">运行时间</span>
+                        <input spellcheck="false"
+                               style="width:80px;" AUTOCOMPLETE="off" type="text" class="form-control" id="run_time" placeholder="14:12" aria-describedby="basic-addon3">
+                    </div>
+                    <select class=" form-control  input-xs"  id="dingshi_run_type_time">
+                        <option>everyday</option>
+                        <option>today</option>
+                    </select>
+                    <button class="btn btn-info btn-sm" type="button" name="add_beizhu"
+                            data-toggle="modal" data-target="#shezhi_youjian">邮件设置
+                    </button>
+                    <button class="btn btn-success btn-sm" type="button" name="dingshi_tijiao">提交</button>
+                    <button class="btn btn-warning btn-sm" type="button" name="dingshibaobiao" data-toggle="modal" data-target="#dingshi_baobiao_modal">定时报表</button>
+                </form>
+            </div>
+        </div>
+        <div class="row mt-low">
+            <div class="col-xs-7 ">
+                <div class="panel panel-success">
+                    <div class="panel-heading">项目列表</div>
+                    <table class="table table-bordered table-hover" style=”word-break:break-all; word-wrap:break-all;”>
+                        <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" name="all_choice"></th>
+                            <th>git地址</th>
+                            <th>分支名</th>
+                            <th>业务名</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="xiangmu_body">
+                        {% for i in git_detail %}
+                            <tr class="success" test="true">
+                                <td>
+                                    <input type="checkbox">
+                                </td>
+                                <td>{{ i[0] }}</td>
+                                <td>{{ i[5] }}</td>
+                                <td>{{ i[1] }}</td>
+                                <td>
+                                    <div class="btn-group btn-group-xs" role="group">
+                                        <button class="btn btn-success btn-xs" type="button" name="simple_beizhu"
+                                                data-toggle="modal" data-target="#case_list"
+                                        >备注
+                                        </button>
+                                        <button class="btn btn-warning btn-xs" type="button" name="add_beizhu"
+                                                data-toggle="modal" data-target="#bianji_alert">编辑
+                                        </button>
+                                         <button class="btn btn-danger btn-xs" type="button" name="git_delete"
+                                               user_name={{i[2]}} >删除
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div>
+                        <ul class="pagination" id="fenye_first">
+                            <li><a href="#">&laquo;</a></li>
+                            <li><a href="#">&raquo;</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-5">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">运行列表</div>
+                    <table class="table table-bordered table-hover ">
+                        <thead>
+                        <tr>
+                            <th>创建时间</th>
+                            <th>运行时间</th>
+                            <th>间隔</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="suite_body">
+                        {% for i in dingshi_detail %}
+                            <tr class="warning" test="true" run_id={{ i[4] }}>
+                                <td width="90px">{{ i[1] }}</td>
+                                <td>{{ i[2][1] }}</td>
+                                <td>{{ i[2][0] }}</td>
+                                <td>{{ i[3] }}</td>
+                                <td>
+                                    <div class="btn-group btn-group-xs" role="group">
+                                        {% if  i[3] =="done" %}
+                                            <button class="btn btn-info btn-xs" type="button" name="simple_detail_git">
+                                                运行结果
+                                            </button>
+                                        {% else %}
+                                            <button class="btn btn-info btn-xs" type="button" name="simple_detail_git"
+                                                    disabled="disabled">运行结果
+                                            </button>
+                                        {% endif %}
+                                    <button class="btn btn-warning btn-xs" type="button" name="renwu_detail"
+                                         run_id={{ i[4] }}       data-toggle="modal" data-target="#renwu_detail">任务详情</button>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div>
+                        <ul class="pagination" id="suite_fenye">
+                            <li><a href="#">&laquo;</a></li>
+                            <li><a href="#">&raquo;</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--编辑git-->
+<div class="modal fade" id="bianji_alert" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog  modal-sm" role="document" style="width:400px">
+        <div class="modal-content">
+            <div class="modal-header " style="height:50px">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h5 class="modal-title" >编辑git</h5>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <form role="form">
+                        <div class="form-group form-group-sm">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="git_address_bianji">git 地址</span>
+                                <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="git_fenzhi_bianji">分支</span>
+                                <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="git_yewu_bianji">业务名</span>
+                                <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer"  style="height:50px">
+                <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn-xs"  id="bianji_submit">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="dingshi_baobiao_modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">邮件设置</h4>
+      </div>
+                  <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row ">
+                        <div class="col-xs-12">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="sizing-addon2">邮件title</span>
+                                <input type="text" class="form-control" placeholder="Username"
+                                       aria-describedby="sizing-addon2"  id="dingshi_baobiao_title">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row  mt-low">
+                        <div class="col-xs-12">
+                            <form role="form">
+                                <div class="form-group  form-group-sm">
+                                    <label  >发件人</label>
+                                    <select class="form-control  input-sm" id="dingshi_baobiao_fajianren">
+                                    <option>无</option>
+                                        {% for i in fajianren %}
+                                        <option  name={{ i }}>{{ i }}</option>
+                                        {%  endfor %}
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-xs-12">
+                            <form role="form">
+                                <div class="form-group form-group-sm">
+                                    <label >收件人</label>
+                                    <select id="dingshi_baobiao_shoujianren" name="usertype" class="selectpicker show-tick form-control input-sm" multiple data-live-search="false">
+                                         {% for i in email_detail %}
+                                        <option value={{ i[0] }}>
+                                                 <form class="form-horizontal" role="form">
+                                                    <p>{{ i[0] }} &#12288</p>
+                                                        <p class="form-control-static">{{ i[1] }}</p>
+                                            </form>
+                                        </option>
+                                          {% endfor %}
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                            <div class="row  mt-low">
+                    </div>
+                </div>
+            </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="dingshi_baobiao_close">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--任务详情-->
+<div class="modal fade" id="renwu_detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog  modal-sm" role="document" style="width:400px">
+        <div class="modal-content">
+            <div class="modal-header " style="height:40px"  >
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h5 class="modal-title" >任务详情</h5>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row ">
+                        <div class="col-xs-12">
+                            <p class="text-left"  id="renwu_create_time"></p>
+                            <p class="text-left" id="last_run_time_renwu"></p>
+                            <p class="text-left" id="run_type_suite_renwu"></p>
+                            <p class="text-left" id="fajianren_renwu"></p>
+                            <dl>
+                                <dt  >运行git 列表:</dt>
+                                <dd>
+                                    <ul id="run_git_list">
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl  >
+                                <dt>收件人：</dt>
+                                <dd>
+                                    <ul  id="renwu_receive_email">
+
+                                    </ul>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer"  style="height:45px">
+                <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <!--添加git库-->
+<div class="modal fade" id="add_git" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog  modal-sm" role="document" style="width:400px">
+        <div class="modal-content">
+            <div class="modal-header " style="height:40px">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h5 class="modal-title" id="myModalLabel">添加git</h5>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <form role="form">
+                    <div class="form-group form-group-sm">
+                        <div class="input-group">
+                        <span class="input-group-addon" id="git_address">git 地址</span>
+                        <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <div class="input-group">
+                        <span class="input-group-addon" id="git_fenzhi">分支</span>
+                        <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                        <div class="form-group form-group-sm">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="git_yewu">业务名</span>
+                        <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                    </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer"  style="height:55px">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn-sm"  id="git_submit">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{#//实时运行邮件设置#}
+<div class="modal fade" id="shishi_youjian" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog   modal-sm" style="width:400px">
+        <div class="modal-content">
+            <div class="modal-header  " style="height:50px">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title"><strong>邮件设置</strong></h5>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row ">
+                        <div class="col-xs-12">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="sizing-addon2">邮件title</span>
+                                <input type="text" class="form-control" placeholder="Username"
+                                       aria-describedby="sizing-addon2"  id="shishi_youjian_title">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row  mt-low">
+                        <div class="col-xs-12">
+                            <form role="form">
+                                <div class="form-group  form-group-sm">
+                                    <label  >发件人</label>
+                                    <select class="form-control  input-sm" id="shishi_fajianren">
+                                    <option>无</option>
+                                        {% for i in fajianren %}
+                                        <option  name={{ i }}>{{ i }}</option>
+                                        {%  endfor %}
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-xs-12">
+                            <form role="form">
+                                <div class="form-group form-group-sm">
+                                    <label >收件人</label>
+                                    <select id="shishi_shoujianren" name="usertype" class="selectpicker show-tick form-control input-sm" multiple data-live-search="false">
+                                         {% for i in email_detail %}
+                                        <option value={{ i[0] }}>
+                                                 <form class="form-horizontal" role="form">
+                                                    <p>{{ i[0] }} &#12288</p>
+                                                        <p class="form-control-static">{{ i[1] }}</p>
+                                            </form>
+                                        </option>
+                                          {% endfor %}
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row  mt-low">
+                        <div class="col-xs-12">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="sizing-addon2">jekins_job</span>
+                                <select class=" form-control  input-xs">
+                                <option name="none" num="none">无</option>
+                                    {% for i in jobs %}
+                                        <option name={{ i[1] }} num={{ i[0] }}>{{ i [1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal"  name="shishi_email_clear" >关闭</button>
+                <button type="button" class="btn btn-success btn-sm" name="bianji_email" data-dismiss="modal">保存</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+
+
+    {#//邮件设置#}
+<div class="modal fade" id="shezhi_youjian" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog   modal-sm" style="width:500px">
+        <div class="modal-content">
+            <div class="modal-header  " style="height:50px">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title"><strong>邮件设置</strong></h5>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row ">
+                        <div class="col-xs-12">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="sizing-addon2">邮件title</span>
+                                <input type="text" class="form-control" id="youjian_title_dingshi"
+                                      aria-describedby="sizing-addon2">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row  mt-low">
+                        <div class="col-xs-12">
+                            <form role="form">
+                                <div class="form-group  form-group-sm">
+                                    <label  >发件人</label>
+                                    <select class="form-control  input-sm"  id="fajianren_dingshi">
+                                    <option>无</option>
+                                              {% for i in fajianren %}
+                                        <option>{{ i }}</option>
+                                        {%  endfor %}
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-xs-12">
+                            <form role="form">
+                                <div class="form-group form-group-sm">
+                                    <label >收件人</label>
+                                    <select id="shoujianren_dingshi" name="usertype" class="selectpicker show-tick form-control input-sm" multiple data-live-search="false">
+                                           {% for i in email_detail %}
+                                        <option value={{ i[0] }}>
+                                                 <form class="form-horizontal" role="form">
+                                                    <p>{{ i[0] }} &#12288</p>
+                                                        <p class="form-control-static">{{ i[1] }}</p>
+                                            </form>
+                                        </option>
+                                          {% endfor %}
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                            <div class="row  mt-low">
+                        <div class="col-xs-12">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="sizing-addon2">jekins_job</span>
+                                <select class=" form-control  input-xs">
+                                <option name="none" num="none">无</option>
+                                    {% for i in jobs %}
+                                        <option name={{ i[1] }} num={{ i[0] }}>{{ i [1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal"  name="dingshi_su_ti">关闭</button>
+                <button type="button" class="btn btn-success btn-sm" name="bianji_email" data-dismiss="modal">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+    <!--完成功能列表-->
+<div class="modal fade" id="case_list" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog  modal-sm" role="document" style="width:500px">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="form-group">
+                        <label for="name">完成描述</label>
+                        <textarea class="form-control" rows="10" name="textarea_wancheng"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer"  style="height:45px">
+                <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn-xs"  id="beizhu_submit">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="static/hualala/vendor/jquery/jquery.min.js"></script>
+<script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--<script src="static/bootstrap-table-master/dist/bootstrap-table.min.js"></script>-->
+<script src="static/hualala/vendor/metisMenu/metisMenu.min.js"></script>
+<script src="static/hualala/dist/js/sb-admin-2.js"></script>
+<script src="static/layer-v3.0/layer/layer.js"></script>
+<script src="static/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+<script src="static/echarts/echarts.min.js"></script>
+<script src="static/fenye/fenye.js"></script>
+<script src="static/fenye/jiekou_pic.js"></script>
+    <script type=text/javascript>
+
+
+    var $SCRIPT_ROOT = "http://"+window.location.host
+      //实时运行邮件设置关闭清空
+      $('[name="shishi_email_clear"]').click(function()
+      {
+      $('#shishi_youjian_title').val('')
+          $('#shishi_fajianren').val('无')
+          $('#shishi_shoujianren').selectpicker('val', ['noneSelectedText'])
+      }
+      )
+      $('[name="dingshi_su_ti"]').click(function () {
+          $('#youjian_title_dingshi').val('')
+          $('#fajianren_dingshi').val('无')
+          $('#shoujianren_dingshi').selectpicker('val', ['noneSelectedText'])
+      })
+      var new_get_run_statu=0
+      function get_run_statu() {
+          $('[name="simple_detail_git"]').each(function()
+          {
+              if ($(this).parent().parent().prev().html()=="done")
+              {
+                  $(this).attr('disabled',false)
+              }
+          })
+
+          if (new_get_run_statu==0)
+          {
+              new_get_run_statu=1
+               $.post($SCRIPT_ROOT + '/new_get_run_statu', {statu: "jiekou_dingshi"}, function (data) {
+              $.each(data.all_data, function (k, i) {
+                  $('[run_id]').each(function () {
+                      if ($(this).attr('run_id') == String(i[1])) {
+                          $(this).find('td').eq(3).html(i[0])
+                          if  (i[0]=="done")
+                          {
+                              $('this').find('td').eq(4).find('button').eq(0).attr('disabled',false)
+                          }
+                      else {
+                          $('this').find('td').eq(4).find('button').eq(0).attr('disabled',true)
+                               new_get_run_statu=0
+                          }
+                      }
+                  })
+              })
+
+                   if (data.shishi_statu.length>0)
+                   {
+                                     $('[name="all_resul_show"]').attr('shishiid',data.shishi_statu[0][1])
+              if (data.shishi_statu[0][0]=='2')
+              {
+              $('[name="all_resul_show"]').attr('disabled',false)
+                   $('#run_now_chonggou').html('运行')
+                    $('#run_now_chonggou').attr('disabled',false)
+              }
+              else {
+                  $('[name="all_resul_show"]').attr('disabled',true)
+              }
+
+                   }
+          })
+
+          }
+      }
+
+      setInterval('get_run_statu()', 5000)
+      //实时运行
+      $('#run_now_chonggou').click(function () {
+              var all_path = ''
+               var all_branch=''
+          var statu=0
+              $('#xiangmu_body').find('[type="checkbox"]').each(function () {
+                  if ($(this).is(":checked")) {
+                      statu=1
+                      all_path = all_path + "#" + $(this).parent().next().html()
+                         all_branch=all_branch+'#'+$(this).parent().next().next().html()
+                  }
+              })
+
+              var all_name = "#zhen#zhen"
+              var email = ''
+              $('#shishi_shoujianren').find('option').each(function () {
+                      if ($(this).is(':selected')) {
+                          email = email + "##" + $(this).attr('value')
+                      }
+
+                  }
+              )
+                 var send_email=''
+                if ($('#shishi_fajianren').val()!='无')
+                {
+                    send_email=$('#shishi_fajianren').val()
+                }
+                if (statu==1)
+                {
+
+              $.post($SCRIPT_ROOT + '/run_hualala', {
+                      type: "url", run_server: "自动分发", email: email, all_name: all_name, all_path: all_path, time: '',
+                  all_branch:all_branch,statue: "jiekou_shishi",send_email_user: $('#shishi_fajianren').val(),emali_title:$('#shishi_youjian_title').val(),job:"job: no select<span class=\"caret\"></span>"},
+                  function (data) {
+                   $('#run_now_chonggou').attr('disabled', true)
+                      $('[name="all_resul_show"]').attr('disabled', true)
+                     $('#run_now_chonggou').html('运行中')
+
+                                       layer.msg('运行成功', {
+                            shade: [0.3, '#fff'],
+                            shadeClose: true,
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        })
+                      setTimeout(function(){ window.location.reload()}, 1500)
+                  })
+
+                }
+                else
+                {
+                          layer.msg('请选择需要运行的git库', {
+                            shade: [0.3, '#fff'],
+                            shadeClose: true,
+                            icon: 2,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        })
+
+                }
+
+
+      }
+      )
+      //定时运行提交
+            $('[name="dingshi_tijiao"]').click(function () {
+              var all_path = ''
+               var all_branch=''
+                var statu=0
+              $('#xiangmu_body').find('[type="checkbox"]').each(function () {
+                  if ($(this).is(":checked")) {
+                      statu=1
+                      all_path = all_path + "#" + $(this).parent().next().html()
+                         all_branch=all_branch+'#'+$(this).parent().next().next().html()
+                  }
+              })
+              var all_name = "#zhen#zhen"
+              var email = ''
+                if ($('#dingshi_run_type_time').val()=='everyday') {
+                    var run_time = '接口定时设置 ：everyday' + $('#run_time').val()
+                    var run_statu = "接口定时设置 ：everyday<span class=\"caret\"></span>"
+                }
+                else if($('#dingshi_run_type_time').val()=='today')
+                {
+                var myDate = new Date();
+                var year=String(myDate.getFullYear())
+                var month=myDate.getMonth()+1
+                if (month<10)
+                {
+                    month='0'+String(month)
+                }
+                var date=String(myDate.getDate())
+                var time_data=year+'-'+month+'-'+String(myDate.getDate())
+                    var run_time = '接口定时设置 ：'+time_data + ' '+$('#run_time').val()
+                    var run_statu = '接口定时设置 ：'+time_data+'<span class=\"caret\"></span>'
+                }
+
+              $('#shoujianren_dingshi').find('option').each(function () {
+                      if ($(this).is(':selected')) {
+                          email = email + "##" + $(this).attr('value')
+                      }
+                  }
+              )
+                var send_email=''
+                if ($('#fajianren_dingshi').val()!='无')
+                {
+                    send_email=$('#fajianren_dingshi').val()
+                }
+
+
+                if (statu==1)
+                {
+                                  $.post($SCRIPT_ROOT + '/run_hualala', {run_statu:run_statu,
+                      type: "url", run_server: "自动分发", email: email, all_name: all_name, all_path: all_path, time: run_time,
+                  all_branch:all_branch,statu: "jiekou_dingshi",send_email_user: send_email,emali_title:$('#youjian_title_dingshi').val(),job:"job: no select<span class=\"caret\"></span>"},
+                  function (data) {
+                  if (data.statu=="success")
+                  {
+                        layer.msg('提交成功', {
+                            shade: [0.3, '#fff'],
+                            shadeClose: true,
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        })
+                      setTimeout(function(){window.location.reload()}, 3000);
+                  }
+                  else
+                  {
+
+                      layer.msg('提交失败', {
+                            shade: [0.3, '#fff'],
+                            shadeClose: true,
+                            icon: 2,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        })
+                  }
+                  })
+
+                }
+                else
+                {
+                      layer.msg('请选择要运行的git库', {
+                            shade: [0.3, '#fff'],
+                            shadeClose: true,
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        })
+                }
+          }
+      )
+      //查看运行结果
+      $('[name="simple_detail_git"]').click(function()
+      {
+           window.open($SCRIPT_ROOT + '/jiekou_result/' + $(this).parent().parent().parent().attr('run_id'))
+      })
+      //是试运行打开结果页面
+      $('[name="all_resul_show"]').click(function()
+      {
+          {#window.open($SCRIPT_ROOT + '/jiekou_result/' + $('[name="all_resul_show"]').attr('shishiid'))#}
+          window.open($SCRIPT_ROOT + '/jiekou_result/' + $('[name="all_resul_show"]').attr('shishiid'))
+      })
+    $("#dingshi_form").css({position: "relative ",'left':-50,'z-index':1});
+   $(document).ready(function()
+   {
+
+       if (window.screen.height>=999)
+       {
+            fenye_def($('#fenye_first'),$('#xiangmu_body'),13)
+       fenye_def($('#suite_fenye'),$('#suite_body'),13)
+       }
+
+       $('#suite_body').find('tr').each(function()
+       {
+           if ( $(this).find('td').eq(1).html()=="接口实时")
+           {
+                if ( $(this).find('td').eq(3).html()!="done")
+                {
+                         $('#run_now_chonggou').attr('disabled', true)
+                      $('[name="all_resul_show"]').attr('disabled', true)
+                     $('#run_now_chonggou').html('运行中')
+                }
+           }
+       })
+
+   })
+    //编辑git  弹出框打开，添加信息 bianji_alert
+    $('[data-target="#bianji_alert"]').click(function()
+    {
+      var git_name=$(this).parent().parent().parent().find('td').eq(1).html()
+        var git_fenzhi=$(this).parent().parent().parent().find('td').eq(2).html()
+        var git_yewu=$(this).parent().parent().parent().find('td').eq(3).html()
+        $('#git_address_bianji').next().val(git_name)
+        $('#git_address_bianji').next().attr('git_name',git_name)
+        $('#git_fenzhi_bianji').next().val(git_fenzhi)
+        $('#git_fenzhi_bianji').next().attr('git_fenzhi',git_fenzhi)
+        $('#git_yewu_bianji').next().val(git_yewu)
+        $('#git_yewu_bianji').next().attr('git_yewu',git_yewu)
+    })
+      //git编辑提交
+      $('#bianji_submit').click(function () {
+          $('#bianji_alert').modal('hide')
+          $.post($SCRIPT_ROOT + '/git_bianji', {
+              git_name: $('#git_address_bianji').next().val(), git_fenzhi:
+                  $('#git_fenzhi_bianji').next().val(), git_yewu: $('#git_yewu_bianji').next().val(),
+              old_git_name:$('#git_address_bianji').next().attr('git_name'),old_git_fenzhi:$('#git_fenzhi_bianji').next().attr('git_fenzhi')
+          }, function (data) {
+              if (data.statu == 'success') {
+                  layer.msg('保存成功', {
+                      shade: [0.3, '#fff'],
+                      shadeClose: true,
+                      icon: 1,
+                      time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                  })
+                  setTimeout("window.location.reload()", 2000)
+              }
+          })
+      })
+//删除git
+    //删除git文件
+    $('button[name="git_delete"]').each(function () {
+            $(this).click(function () {
+                    var name = $(this).attr('user_name')
+                    var branch = $(this).parent().parent().prevAll().eq(1).html()
+                     var git = $(this).parent().parent().prevAll().eq(2).html()
+                    window.location.reload()
+                    $.post($SCRIPT_ROOT + '/delete_ben', {name: name, git: git,branch:branch,statu:'jiekou'},
+                        function (data) {
+                                     layer.msg('保存成功', {
+                      shade: [0.3, '#fff'],
+                      shadeClose: true,
+                      icon: 1,
+                      time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                  })
+                  setTimeout("window.location.reload()", 2000)
+                        }
+                    )
+                }
+            )
+        }
+    )
+
+    //提交git
+    $('#git_submit').click(function(){
+        var git=$('#git_address').next().val()
+        var beizhu=$('#git_yewu').next().val()
+        var branch=$('#git_fenzhi').next().val()
+        $.post($SCRIPT_ROOT + '/jiekou_yun',{git:git,beizu:beizhu,branch:branch},function(data)
+        {
+            $('#add_git').modal('hide')
+            if (data.a=='1')
+            {
+                       layer.msg('保存成功', {
+                      shade: [0.3, '#fff'],
+                      shadeClose: true,
+                      icon: 1,
+                      time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                  })
+
+            }
+            else
+            {
+                   layer.msg(data.a, {
+                      shade: [0.3, '#fff'],
+                      shadeClose: true,
+                      icon: 2,
+                      time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                  })
+            }
+            setTimeout("window.location.reload()",2000)
+        })
+    })
+    //备注 打开
+    $('[name="simple_beizhu"]').click(function()
+    {   var name=$(this).next().next().attr('user_name')
+        var git=$(this).parent().parent().parent().find('td').eq(1).html()
+                   $.get($SCRIPT_ROOT + '/add_file_detail', {name: name, git: git,type:"jiekou"},
+                    function (data) {
+                        $('[name="textarea_wancheng"]').val(data.a)
+                        $('[name="textarea_wancheng"]').attr('user_name',name)
+                         $('[name="textarea_wancheng"]').attr('git_name',git)
+                    }
+                )
+
+    })
+    //提交备注
+    $('#beizhu_submit').click(function()
+    {
+        var name= $('[name="textarea_wancheng"]').attr('user_name')
+        var git=$('[name="textarea_wancheng"]').attr('git_name')
+        $.post($SCRIPT_ROOT + '/add_file_detail', {detail: $('[name="textarea_wancheng"]').val(), name: name, git: git,type:"jiekou"},
+                    function (data) {
+                        if (data.a=='1')
+                        {
+                            $('#case_list').modal('hide')
+                        }
+                        else {
+                                    layer.msg('保存失败', {
+                      shade: [0.3, '#fff'],
+                      shadeClose: true,
+                      icon: 2,
+                      time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                  })
+                        }
+                    }
+                )
+    })
+    $('#case_list').on('hidden.bs.modal', function (e) {
+          $('[name="textarea_wancheng"]').val('')
+                        $('[name="textarea_wancheng"]').removeAttr('user_name')
+                         $('[name="textarea_wancheng"]').removeAttr('git_name')
+
+})
+
+
+
+    //任务详情打开
+    $('[name="renwu_detail"]').click(function()
+    {
+        var run_id=$(this).attr('run_id')
+        $.post('http://192.168.33.244:5025/get_renwu_detail',{run_id:run_id},function(data)
+        {
+                $('#renwu_create_time').html('<strong>创建时间 ：</strong>'+data.create_time)
+            $('#last_run_time_renwu').html('<strong>最近运行时间 ：</strong>'+data.last_run_time)
+            $('#run_type_suite_renwu').html('<strong>运行类型 ：</strong>'+data.run_type)
+            $.each(data.all_git,function(k,i){
+                $('#run_git_list').prepend('<li>'+i+'</li>')
+            })
+            $.each(data.receive_email,function(k,i){
+                $('#renwu_receive_email').prepend('<li>'+i+'</li>')
+            })
+            $('#fajianren_renwu').html('<strong>发件人 ：</strong>'+data.send_email)
+        })
+    })
+      $('#dingshi_baobiao_close').click(function(){
+    $('#dingshi_baobiao_modal').modal('hide')
+          var email_title=$('#dingshi_baobiao_title').val()
+          var fajianren=$('#dingshi_baobiao_fajianren').val()
+
+    })
+
+</script>
+{% endblock %}

@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>首页</title>
+<link rel="stylesheet" type="text/css" href= {{url_for('static', filename='css/style.css')}} />
+<script type="text/javascript" src= {{url_for('static', filename='js/jquery-1.6.min.js')}}></script>
+<script type="text/javascript" src={{url_for('static', filename='js/index.js')}}></script>
+</head>
+
+<body>
+<div class="nav-top">
+	<span>系统</span>
+    <div class="nav-topright">
+
+        <span>您好：{{user}}</span><span  id="logout">注销</span>
+
+    </div>
+</div>
+<div class="nav-down"   style="position:relative;
+z-index:99999;">
+    <div class="leftmenu2">
+        <ul>
+        	<li>
+            	<a class="j_a_list j_a_list1"></a>
+                <div class="j_menu_list j_menu_list_first">
+                	<span class="sp1"><i></i>脚本运行</span>
+                                      {% for i in  names %}
+    <a href="#"  id={{i}}>{{i}}</a>
+        {% endfor %}
+                </div>
+            </li>
+            <li>
+            	<a class="j_a_list j_a_list2"></a>
+                <div class="j_menu_list">
+                	<span class="sp2"><i></i>文件管理</span>
+                                      {% for i in  names %}
+    <a href="##"  id={{i}}>{{i}}</a>
+        {% endfor %}
+                </div>
+            </li>
+            <li>
+            	<a class="j_a_list j_a_list3"></a>
+                <div class="j_menu_list">
+                	<span class="sp3"><i></i>用户管理</span>
+                	<a href="###" id="user_mange">用户信息</a>
+                    <a href="adduser" id="add_user">增删用户</a>
+                    <a href="common" id="user_mange">通用配置</a>
+                </div>
+            </li>
+
+        </ul>
+        
+    </div>
+
+     </div>
+
+
+    <div class="rightcon">
+    	<div class="right_con">
+
+             {% block content %}{% endblock %}
+    </div>
+</div>
+
+<script src="{{url_for('static', filename='jquery-1.8.0.js')}}"></script>
+<script type=text/javascript>
+var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+</script>
+<script type=text/javascript>
+$("#1").html("{"apiKey":"22","apiSign": "22",
+    "vendorCode": "103530\,
+    "stockDetail": [
+        {
+            "warehouse": "VIP_CD",
+            "barcode": "JYM20172058",
+            "inventory": "10"
+        }
+    ],
+    "cooperationCode": "10353082"
+}")
+
+
+
+
+</script>
+</body>
+</html>

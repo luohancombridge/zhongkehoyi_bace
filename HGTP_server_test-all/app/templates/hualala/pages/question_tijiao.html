@@ -1,0 +1,469 @@
+{% extends "/hualala/pages/base.html" %}
+{% block content %}
+ <style type="text/css">
+        .mt-10 {
+            margin-top: 25px;
+        }
+        .mt-low {
+            margin-top: 15px;
+        }
+        .textarea {
+            width: 650px;
+            min-height: 420px;
+            max-height: 420px;
+            _height: 120px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 3px;
+            outline: 0;
+            border: 1px solid #a0b3d6;
+            font-size: 12px;
+            line-height: 24px;
+            padding: 2px;
+            word-wrap: break-word;
+            overflow-x: hidden;
+            overflow-y: auto;
+            border-color: rgba(82, 168, 236, 0.8);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+        }
+
+        .row.no-gutter {
+            margin-left: 0;
+            margin-right: 0;
+        }
+ </style>
+    <div class="container-fluid">
+        <div class="col-md-5">
+            <form role="form">
+                <legend><h4>问题反馈</h4></legend>
+                <div class="row mt-low">
+                    <div class="form-group  form-group-sm">
+                        <label for="lastname" class="col-sm-2 control-label">标题</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control  col-sm-10" id="insert_question_title"
+                                   placeholder="请输入标题">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-low">
+                    <div class="col-md-6">
+                        <div class="form-group form-group-sm">
+                            <label for="name">问题类型</label>
+                            <select class="form-control" id="insert_question_type">
+                                <option>缺陷</option>
+                                <option>建议</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group form-group-sm">
+                            <label for="name">优先级</label>
+                            <select class="form-control" id="insert_question_you">
+                                <option>一般</option>
+                                <option>紧急</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-low">
+                    <div class="col-md-12">
+                        <div class="form-group form-group-sm">
+                            <label for="name">所属功能</label>
+                            <select class="form-control" id="insert_question_leixing">
+                                <option>接口自动化</option>
+                                <option>ui自动娿</option>
+                                <option>挡板</option>
+                                <option>其他</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="name">内容</label>
+                            <textarea class="form-control" rows="12" id="insert_question_detail"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-group  " role="group">
+                    <button type="button" class="btn btn-warning btn-sm" id="question_clear">清空</button>
+                    <button type="button" class="btn btn-success btn-sm" id="question_submit">提交</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-7 mt-low">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    问题列表
+                </div>
+                <div class="panel-body">
+                    <div class="container-fluid ">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group form-group-sm">
+                                        <div class="col-sm-6">
+                                            <div class="input-group input-group-sm  ">
+                                                <input type="text" class="form-control" placeholder="搜索"
+                                                       id="sousouo_input">
+                                                <span class="input-group-btn">
+                                                              <button class="btn btn-primary" type="button"
+                                                                      id="souduo_button">搜索</button>
+                                                        </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <select class="form-control" id="sousuo_select">
+                                                <option>遗留</option>
+                                                <option>已解决</option>
+                                                <option>未解决</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="btn-group btn-group-justified btn-group-sm" role="group"
+                                                 aria-label="..." id="youxianji_sousuo">
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    <button type="button" class="btn btn-info" data-toggle="modal"
+                                                            data-target="#yunxingtime" id="run_time_button">
+                                                        一般
+                                                    </button>
+                                                </div>
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    <button type="button" class="btn btn-warning" data-toggle="modal"
+                                                            data-target="#all_git_run_detial" id="run_all_detail">
+                                                        紧急
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <ul class="list-group" id="question_list">
+                                </ul>
+                                <ul class="pagination" id="fenye_first">
+                                    <li><a href="#">&laquo;</a></li>
+                                    <li><a href="#">&raquo;</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--//问题详情弹出框-->
+<div class="modal fade" tabindex="-1" role="dialog" id="modal_question_detail">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 450px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title"  id="order_all_title">接口平台出现了大规模的预期问题</h5>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                <div class="list-group" style=" overflow:scroll; height:200px;overflow-x:hidden" id="order_list">
+                    <a href="#" class="list-group-item active">
+                        <h6 class="list-group-item-heading"  id="firstquestionorder">
+                            孙振与2019-10-27 18:13 提交问题：
+                        </h6>
+                        <p class="list-group-item-text">
+                        <h6 id="firstquestiontitle">&#12288&#12288&#12288您将通过网页进行免费域名注册。</h6>
+                        </p>
+                    </a>
+                </div>
+                        <div class="form-group"  >
+                        <select class="form-control"  id="order_statu">
+                            <option>未解决</option>
+                            <option>遗留</option>
+                            <option>已解决</option>
+                        </select>
+                        </div>
+                        <div class="form-group"  >
+                            <label for="name">回复</label>
+                            <textarea class="form-control" id="deblock_udid" name="deblock_udid" rows="5" style="min-width: 90%"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-success btn-sm"  id="submit_order">提交</button>
+            </div>
+        </div>
+    </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script src="static/hualala/vendor/jquery/jquery.min.js"></script>
+<script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--<script src="static/bootstrap-table-master/dist/bootstrap-table.min.js"></script>-->
+<script src="static/hualala/vendor/metisMenu/metisMenu.min.js"></script>
+<script src="static/hualala/dist/js/sb-admin-2.js"></script>
+<script src="static/layer-v3.0/layer/layer.js"></script>
+<script src="static/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+<script src="static/echarts/echarts.min.js"></script>
+<script src="static/fenye/fenye.js"></script>
+<script src="static/fenye/jiekou_pic.js"></script>
+<script type=text/javascript>
+    var  url_mu='http://'+window.location.host+'/'
+    $(document).ready(function () {
+       //获取问题详情
+        $.ajaxSetup({
+            async:false
+        })
+        $.post(url_mu+'use_question/get_qustion_detail',{},function(data)
+        {
+            var question_list_code='  <a href="#" class="list-group-item list-group-item-action">\n' +
+                '                        1 item<span class="badge  badge-success">已解决</span></a>'
+            $.each(data.data,function(k,i)
+            {
+                $('#question_list').append(question_list_code)
+                $('#question_list').find('a').eq(-1).html(i['title']+'<span class="badge ">已解决</span>')
+                if (i['type']=="遗留")
+                {
+                    $('#question_list').find('span').eq(-1).html('遗'+'&#12288'+'留')
+                }
+                else
+                {
+                    $('#question_list').find('span').eq(-1).html(i['type'])
+                }
+                $('#question_list').find('a').eq(-1).attr('question_id',i['id'])
+                $('#question_list').find('a').eq(-1).attr('question_detail',i['question_detail'])
+                $('#question_list').find('a').eq(-1).attr('user_name',i['user_name'])
+                $('#question_list').find('a').eq(-1).attr('submit_time',i['submit_time'])
+                $('#question_list').find('a').eq(-1).attr('question_statu',i['type'])
+                $('#question_list').find('a').eq(-1).attr('youxianji',i['youxianji'])
+            })
+            $('#question_list').attr('this_user',data.name)
+        })
+        fenye_def($('#fenye_first'), $('#question_list').find('a'), 3)
+        test_fenye( $('#question_list').find('a'))
+        $.ajaxSetup({
+            async : true
+        })
+        $('#question_list').find('a').on('click',function(){
+               if ($(this).attr('user_name')!=$('#question_list').attr('this_user'))
+               {
+                   $('#submit_order').attr('disabled',true)
+               }
+
+                var order_detail='                    <a href="#" class="list-group-item">\n' +
+                    '                        <h6 class="list-group-item-heading"  name="order_title">\n' +
+                    '                            孙振与2019-10-27 18:13 提交问题：\n' +
+                    '                        </h6>\n' +
+                    '                        <p class="list-group-item-text">\n' +
+                    '                        <h6  name="order_detail">&#12288&#12288&#12288您将通过网页进行免费域名注册。</h6>\n' +
+                    '                        </p>\n' +
+                    '                    </a>'
+                var question_id=$(this).attr('question_id')
+                var question_title=$(this).html().split('<span')[0]
+                var qustion_id=$(this).attr('question_id')
+                var question_detail=$(this).attr('question_detail')
+                var user_name=$(this).attr('user_name')
+                var submit_time=$(this).attr('submit_time')
+                $('#order_all_title').html(question_title)
+                $('#order_all_title').attr('question_id',question_id)
+                $('#firstquestionorder').html(user_name+'于'+submit_time+'提交问题:')
+                $('#firstquestiontitle').html('&#12288&#12288&#12288'+question_detail)
+            var  question_statu=$(this).attr('question_statu')
+            $('#order_statu').val(question_statu)
+                //回复模态框弹出初始化操作
+                    $.post(url_mu+'use_question/order_detail',{question_id:question_id},function(data){
+                        $.each(data.data,function(a,b){
+                            $('#order_list').append(order_detail)
+                            $('[ name="order_title"]').eq(-1).html(b[2]+'与'+b[4]+'提交问题：')
+                            $('[name="order_detail"]').eq(-1).html('&#12288&#12288&#12288'+b[3])
+                        })
+                    })
+            $('#modal_question_detail').modal('show')
+        })
+    })
+
+    $('#question_clear').click(function()
+    {
+        $('#insert_question_title').val('')
+        $('#insert_question_detail').val()
+        $('#insert_question_type').val('缺陷')
+        $('#insert_question_you').val('一般')
+        $('#insert_question_leixing').val('接口自动化')
+    })
+    $('#question_submit').click(function(){
+var insert_question_title=$('#insert_question_title').val()
+        var insert_question_type=$('#insert_question_type').val()
+        var insert_question_you=$('#insert_question_you').val()
+        var insert_question_leixing=$('#insert_question_leixing').val()
+        var  insert_question_detail=$('#insert_question_detail').val()
+        if ($.trim(insert_question_title)=='' || $.trim(insert_question_detail)=='')
+        {
+            layer.msg("标题与内容不能为空", {
+                shade: [0.3, '#fff'],
+                shadeClose: true,
+                icon: 2,
+                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+            })
+
+        }
+        else
+        {
+
+            $.post(url_mu+'use_question/question_submit',{insert_question_title:insert_question_title,
+                insert_question_type:insert_question_type, insert_question_you:insert_question_you,
+                insert_question_leixing:insert_question_leixing,insert_question_detail:insert_question_detail },function(data){
+                if (data.statu=='success')
+                {
+                    layer.msg('提交成功', {
+                        shade: [0.3, '#63bdff'],
+                        shadeClose: true,
+                        icon: 1,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    })
+                }
+                else
+                {
+                    layer.msg(data.statu, {
+                        shade: [0.3, '#fff'],
+                        shadeClose: true,
+                        icon: 2,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    })
+                }
+            })
+        }
+    })
+//提交回复
+    $('#submit_order').click(function(){
+        var question_id=$('#order_all_title').attr('question_id')
+        var order_detail=$('#deblock_udid').val().trim()
+        if (order_detail=='')
+        {
+            layer.msg('回复不能为空', {
+                shade: [0.3, '#fff'],
+                shadeClose: true,
+                icon: 2,
+                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+            })
+
+        }
+        else
+        {
+            $('#submit_order').attr('disabled',true)
+            $.post(url_mu+'use_question/order_insert',{question_id:question_id,order_detail:order_detail},function(data){
+                $('#submit_order').attr('disabled',false)
+                if (data.statu=='success')
+                {
+                    layer.msg('回复成功', {
+                        shade: [0.3, '#fff'],
+                        shadeClose: true,
+                        icon: 1,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    })
+                }
+                $('#modal_question_detail').modal('hide')
+                $('#deblock_udid').val('')
+            })
+
+        }
+    })
+
+
+    $('#modal_question_detail').on('hide.bs.modal',function()
+    {
+        $('#order_list').find('a')
+        $.each( $('#order_list').find('a'),function(a,b)
+        {
+            if (a!=0)
+            {
+                $(this).remove()
+            }
+        })
+    })
+    //修改问题状态
+    $('#order_statu').change(function(){
+        var order_statu=$('#order_statu').val()
+        var question_id=$('#order_all_title').attr('question_id')
+        $.post(url_mu + 'use_question/question_statu_change', {
+            order_statu: order_statu,
+            question_id: question_id
+        }, function (data) {
+            if (data.statu == 'success') {
+                layer.msg('状态更改成功', {
+                    shade: [0.3, '#fff'],
+                    shadeClose: true,
+                    icon: 1,
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                })
+
+            }
+        })
+    })
+
+    //搜索列表
+    $('#souduo_button').click(function () {
+        var sousuo_detail = $('#sousouo_input').val()
+        if (sousuo_detail.trim() == '') {
+            $.each($('#question_list').find('a'), function (a, b) {
+                if ($(this).attr('sousuo_shou') != undefined) {
+                    $(this).show()
+                }
+            })
+        } else {
+            $('#question_list').find('a').removeAttr('sousuo_shou')
+            $.each($('#question_list').find('a'), function (b, k) {
+                var question_detail = $(this).html()
+                if ($(this).is(':visible')) {
+                    $(this).attr('sousuo_shou', '1')
+                    if (question_detail.indexOf(sousuo_detail) < 0) {
+                        $(this).hide()
+                    }
+                }
+            })
+        }
+
+    })
+    //搜索select change
+    $('#sousuo_select').on('change', function () {
+            var sousuo_detail = $(this).val()
+            $.each($('#question_list').find('a'), function (a, b) {
+                if ($(this).attr('sousuo_shou') != undefined) {
+                    $(this).show()
+                }
+            })
+            $('#question_list').find('a').removeAttr('sousuo_shou')
+            $.each($('#question_list').find('a'), function (a, b) {
+                if ($(this).attr('question_statu') != sousuo_detail  && $(this).is(':visible')) {
+                    $(this).hide()
+                    $(this).attr('sousuo_shou', '1')
+                }
+            })
+        }
+    )
+
+    //优先级搜索￿·
+    $('#youxianji_sousuo').find('button').click(function(){
+        var jinji_detail=$(this).html().trim()
+        $.each($('#question_list').find('a'), function (a, b) {
+            if ($(this).attr('sousuo_shou') != undefined) {
+                $(this).show()
+            }
+        })
+        $('#question_list').find('a').removeAttr('sousuo_shou')
+        $.each($('#question_list').find('a'), function (a, b) {
+                 var statu=1
+                 if ($(this).attr('youxianji')!=jinji_detail && $(this).is(':visible'))
+                     (
+                         $(this).hide()
+                     )
+                  if (statu==1)
+                  {
+                      $(this).attr('sousuo_shou', '1')
+                  }
+        })
+    })
+</script>
+{% endblock %}

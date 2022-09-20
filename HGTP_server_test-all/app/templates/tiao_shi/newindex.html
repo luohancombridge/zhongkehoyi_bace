@@ -1,0 +1,165 @@
+{% extends "/tiao_shi/base.html" %}
+{% block content %}
+       <style type="text/css">
+
+
+table.zyhovertable {
+
+
+    font-family:
+    verdana,arial,sans-serif;
+    font-size:11px;
+    color:#333333;
+    border-width: 1px;
+    border-color: #999999;
+    border-collapse:
+    collapse;
+}
+
+table.zyhovertable th {
+    background-color:#C3DDE0;
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #999999;
+}
+
+table.zyhovertable tr {
+    background-color:#DCDCDC;
+}
+
+table.zyhovertable td {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #999999;
+}
+</style>
+<div class="container">
+    <div class="row">
+ <div class="col-lg-12">
+<table class="table table-hover table-bordered">
+  <h2><caption>悬停表格布局</caption></h2>
+  <thead>
+    <tr>
+      <th>名称</th>
+      <th>城市</th>
+      <th>邮编</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Tanmay</td>
+      <td>Bangalore</td>
+      <td>560001</td>
+    </tr>
+    <tr>
+      <td>Sachin</td>
+      <td>Mumbai</td>
+      <td>400003</td>
+    </tr>
+    <tr>
+      <td>Uma</td>
+      <td>Pune</td>
+      <td>411027</td>
+    </tr>
+  </tbody>
+</table>
+     </div>
+        </div>
+        <div class="row">
+ <div class="col-lg-4">
+
+
+     <div class="btn-toolbar" role="toolbar">
+	<div class="btn-group">
+		<button type="button" class="btn btn-default">按钮 1</button>
+		<button type="button" class="btn btn-default">按钮 2</button>
+		<button type="button" class="btn btn-default">按钮 3</button>
+	</div>
+</div>
+
+
+       </div>
+            <div class="col-lg-4" name="2">
+     <div class="btn-toolbar" role="toolbar">
+	<div class="btn-group">
+		<button type="button" class="btn btn-default">按钮 1</button>
+		<button type="button" class="btn btn-default">按钮 2</button>
+		<button type="button" class="btn btn-default">按钮 3</button>
+	</div>
+</div>
+
+
+       </div>
+        </div>
+
+
+<!-- Split button -->
+            <div class="row">
+ <div class="col-lg-4">
+
+<div class="btn-group">
+	<button type="button" class="btn btn-default dropdown-toggle"
+			data-toggle="dropdown">
+		默认 <span class="caret"></span>
+	</button>
+	<ul class="dropdown-menu" role="menu">
+		<li><a href="#">功能</a></li>
+		<li><a href="#">另一个功能</a></li>
+		<li><a href="#">其他</a></li>
+		<li class="divider"></li>
+		<li><a href="#">分离的链接</a></li>
+	</ul>
+</div>
+<div class="btn-group">
+<select id="id_select" class="selectpicker bla bla bli" multiple data-live-search="true">
+    <option >cow</option>
+    <option   name="1121" class="2">bull</option>
+    <option>ASD</option>
+    <option selected>Bla</option>
+    <option>Ble</option>
+    </optgroup>
+  </select>
+    <button type="button" class="btn btn-default"  id="yewu">提价</button>
+</div>
+ </div>
+            </div>
+</div>
+
+
+<script src="{{url_for('static', filename='jquery-3.2.1.min.js')}}"></script>
+<script type="text/javascript" src={{url_for('static', filename='js/index.js')}}></script>
+     <script type="text/javascript" src="{{url_for('static', filename='jquery-ui-1.12.1/jquery-ui.js')}}"></script>
+    <script type="text/javascript"   src="{{url_for('static', filename='jquery-ui-1.12.1/jquery-ui.min.js')}}"></script>
+<script type=text/javascript>
+var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+</script>
+<script type=text/javascript>
+
+
+
+$('#yewu').click(function() {
+        var a = ''
+        $('#id_select').find('option:selected').each(function () {
+                 a = a + ',' + $(this).text()
+
+            }
+        )
+        $.post($SCRIPT_ROOT + '/exe_print', {ame: a},
+            function (data) {
+                alert(data.a)
+            }
+        )
+    }
+)
+
+
+
+
+
+
+
+</script>
+{% endblock %}
+

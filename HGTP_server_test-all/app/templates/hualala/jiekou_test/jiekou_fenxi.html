@@ -1,0 +1,751 @@
+{% extends "/hualala/pages/base.html" %}
+{% block content %}
+    <style type="text/css">
+        .mt-10 {
+            margin-top: 25px;
+        }
+        .mt-low {
+            margin-top: 15px;
+        }
+        .textarea {
+            width: 650px;
+            min-height: 420px;
+            max-height: 420px;
+            _height: 120px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 3px;
+            outline: 0;
+            border: 1px solid #a0b3d6;
+            font-size: 12px;
+            line-height: 24px;
+            padding: 2px;
+            word-wrap: break-word;
+            overflow-x: hidden;
+            overflow-y: auto;
+            border-color: rgba(82, 168, 236, 0.8);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+        }
+        .row.no-gutter {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    </style>
+<div class="container-fluid">
+    <div class="row ">
+            <div class="col-xs-6">
+                <div class="row mt-10">
+                    <div class="col-xs-3">
+                        <div class="btn-group btn-group-justified btn-group-xs" role="group" aria-label="...">
+                            <div class="btn-group btn-group-xs" role="group">
+                                <button type="button" class="btn btn-success" id="run_case">启用</button>
+                            </div>
+                            <div class="btn-group btn-group-xs" role="group">
+                                <button type="button" class="btn btn-info"  id="result_open">停止</button>
+                            </div>
+                        </div>
+                    </div>
+        <div class="col-xs-3">
+            <div class="btn-group btn-group-justified btn-group-xs" role="group" aria-label="...">
+                <div class="btn-group btn-group-xs" role="group">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_git_modal" id="add_git" >
+                        增加git
+                    </button>
+                </div>
+                <div class="btn-group btn-group-xs" role="group">
+                    <button type="button" class="btn btn-danger"  id="delete_git">删除</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-5">
+            <div class="btn-group btn-group-justified btn-group-xs" role="group" aria-label="...">
+                <div class="btn-group btn-group-xs" role="group">
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#shezhi_youjian" id="youjian_button" >
+                        邮件设置
+                    </button>
+                </div>
+                <div class="btn-group btn-group-xs" role="group">
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#yunxingtime" id="run_time_button" >
+                        运行时间
+                    </button>
+                </div>
+                <div class="btn-group btn-group-xs" role="group">
+                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#all_git_run_detial" id="run_all_detail" >
+                        历次结果
+                    </button>
+                </div>
+            </div>
+        </div>
+                </div>
+                <div class="row mt-low">
+                    <div class="col-xs-12">
+                        <!--<div class="table-responsive"   style=" height:465px; overflow:auto; " >-->
+                        <div class="table-responsive"   >
+                            <table class="table table-bordered table-hover ">
+                                <thead>
+                                <tr  >
+                                    <th >
+                                        <input type="checkbox"  name="all_choice">
+                                        选择</th>
+                                    <th>git地址</th>
+                                    <th>分支名</th>
+                                    <th>提交日期</th>
+                                    <th>状态</th>
+                                    <th>业务名</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="xiangmu_body">
+                                <tr class="success" >
+                                    <td>
+                                        <input type="checkbox" >
+                                    </td>
+                                    <td>http://www.baidu.com</td>
+                                    <td>master</td>
+                                    <td>2022/1/23</td>
+                                    <td>启用</td>
+                                    <td>题库</td>
+                                    <td>
+                                        <div class="btn-group btn-group-xs" role="group" >
+                                            <button class="btn btn-info btn-xs" type="button" name="simple_detail_git">结果报表</button>
+                                            <button class="btn btn-warning btn-xs" type="button" name="add_beizhu">编辑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                        <ul class="pagination" id="fenye_first">
+                            <li><a href="#">&laquo;</a></li>
+                            <li><a href="#">&raquo;</a></li>
+                        </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="col-xs-6" >
+            <div class="row mt-low">
+                <div class="col-xs-12" >
+                    <div id="tongguolv" style="width: 100%;height:300px;"></div>
+                </div>
+            </div>
+            <div class="row mt-low">
+                <div class="col-xs-12" >
+            <div id="user_num" style="width: 100%;height:300px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{#//邮件设置#}
+<div class="modal fade" id="shezhi_youjian" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog   modal-sm" style="width:300px">
+        <div class="modal-content">
+            <div class="modal-header  " style="height:50px">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title"><strong>邮件设置</strong></h5>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row ">
+                        <div class="col-xs-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon">邮件title</span>
+                                <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                       id="youjian_title"  value="测试报告">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row  mt-low">
+                        <div class="col-xs-12">
+                            <form role="form">
+                                <div class="form-group  form-group-sm">
+                                    <label  >发件人</label>
+                                    <select class="form-control  input-sm">
+                                        <option>测试部</option>
+                                        <option>测开组</option>
+                                        <option>开发组</option>
+                                        <option>运维组</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+
+                    <div class="row ">
+                        <div class="col-xs-12">
+                            <form role="form">
+                                <div class="form-group form-group-sm">
+                                    <label >收件人</label>
+                                    <select id="usertype" name="usertype" class="selectpicker show-tick form-control input-sm" multiple data-live-search="false">
+                                        <option value="0">苹果</option>
+                                        <option value="1">菠萝</option>
+                                        <option value="2">香蕉</option>
+                                        <option value="3">火龙果</option>
+                                        <option value="4">梨子</option>
+                                        <option value="5">草莓</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal" >关闭</button>
+                <button type="button" class="btn btn-success btn-sm" name="bianji_email" data-dismiss="modal">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+
+{#//运行时间设置#}
+<div class="modal fade" id="yunxingtime" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog   modal-sm" style="width:430px">
+        <div class="modal-content">
+            <div class="modal-header  " style="height:50px">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title"><strong>运行时间设置</strong></h5>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row ">
+                        <div class="col-xs-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon">运行时间</span>
+                                <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                        id="yunxing_time"    placeholder="时间格式14:21"    value="19:10">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row  mt-low">
+                        <div class="col-xs-12">
+                            <form  class="form-inline" role="form">
+                                <div class="input-group  input-group-sm">
+                                    <div class="input-group-addon">间隔时间</div>
+                                    <input type="text" class="form-control input-sm" id="exampleInputAmount"
+                                          value="3" >
+                                </div>
+                                    <select class=" form-control  input-sm">
+                                        <option>天</option>
+                                        <option>周</option>
+                                        <option>小时</option>
+                                    </select>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal" >关闭</button>
+                <button type="button" class="btn btn-success btn-sm" name="bianji_time" data-dismiss="modal">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+
+{#//总体每次历次结果#}
+<div class="modal fade" id="all_git_run_detial" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog   modal-sm" style="width:1180px">
+        <div class="modal-content">
+            <div class="modal-header"  style="height:50px">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title"><strong>总体历次结果</strong></h5>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row ">
+                        <div class="col-xs-5">
+                            <div class="table-responsive"   >
+                                <table class="table table-bordered table-hover ">
+                                    <thead>
+                                    <tr  >
+                                        <th>运行时间</th>
+                                        <th>通过率</th>
+                                        <th>耗时</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="second_body">
+                                    <tr class="success"   test="true" style="cursor:pointer">
+                                        <td>2019/2/21 14:20</td>
+                                        <td>80%</td>
+                                        <td>7分12秒</td>
+                                        <td>
+                                            <div class="btn-group btn-group-xs" role="group" >
+                                                <button class="btn btn-info btn-xs" type="button" name="aoo_detail_shwo">查看结果</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="success"  style="cursor:pointer">
+                                        <td>2019/2/21 14:20</td>
+                                        <td>70%</td>
+                                        <td>4分52秒</td>
+                                        <td>
+                                            <div class="btn-group btn-group-xs" role="group" >
+                                                <button class="btn btn-info btn-xs" type="button" name="aoo_detail_shwo">查看结果</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="success"  style="cursor:pointer">
+                                        <td>2019/2/21 14:20</td>
+                                        <td>70%</td>
+                                        <td>4分52秒</td>
+                                        <td>
+                                            <div class="btn-group btn-group-xs" role="group" >
+                                                <button class="btn btn-info btn-xs" type="button" name="aoo_detail_shwo">查看结果</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="success"  style="cursor:pointer">
+                                        <td>2019/2/21 14:20</td>
+                                        <td>70%</td>
+                                        <td>4分52秒</td>
+                                        <td>
+                                            <div class="btn-group btn-group-xs" role="group" >
+                                                <button class="btn btn-info btn-xs" type="button" name="aoo_detail_shwo">查看结果</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="success"  style="cursor:pointer">
+                                        <td>2019/2/21 14:20</td>
+                                        <td>70%</td>
+                                        <td>4分52秒</td>
+                                        <td>
+                                            <div class="btn-group btn-group-xs" role="group" >
+                                                <button class="btn btn-info btn-xs" type="button" name="aoo_detail_shwo">查看结果</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                        </div>
+                    </div>
+                        <div class="col-xs-7" >
+                                    <div id="lici_tonguolv" style="width: 630px;height:400px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal" >关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<div class="modal fade" id="add_git_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog   modal-sm" style="width:300px">
+        <div class="modal-content">
+            <div class="modal-header  " style="height:50px">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">添加git</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row  ">
+                        <div class="col-xs-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon">git 地址</span>
+                                <input type="text" class="form-control " aria-describedby="basic-addon1"
+                                       id="add_beizhu_address">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row  mt-low ">
+                        <div class="col-xs-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon">分支名</span>
+                                <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                       id="add_git_fenzhi">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-low ">
+                        <div class="col-xs-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon">业务名</span>
+                                <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                       id="add_git_beizhu">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal" >关闭</button>
+                <button type="button" class="btn btn-success btn-sm" name="add_git_modal" data-dismiss="modal">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+
+
+
+<div class="modal fade" id="modeal_git_bianji" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog   modal-sm" style="width:300px">
+        <div class="modal-content">
+            <div class="modal-header  " style="height:50px">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">编辑git</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row  ">
+                        <div class="col-xs-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon">git 地址</span>
+                                <input type="text" class="form-control " aria-describedby="basic-addon1"
+                                       id="bianji_address">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row  mt-low ">
+                        <div class="col-xs-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon">分支名</span>
+                                <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                       id="bianji_fenzhi">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-low ">
+                        <div class="col-xs-12">
+                            <div class="input-group  input-group-sm">
+                                <span class="input-group-addon">简单编辑</span>
+                                <input type="text" class="form-control input-sm" aria-describedby="basic-addon1"
+                                       id="bianji_beizhu">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal" >关闭</button>
+                <button type="button" class="btn btn-success btn-sm" name="bianji_git_modal_submit" data-dismiss="modal">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<table id="table_tr_example"   style="display:none">
+    <tr class="success" >
+        <td>
+            <input type="checkbox" >
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+            <div class="btn-group btn-group-xs" role="group" >
+                <button class="btn btn-danger btn-xs" type="button" name="simple_detail_git">结果报表</button>
+                <button class="btn btn-warning btn-xs" type="button" name="add_beizhu">编辑</button>
+            </div>
+        </td>
+    </tr>
+</table>
+
+
+
+
+{#单个git库历次结果报表#}
+
+<div class="modal fade" id="simple_run_detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog   modal-sm" style="width:950px;height:200px">
+        <div class="modal-content">
+            <div class="modal-header"  style="height:50px">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title"><strong>历次结果</strong></h5>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row ">
+                        <div class="col-xs-6">
+                            <div class="table-responsive"   >
+                                <table class="table table-bordered table-hover ">
+                                    <thead>
+                                    <tr  >
+                                        <th>运行时间</th>
+                                        <th>通过率</th>
+                                        <th>耗时</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="time_all_body_git_simple">
+                                    <tr class="success  "   test="true" style="cursor:pointer">
+                                        <td>2019/2/21 14:20</td>
+                                        <td>95%</td>
+                                        <td>2分11秒</td>
+                                        <td>
+                                            <div class="btn-group btn-group-xs" role="group" >
+                                                <button class="btn btn-info btn-xs" type="button" name="simple_git_result_detail">查看结果</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="success" style="cursor:pointer" >
+                                        <td>2019/2/21 14:20</td>
+                                        <td>60%</td>
+                                        <td>5分11秒</td>
+                                        <td>
+                                            <div class="btn-group btn-group-xs" role="group" >
+                                                <button class="btn btn-info btn-xs" type="button" name="simple_git_result_detail">查看结果</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="success" style="cursor:pointer" >
+                                        <td>2019/2/21 14:20</td>
+                                        <td>60%</td>
+                                        <td>9分11秒</td>
+                                        <td>
+                                            <div class="btn-group btn-group-xs" role="group" >
+                                                <button class="btn btn-info btn-xs" type="button" name="simple_git_result_detail">查看结果</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="success" style="cursor:pointer" >
+                                        <td>2019/2/21 14:20</td>
+                                        <td>60%</td>
+                                        <td>22分11秒</td>
+                                        <td>
+                                            <div class="btn-group btn-group-xs" role="group" >
+                                                <button class="btn btn-info btn-xs" type="button" name="simple_git_result_detail">查看结果</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="success" style="cursor:pointer" >
+                                        <td>2019/2/21 14:20</td>
+                                        <td>60%</td>
+                                        <td>21分11秒</td>
+                                        <td>
+                                            <div class="btn-group btn-group-xs" role="group" >
+                                                <button class="btn btn-info btn-xs" type="button" name="simple_git_result_detail">查看结果</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                        <div class="col-xs-6" >
+                            <ul id="myTab" class="nav nav-tabs">
+                                <li class="active">
+                                    <a href="#home" data-toggle="tab">
+                                        单次运行详情
+                                    </a>
+                                </li>
+                                <li><a href="#ios" data-toggle="tab">多次通过率折线图</a></li>
+                            </ul>
+                            <div id="myTabContent" class="tab-content">
+                                <div class="tab-pane fade in active" id="home">
+                                    <pre  style = "border:none; background:none"></pre>
+                                    <div id="simple_zhu_git" style="width: 530px;height:250px;"></div>
+                                </div>
+                                <div class="tab-pane fade" id="ios">
+
+                                    <div id="simple_zhu_git_zhe" style="width: 420px;height:250px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal" >关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<script src="static/hualala/vendor/jquery/jquery.min.js"></script>
+<script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--<script src="static/bootstrap-table-master/dist/bootstrap-table.min.js"></script>-->
+<script src="static/hualala/vendor/metisMenu/metisMenu.min.js"></script>
+<script src="static/hualala/dist/js/sb-admin-2.js"></script>
+<script src="static/layer-v3.0/layer/layer.js"></script>
+<script src="static/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+<script src="static/echarts/echarts.min.js"></script>
+<script src="static/fenye/fenye.js"></script>
+<script src="static/fenye/jiekou_pic.js"></script>
+<script type=text/javascript>
+    //单个git弹出结果页面
+    $('[name="simple_git_result_detail"]').click(function()
+    {
+        window.open('http://127.0.0.1:5025/open_window_page_result?type=class_all&class_name=testnext.ceshizhong')
+    })
+    //全部弹出框点击查看按钮弹出结果详情页
+    $('[name="aoo_detail_shwo"]').click(function()
+    {
+        window.open('http://192.168.82.235:5025/jiekou_result/1095')
+    })
+    //启用业务线，把业务线加入运行中
+    $('#run_case').click(function()
+    {
+        $('input[type="checkbox"]').each(function(a,k)
+        {
+            if (a!=0)
+            {
+                if ($(this).is(':checked'))
+                {
+                    $(this).parent().parent().find('td').eq(4).html('启用')
+                }
+            }
+        })
+    })
+    //启用业务线，把业务线加入运行中
+    $('#result_open').click(function()
+    {
+        $('input[type="checkbox"]').each(function(a,k)
+        {
+            if (a!=0)
+            {
+                if ($(this).is(':checked'))
+                {
+                    $(this).parent().parent().find('td').eq(4).html('暂停')
+                }
+            }
+        })
+    })
+
+    $('[name="simple_detail_git"]').click(function()
+    {
+        $('#simple_run_detail').modal('show')
+    })
+    //编辑git
+    $('[name="add_beizhu"]').click(function()
+    {
+        $('#bianji_git_modal_submit').attr('this_row','')
+        $(this).parent().parent().parent().attr('bianji_this','true')
+        $(this).parent().parent().parent().find('td').each(function(k,b)
+        {
+            if (k==1)
+            {
+                $('#bianji_address').val($(this).html())
+            }
+            else if (k==2)
+            {
+                $('#bianji_fenzhi').val($(this).html())
+
+            }
+            else if (k==5)
+            {
+                $('#bianji_beizhu').val($(this).html())
+
+            }
+        })
+        $('#modeal_git_bianji').modal('show')
+
+    })
+    $('[name="bianji_git_modal_submit"]').click(function()
+    {
+        if ($('#bianji_beizhu').val().length>5)
+        {
+            layer.msg("业务名长度不能超过5位", {icon: 2})
+        }
+        else
+        {
+            $('[bianji_this="true"]').find('td').each(function(a,b)
+            {
+                if (a==1)
+                {
+                    $(this).html( $('#bianji_address').val())
+                }
+                else if (a==2)
+                {
+                    $(this).html( $('#bianji_fenzhi').val())
+                }
+                else if (a==5)
+                {
+                    $(this).html( $('#bianji_beizhu').val())
+                }
+            })
+        }
+    })
+    //增加git地址
+    $('[name="add_git_modal"]').click(function()
+    {
+        if ($('#add_git_beizhu').val().length>5)
+        {
+            layer.msg("业务名长度不能超过5位", {icon: 2})
+        }
+        else
+        {
+            $('#xiangmu_body').find('tr').eq(0).before($('#table_tr_example').find('tr').eq(0).clone())
+            var this_all=$('#xiangmu_body').find('tr').eq(0).find('td')
+            var git_address=$('#add_beizhu_address').val()
+            var git_fenzhi=$('#add_git_fenzhi').val()
+            var  git_beizhu=$('#add_git_beizhu').val()
+            var mydate = new Date()
+            this_all.eq(1).html(git_address)
+            this_all.eq(2).html(git_fenzhi)
+            this_all.eq(3).html(mydate.toLocaleDateString())
+            this_all.eq(4).html(git_beizhu)
+            fenye_def($('#fenye_first'),$('#xiangmu_body'),10)
+        }
+
+    })
+    $(document).ready(function()
+    {
+        fenye_def($('#fenye_first'),$('#xiangmu_body'),12)
+    })
+    //导入js文件，首页通过率折现图
+    zhexianpic(document.getElementById('user_num'),['2月12日','2月13日','2月14日','2月15日','2月16日'],
+        [7,3,4,12,4] )
+    //导入js文件，首页柱状图
+    zhuzhuang_pic(['运行结果图','最近五次'],document.getElementById('tongguolv'),['2月11日','2月12日','2月13日','2月14日','2月15日'],
+   [[40,155,95,75,22],[100,200,105,100,0],[906,911,908,778,77]] )
+
+    //历次通过率柱状图，模态弹出框
+    zhuzhuang_pic( ['运行结果图','每个业务线'],document.getElementById('lici_tonguolv'),['核心','大数据','借悦','向前','向上'],
+        [[40,155,95,75,22],[100,200,105,100,0],[906,911,908,778,77]] )
+    //单个git库统计弹出框，圈图
+    quantu(document.getElementById('simple_zhu_git'),['通过','失败','出错'],[77,33,44])
+    //单个git库统计弹出框，折线图
+    // zhexianpic(document.getElementById('simple_zhe_git'),['2月12日','2月13日','2月14日','2月15日','2月16日'],
+    //     [7,3,4,12,4] )
+//单个git弹出页面，点击弹出按钮
+
+    $('#time_all_body_git_simple').find('tr').click(function()
+    {
+        var z=[Math.floor(Math.random()*100+30),Math.floor(Math.random()*100+60),Math.floor(Math.random()*100+10)]
+        quantu(document.getElementById('simple_zhu_git'),['通过','失败','出错'],z)
+    })
+
+    zhexianpic(document.getElementById('simple_zhu_git_zhe'),['2月12日','2月13日','2月14日','2月15日','2月16日'],
+        [7,3,4,12,4] )
+
+//全体结果页面弹出框，点击表格，图表显示更换
+    $('#second_body').find('tr').click(function()
+    {
+        var z1=[Math.floor(Math.random()*100+30),Math.floor(Math.random()*100+60),Math.floor(Math.random()*100+10),Math.floor(Math.random()*100+10),Math.floor(Math.random()*100+10)]
+        var z2=[Math.floor(Math.random()*100+30),Math.floor(Math.random()*100+60),Math.floor(Math.random()*100+10),Math.floor(Math.random()*100+10),Math.floor(Math.random()*100+10)]
+        var z3=[Math.floor(Math.random()*100+30),Math.floor(Math.random()*100+60),Math.floor(Math.random()*100+10),Math.floor(Math.random()*100+10),Math.floor(Math.random()*100+10)]
+        var z4=[Math.floor(Math.random()*100+30),Math.floor(Math.random()*100+60),Math.floor(Math.random()*100+10),Math.floor(Math.random()*100+10),Math.floor(Math.random()*100+10)]
+        var z5=[Math.floor(Math.random()*100+30),Math.floor(Math.random()*100+60),Math.floor(Math.random()*100+10),Math.floor(Math.random()*100+10),Math.floor(Math.random()*100+10)]
+        zhuzhuang_pic( ['运行结果图','每个业务线'],document.getElementById('lici_tonguolv'),['核心','大数据','借悦','向前','向上'],
+            [z1,z2,z3] )
+    })
+
+</script>
+{% endblock %}

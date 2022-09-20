@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        .carousel-inner img {
+            width: 100%;
+            height: 100%;
+        }
+        .mt-10 {
+            margin-top: 25px;
+        }
+        .mt-low {
+            margin-top: 15px;
+        }
+        .textarea {
+            width: 650px;
+            min-height: 420px;
+            max-height: 420px;
+            _height: 120px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 3px;
+            outline: 0;
+            border: 1px solid #a0b3d6;
+            font-size: 12px;
+            line-height: 24px;
+            padding: 2px;
+            word-wrap: break-word;
+            overflow-x: hidden;
+            overflow-y: auto;
+            border-color: rgba(82, 168, 236, 0.8);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+        }
+        .row.no-gutter {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    </style>
+     <link hrel="stylesheet" href="/static/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css"
+          rel="stylesheet">
+    <link href="/static/bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <a class="navbar-brand" href="#">
+        <img src="/static/mafengwo_pic/logo.png" alt="test" width="25">
+    </a>
+    <a class="navbar-brand" href="#"  >数据提取</a>
+    <!-- Links -->
+<!--    <ul class="navbar-nav">-->
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" href="#">Link 1</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" href="#">Link 2</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" href="#">Link 3</a>-->
+<!--        </li>-->
+<!--        <liv class="nav-item dropdown">-->
+<!--            <a class="nav-link dropdown-toggle " href="#" data-toggle="dropdown">-->
+<!--                项目列表表-->
+<!--            </a>-->
+<!--            <div class="dropdown-menu">-->
+<!--                <a class="dropdown-item" href="#">酒店</a>-->
+<!--                <a class="dropdown-item" href="#">大交通</a>-->
+<!--            </div>-->
+<!--        </liv>-->
+<!--    </ul>-->
+</nav>
+<div class="container-fluid">
+    <div class="row  mt-low">
+        <div class="col-md-4">
+            <ul class="nav nav-tabs ml-3" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#home">json A</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#menu1">json B</a>
+                </li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div id="home" class="container tab-pane active"><br>
+                    <div class="form-group" name="json_one">
+                        <form class="form-inline mb-3 " onsubmit="return false">
+                            <button type="button"  class="btn btn-sm btn-outline-success" name="submit_json">提交json字符串
+                            </button>
+                            <input type="text" id="json_key_one_one" class=" input-sm ml-3 " style="width:288px"
+
+                                   aria-label="Username" aria-describedby="basic-addon1">
+                        </form>
+                        <textarea class="form-control  " rows="18" id="json_detail_one"></textarea>
+                    </div>
+                    <button type="button" name="json_chushihua" class="btn btn-info btn-sm btn-block">
+                        返回
+                    </button>
+                </div>
+                <div id="menu1" class="container tab-pane fade"><br>
+                    <div class="form-group" name="json_two">
+
+                        <form class="form-inline mb-3 " onsubmit="return false">
+                            <button type="button" class="btn btn-sm btn-outline-success" name="submit_json">提交json字符串
+                            </button>
+                            <input type="text" id="json_key_one_one" class=" input-sm ml-3 " style="width:288px"
+                                   placeholder="提取的key值"
+                                   aria-label="Username" aria-describedby="basic-addon1">
+                        </form>
+
+                        <textarea class="form-control  " rows="18" id="json_detail_two"></textarea>
+                    </div>
+                    <button type="button" name="json_chushihua" class="btn btn-info btn-sm btn-block">
+                        返回
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="mb-2">
+                <h5 class="text-secondary"><strong>json A</strong></h5>
+            </div>
+            <div class="input-group mb-3">
+<!--                输入要查找的key，多个用逗号隔开,支持等号-->
+                <input type="text" name="find_detail" class="form-control"
+                       aria-label="Username" aria-describedby="basic-addon1">
+                <div class="input-group-append">
+                    <button class="btn btn-success " type="button" id="json_one" name="find_submit">提交
+                    </button>
+                </div>
+            </div>
+            <div id="find_result_one">
+
+            </div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" id="fenye_one">
+                    <li class="page-item"><a class="page-link" href="#">前一页</a></li>
+                    <li class="page-item"><a class="page-link" href="#">后一页</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col-md-4">
+            <div class="mb-2">
+                <h5 class="text-secondary"><strong> json B</strong></h5>
+            </div>
+            <div class="input-group mb-3">
+                <input type="text" name="find_detail" class="form-control"
+                       aria-label="Username" aria-describedby="basic-addon1">
+                <div class="input-group-append">
+                    <button class="btn  btn-success" type="button"  id="json_two" name="find_submit">提交
+                    </button>
+                </div>
+            </div>
+            <div id="find_result_two">
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="/static/hualala/vendor/jquery/jquery.min.js"></script>
+<script src="/static/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+<script src="/static/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
+<script src="/static/layer-v3.0/layer/layer.js"></script>
+<script src="/static/fenye/fenye_new.js"></script>
+<script type=text/javascript>
+    //根据字符串，切分换行,第一个参数为切分的字符串，第二个参数为切分的长度
+    function str_sp_n(a,b){
+        var str_length=parseInt(a.length/b)
+        var k=''
+        for (u=0;u<=str_length;u++)
+        {
+            k=k+a.substr(0,b)+'\n'
+            a=a.replace(a.substr(0,b),'')
+        }
+        return k
+    }
+    $(document).ready(function(){
+        $.ajax({
+            url: "some.php",
+            async: false
+        })
+    })
+    function _getRandomString(len) {
+        len = len || 32;
+        var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz'; // 默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1
+        var maxPos = $chars.length;
+        var pwd = '';
+        for (i = 0; i < len; i++) {
+            pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+        }
+        return pwd;
+    }
+    var url_host = "http://"+window.location.host
+    //页面左侧提取json
+    function left_json_get(el){
+
+        var json_detail=el.parent().next().val()
+        var json_key=el.next().val()
+        var this_el=el
+        $.post(url_host+'/json_tiqu/json_submit',{json_detail:json_detail,json_key:json_key},
+            function(data){
+                this_el.parent().next().val(data.data)
+                this_el.parent().next().attr('disabled','true')
+                this_el.parent().parent().next().attr('begin_json',json_detail)
+            })
+
+    }
+$('[name="submit_json"]').click(function(){
+    left_json_get($(this))
+
+})
+$('[name="json_chushihua"]').click(function(){
+    $(this).prev().find('textarea').removeAttr('disabled')
+    $(this).prev().find('textarea').val($(this).attr('begin_json'))
+})
+
+    //页面右边，从json中提取要获取的值,参数为button
+    function  get_json_value(el)
+    {
+        var lun_num=el.attr('id')
+        if (lun_num=='json_one')
+        {
+            var mulu_result=$('#find_result_one')
+        }
+        else
+        {
+            var mulu_result=$('#find_result_two')
+        }
+        var find_detail =el.parent().prev().val()
+        var json_detail = $('[name="'+lun_num+'"]').find('textarea').val()
+        $.ajax({
+            url: "some.php",
+            async: true
+        })
+        $.post(url_host + '/json_tiqu/find_submit', {find_detail: find_detail, json_detail, json_detail},
+            function (data) {
+                var u = "\n" +
+                    "            <div class=\"alert alert-success mb-3\" role=\"alert\" data-toggle=\"collapse\">\n" +
+                    "                A simple success alert—check it out!\n" +
+                    "            </div>"
+                    +
+                    "<div  class=\"collapse\">\n" +
+                    " <pre  name=\"all_gind_json\"></pre>" +
+
+                    "</div>"
+                if (data.hasOwnProperty('data')) {
+                    mulu_result.empty()
+                } else {
+                    alert('error')
+                }
+                var statu = "1"
+                $.each(data.data, function (k, i) {
+                    var id_statu = _getRandomString(12)
+                    mulu_result.append(u)
+                    i[0]=JSON.stringify(i[0])
+                    i[0]=str_sp_n(i[0],50)
+                    mulu_result.find('[ role="alert"]').eq(-1).html(i[0])
+                    mulu_result.find('[ role="alert"]').eq(-1).attr('all_data_json', i[1])
+                    mulu_result.find('[name="all_gind_json"]').eq(-1).html(i[1])
+                    mulu_result.find('[class="collapse"]').eq(-1).attr('id', id_statu)
+                    mulu_result.find('[ role="alert"]').eq(-1).attr('data-target', "#" + id_statu)
+                })
+                fenye_def($('#fenye_one'),$('#find_result_one').find('.alert'),10)
+
+            })
+    }
+    $('[name="find_submit"]').click(function() {
+        get_json_value($(this))
+
+    })
+
+
+    $(document).keyup(function(event){
+        if (event.keyCode==13)
+        {
+            //判断焦点在那个输入框上
+            var focus_el=$(':focus')
+            if (focus_el.attr('name')=='find_detail' )
+            {
+                var button_el=focus_el.next().find('button')
+                get_json_value(button_el)
+            }
+            else if (focus_el.attr('id')=='json_key_one_one')
+            {
+                left_json_get(focus_el.prev())
+            }
+        }
+    })
+</script>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>HGTP 1.0</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"  href="static/bootstrap-select/dist/css/bootstrap-select.min.css">
+<!-- Latest compiled and minified JavaScript -->
+<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+<link rel="stylesheet" href="static\jQuery-File\css\jquery.fileupload.css">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="static\hualala\vendor\bootstrap\css\bootstrap.min.css" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="static/hualala/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <link hrel="stylesheet" href="static/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="static/hualala/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="static/hualala/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <![endif]-->
+
+    <style type="text/css" media="screen">
+body        { font-family: verdana, arial, helvetica, sans-serif; font-size: 80%; }
+table       { font-size: 60%; }
+pre         { }
+
+/* -- heading ---------------------------------------------------------------------- */
+h1 {3font-size: 16pt;
+	color: gray;
+}
+.heading {
+    margin-top: 0ex;
+    margin-bottom: 1ex;
+}
+.heading .attribute {
+    margin-top: 1ex;
+    margin-bottom: 0;
+}
+.heading .description {
+    margin-top: 4ex;
+    margin-bottom: 6ex;
+}
+/* -- css div popup ------------------------------------------------------------------------ */
+a.popup_link {
+}
+
+a.popup_link:hover {
+    color: red;
+}
+
+.popup_window {
+    display: none;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    /*border: solid #627173 1px; */
+    padding: 10px;
+    background-color: #E6E6D6;
+    font-family: "Lucida Console", "Courier New", Courier, monospace;
+    text-align: left;
+    font-size: 8pt;
+    width: 500px;
+}
+
+}
+/* -- report ------------------------------------------------------------------------ */
+#show_detail_line {
+    margin-top: 3ex;
+    margin-bottom: 1ex;
+}
+#result_table {
+    width: 40%;
+    height: 420 px;
+    border-collapse: collapse;
+    border: 1px solid #777;
+}
+#header_row {
+    font-weight: bold;
+    color: white;
+    background-color: #5F9EA0;
+}
+#result_table td {
+    border: 1px solid #777;
+    padding: 2px;
+}
+#total_row  { font-weight: bold; }
+.passClass  { background-color: #6c6; }
+.failClass  { background-color: #c60; }
+.errorClass { background-color: #c00; }
+.passCase   { color: #6c6; }
+.failCase   { color: #c60; font-weight: bold; }
+.errorCase  { color: #c00; font-weight: bold; }
+.hiddenRow  { display: none; }
+.testcase   { margin-left: 2em; }
+
+
+/* -- ending ---------------------------------------------------------------------- */
+#ending {
+}
+</style>
+
+</head>
+
+<body>
+<div class="container-fluid">
+          <div class="row">
+    <div class="col-xs-6 col-md-4">
+
+
+                                             <pre style="border:none; background:none"></pre>
+                      <div>
+                      <table   id='result_table'>
+                          <thead>
+                          <tr  id='header_row'>
+                              <th>业务组</th>
+                              <th>使用人数</th>
+                              <th>运行接口数</th>
+                              <th>运行case数</th>
+                              <th>通过case数</th>
+                              <th>接口数占比</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                           {% for i in team_detail %}
+                          <tr class="dingshi_detail"  git_url={{i}} name="local_today_table"   >
+                              <td  class="local_today_name">{{i}}  </td>
+                              <td  class="local_today_user_num"> {{ team_detail[i]['num_user'] }}</td>
+                              <td  class="local_today_cishu">{{ team_detail[i]['all_jiekou'] }}</td>
+                              <td  class="local_today_pass_jiekou_num">{{ team_detail[i]['all_case'] }}</td>
+                               <td  class="local_today_fail_jiekou_num"> {{ team_detail[i]['pass_case'] }}</td>
+                              <td  class="local_today_fail_jiekou_num"> {{ team_detail[i]['num'] }}%</td>
+                          </tr>
+                           {% endfor %}
+                          </tbody>
+                      </table>
+                          <h4>各业务线本地运行接口数占比</h4>
+<!--<img src={{ pic_url }} class="img-responsive" alt="Cinque Terre"   id="local_today_pic">-->
+                       <img src="cid:image1" class="img-responsive" alt="Cinque Terre" >
+
+
+                      </div>
+</div>
+                       </div>
+  </div>
+
+  <script src="static/hualala/vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="static/hualala/vendor/metisMenu/metisMenu.min.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="static/hualala/dist/js/sb-admin-2.js"></script>
+<script src="{{url_for('static', filename='layer-v3.0/layer/layer.js')}}">
+<script src="{{url_for('static', filename='jquery-1.8.0.js')}}"></script>
+<script src="static/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+	<script src="{{url_for('static', filename='layer-v3.0/layer/layer.js')}}"></script>
+    <script type=text/javascript>
+var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+$(document).ready(function()
+{
+
+
+
+
+//本地统计pic
+$('#local_today').removeAttr('src')
+$.post($SCRIPT_ROOT +'/pic_local_today_email',{type:'today',statu:'email'},
+function(data)
+{
+  $('#local_today').attr('src',data.pic_path)
+
+})
+
+
+$('#local_today_pic').removeAttr('src')
+$('#zhuzhuangtu_today1').removeAttr('src')
+$.post($SCRIPT_ROOT +'/pic_yewu_today_email',{type:'ci_seven',statu:'email'},
+function(data)
+{
+  $('#zhuzhuangtu_today1').attr('src',data.pic_path)
+  $('#local_today_pic').attr('src',data.pic_path_local)
+
+})
+
+
+
+}
+)
+
+
+</script>
+</body>
+</html>
+

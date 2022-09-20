@@ -1,0 +1,1699 @@
+{% extends "/hualala/pages/base.html" %}
+{% block content %}
+    <style type="text/css">
+        .mt-10 {
+            margin-top: 25px;
+        }
+
+        .mt-low {
+            margin-top: 15px;
+        }
+
+        .textarea {
+            width: 650px;
+            min-height: 220px;
+            max-height: 300px;
+            _height: 120px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 3px;
+            outline: 0;
+            border: 1px solid #a0b3d6;
+            font-size: 12px;
+            line-height: 24px;
+            padding: 2px;
+            word-wrap: break-word;
+            overflow-x: hidden;
+            overflow-y: auto;
+            border-color: rgba(82, 168, 236, 0.8);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+        }
+
+        .row.no-gutter {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    </style>
+    <div class="modal fade" id="publick_db" tabindex="-1" role="dialog" aria-labelledby="publick_db" aria-hidden="true">
+        <div class="modal-dialog" style="width:700px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">接口配置操作</h4>
+                </div>
+                <div class="modal-body">
+                    <ul id="myTab" class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#home" data-toggle="tab">
+                                创建接口
+                            </a>
+                        </li>
+                        <li><a href="#ios" data-toggle="tab">公共config</a></li>
+                        <li><a href="#private_config" data-toggle="tab">接口config</a></li>
+                        <li><a href="#jmeter" data-toggle="tab">数据库配置</a></li>
+                        <li><a href="#create_file" data-toggle="tab">初始化目录</a></li>
+                    </ul>
+                    <div id="myTabContent" class="tab-content">
+                        <div class="tab-pane fade in active" id="home">
+                            <div class="container-fluid">
+                                <div class="row mt-low">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">选择环境</label>
+                                            <div class="col-lg-10" name="file_secret">
+                                                <select class="form-control" id="create_change_huanjing">
+                                                    <option>{{ select_huanjing }}</option>
+                                                    {% for i in huanjing %}
+                                                        <option>{{ i }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="row mt-low">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">选择业务</label>
+                                            <div class="col-lg-10" name="file_yewu">
+                                                <select class="form-control" id="create_file_yewu">
+                                                    {% for i in yewu_name %}
+                                                        <option>{{ i }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="row mt-low">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">接口类型</label>
+                                            <div class="col-lg-10" name="sign_type">
+                                                <select class="form-control"   id="create_jiekou_change_type">
+                                                    <option>app</option>
+                                                     <option>阅卷</option>
+                                                        <option>智慧作业</option>
+                                                     <option>题库</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+
+                                                     <div class="row mt-low " style="display:none;"  id="create_jiekou_anzhuo_all_url">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">接口域名</label>
+                                            <div class="col-lg-10" name="all_yu_ming_create_jiekou">
+                                                <select class="form-control">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+{#                                  <div class="row mt-low">#}
+{#                                    <form class="form-horizontal">#}
+{#                                        <div class="form-group">#}
+{#                                            <label class="col-lg-2 control-label">环境选择</label>#}
+{#                                            <div class="col-lg-10">#}
+{#                                                <select class="form-control" id="environmental_choice">#}
+{#                                                    <option>pre</option>#}
+{#                                                    <option>test1</option>#}
+{#                                                </select>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </form>#}
+{#                                </div>#}
+                                <div name="login_info">
+                                    <div class="row mt-low">
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-lg-2 control-label">登录信息</label>
+                                                <div class="col-lg-10">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">登录地址</span>
+                                                        <input type="text" class="form-control" id="login-url"
+                                                               aria-describedby="basic-addon3">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="row mt-low">
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-lg-2 control-label"></label>
+                                                <div class="col-lg-5">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">用户名</span>
+                                                        <input type="text" class="form-control" id="login-name"
+                                                               aria-describedby="basic-addon3">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-5">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">密码</span>
+                                                        <input type="text" class="form-control" id="login-password"
+                                                               aria-describedby="basic-addon3">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="row mt-low">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">请求方式</label>
+                                            <div class="col-lg-10" name="file_method">
+                                                <select class="form-control">
+                                                    <option>get</option>
+                                                    <option>post</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div name="chuancan_type">
+                                    <div class="row mt-low">
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-lg-2 control-label">传参方式</label>
+                                                <div class="col-lg-10" name="send_request">
+                                                    <select class="form-control">
+                                                        <option>json</option>
+                                                        <option>form_data</option>
+                                                         <option>raw</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="row mt-low" name="file_top_url">
+                                    <div class="col-lg-12">
+                                        <div class="input-group">
+                                            <span class="input-group-addon" id="basic-addon3">private_url</span>
+                                            <input type="text" class="form-control" id="basic-url"
+                                                   aria-describedby="basic-addon3">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-low" name="jiekou_name">
+                                    <div class="col-lg-12">
+                                        <div class="input-group">
+                                            <span class="input-group-addon" id="basic-addon3">接口名</span>
+                                            <input type="text" class="form-control" id="file_jiekou_name"
+                                                   aria-describedby="basic-addon3">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-low">
+                                    <div class="col-lg-12">
+                                        <label><h4>json 模板</h4></label>
+                                        <textarea class="textarea" spellcheck="false" contenteditable="true"
+                                                  id="json_template"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="ios">
+                            <div class="container-fluid">
+                                <div class="row mt-low">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">选择环境</label>
+                                            <div class="col-lg-10" name="file_secret_publick">
+                                                <select class="form-control" name="publick_config_change"
+                                                        id="publick_config_select_huanjing">
+                                                    <option>{{ select_huanjing }}</option>
+                                                    {% for i in huanjing %}
+                                                        <option>{{ i }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="row mt-low">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">选择业务</label>
+                                            <div class="col-lg-10" name="file_yewu_publick">
+                                                <select class="form-control"
+                                                        name="publick_config_change"
+                                                        id="publick_config_change_yewu_select">
+                                                    {% for i in yewu_name %}
+                                                        <option>{{ i }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="row mt-low">
+                                    <div class="col-lg-12">
+                                        <label><h4>配置信息</h4></label>
+                                        <textarea class="textarea" spellcheck="false"
+                                                  contenteditable="true"
+                                                  id="json_template_publick"><br/></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="private_config">
+                            <div class="container-fluid">
+                                <div class="row mt-low">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">选择环境</label>
+                                            <div class="col-lg-10" name="private_config_file">
+                                                <select class="form-control" name="file_yewu_private_select"
+                                                        id="jiekou_huanjing_change">
+                                                    <option>{{ select_huanjing }}</option>
+                                                    {% for i in huanjing %}
+                                                        <option>{{ i }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="row mt-low">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">选择业务</label>
+                                            <div class="col-lg-10" name="file_yewu_private">
+                                                <select class="form-control" name="file_yewu_private_select"
+                                                        id="yewu_private_selec_change">
+                                                    {% for i in yewu_name %}
+                                                        <option>{{ i }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="row mt-low">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">选择接口</label>
+                                            <div class="col-lg-10" name="file_yewu_private">
+                                                <select class="form-control" name="file_yewu_private_select"
+                                                        id="private_select_jjiekou_select">
+                                                    {% for i in yewu_name %}
+                                                        {% for z in yewu_name[i] %}
+                                                            <option name={{ i }}  class={{ i+'#'+z }}><a href="#"
+                                                                                                         name="jiekoulist">{{ z }}</a>
+                                                            </option>
+                                                        {% endfor %}
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="row mt-low">
+                                    <div class="col-lg-12">
+                                        <label><h4>config配置信息</h4></label>
+                                        <textarea class="textarea" spellcheck="false" contenteditable="true"
+                                                  id="json_template_private"><br/></textarea>
+                                    </div>
+                                </div>
+                                <div class="row mt-low">
+                                    <div class="col-lg-12">
+                                        <label><h4>json模板</h4></label>
+                                        <textarea class="textarea" spellcheck="false" contenteditable="true"
+                                                  id="json_moban_private"><br/></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="jmeter">
+                            <div class="container-fluid">
+                                <div class="row mt-low">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">选择环境</label>
+                                            <div class="col-lg-10" name="file_secret_db">
+                                                <select class="form-control" name="db_config_change">
+                                                    <option>{{ select_huanjing }}</option>
+                                                    {% for i in huanjing %}
+                                                        <option>{{ i }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="row mt-low">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">选择业务</label>
+                                            <div class="col-lg-10" name="file_yewu_db">
+                                                <select class="form-control" name="db_config_change">
+                                                    {% for i in yewu_name %}
+                                                        <option>{{ i }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="row mt-low">
+                                    <div class="col-lg-12">
+                                        <label><h4>配置信息</h4></label>
+                                        <textarea class="textarea" spellcheck="false" contenteditable="true"
+                                                  id="json_template_db"><br/></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="create_file">
+                            <div class="container-fluid">
+                                <div class="row mt-low">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">目录名</label>
+                                            <div class="col-lg-10" name="file_secret_db">
+                                                <input type="text" class="form-control" placeholder="输入空目录"
+                                                       id="muluming"
+                                                       aria-describedby="basic-addon1">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="row mt-low">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">业务名</label>
+                                            <div class="col-lg-10" name="file_yewu_db">
+                                                <input type="text" class="form-control" placeholder="业务名" id="yewuming"
+                                                       aria-describedby="basic-addon1">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="row mt-low">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">功能名</label>
+                                            <div class="col-lg-10" name="file_yewu_db">
+                                                <input type="text" class="form-control" placeholder="功能名"
+                                                       id="gongnengming"
+                                                       aria-describedby="basic-addon1">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="row mt-low">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">接口类型</label>
+                                            <div class="col-lg-10" name="sign_type">
+                                                <select class="form-control" id="create_file_type">
+                                                    <option>app</option>
+                                                                                                            <option>阅卷</option>
+                                                        <option>智慧作业</option>
+                                                     <option>题库</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="row mt-low" id="simple_publick_url">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">登录域名</label>
+                                            <div class="col-lg-10" name="file_yewu_db">
+                                                <input type="text" class="form-control" placeholder="业务域名"
+                                                       id="publick_url"
+                                                       aria-describedby="basic-addon1">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div id="pig_cocter_create_all" style="display:none;">
+                                    <div class="row mt-low" >
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-lg-2 control-label">登录信息</label>
+                                                <div class="col-lg-5">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">用户名</span>
+                                                        <input type="text" class="form-control" id="name"
+                                                               aria-describedby="basic-addon3">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-5">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">密码</span>
+                                                        <input type="text" class="form-control" id="password"
+                                                               aria-describedby="basic-addon3">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="row mt-low" id="create_file_name_pass">
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-lg-2 control-label"></label>
+                                                <div class="col-lg-10">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">设备号</span>
+                                                        <input type="text" class="form-control" id="Verification_code"
+                                                               aria-describedby="basic-addon3">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div id="b_duan" style="display:none;">
+                                    <div class="row mt-low" id="b_duan_session">
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label">登录信息</label>
+                                                <div class="col-md-10">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">用户名</span>
+                                                        <input type="text" class="form-control" id="b_duan_sess"
+                                                               aria-describedby="basic-addon3">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="row mt-low">
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <div class="col-md-10 col-md-offset-2">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">密码</span>
+                                                        <input type="text" class="form-control" id="b_duan_user"
+                                                               aria-describedby="basic-addon3">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div id="dirver_app_create" style="display:none;">
+                                    <div class="row mt-low" id="dirvarer_app_create_message">
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-lg-2 control-label">手机号</label>
+                                                <div class="col-lg-5">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">手机号</span>
+                                                        <input type="text" class="form-control" id="driver_phone"
+                                                               aria-describedby="basic-addon3">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-5">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">密码</span>
+                                                        <input type="text" class="form-control" id="driver_password"
+                                                               aria-describedby="basic-addon3">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                                                    <div class="row mt-low" id="dirvarer_app_create_position">
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-lg-2 control-label">位置信息</label>
+                                                <div class="col-lg-5">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">driver_lat</span>
+                                                        <input type="text" class="form-control" id="driver_lat"
+                                                               aria-describedby="basic-addon3">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-5">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">driver_lng</span>
+                                                        <input type="text" class="form-control" id="driver_lng"
+                                                               aria-describedby="basic-addon3">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                                                    </div>
+                                </div>
+                                <div id="andord_app" style="display:none;">
+                                    <div class="row mt-low">
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-lg-2 control-label">环境</label>
+                                                <div class="col-lg-10" name="sign_type">
+                                                    <select class="form-control" id="create_file_type">
+                                                        <option>测试环境</option>
+                                                        <option>开发环境</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+<div id="yuming_add_kfz">
+                                    <div class="row mt-low">
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-lg-2 control-label">域名</label>
+                                                <div class="col-lg-10" id="get_width">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" name="kfz_cr_pu_mo">
+                                                        <span class="input-group-btn">
+						<button class="btn btn-success" type="button" id="add_yu_kfz">
+							增加域名
+						</button>
+					</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+    </div>
+
+
+
+                                    <div class="row mt-low" >
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-lg-2 control-label">登录信息</label>
+                                                <div class="col-lg-5">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">用户名</span>
+                                                        <input type="text" class="form-control" id="kfz_an_app_name"
+                                                           aria-describedby="basic-addon3">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-5">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">密码</span>
+                                                        <input type="text" class="form-control" id="kfz_an_app_passw"
+                                                               aria-describedby="basic-addon3">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="row mt-low" >
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-lg-2 control-label">UUID</label>
+                                                <div class="col-lg-10">
+                                                        <input type="text" class="form-control" id="kfz_an_uuid"
+                                                               value="a4109082e7d279b8a3c3c6d2092c2ad4"
+                                                               aria-describedby="basic-addon3">
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                                                <div class="row mt-low" >
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-lg-2 control-label">SSID</label>
+                                                <div class="col-lg-10">
+                                                        <input type="text" class="form-control" id="kfz_an_ssid"
+                                                               value="1630049605127947273"
+                                                               aria-describedby="basic-addon3">
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+
+                                      <div class="row mt-low" >
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+{#                                                <label class="col-lg-2 control-label">登录信息</label>#}
+                                                <div class="col-lg-offset-2">
+                                                <div class="col-lg-6">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">appName</span>
+                                                        <input type="text" class="form-control" id="kfz_an_app_appneame"
+                                                             value="ANDROID_KFZ_COM"  aria-describedby="basic-addon3">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">utmSource</span>
+                                                        <input type="text" class="form-control" id="kfz_an_app_utmSource"
+                                                             value="app_baidu_com"  aria-describedby="basic-addon3">
+                                                    </div>
+                                                </div>
+                                                    </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div id="yunfuw_create" style="display:none;">
+                                    <div class="row mt-low" id="yunfuw_all">
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-lg-2 control-label">登录信息</label>
+                                                <div class="col-lg-5">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">用户名</span>
+                                                        <input type="text" class="form-control" id="yunfuw_name"
+                                                               aria-describedby="basic-addon3">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-5">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">密码</span>
+                                                        <input type="text" class="form-control" id="yunfuw_password"
+                                                               aria-describedby="basic-addon3">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+                    <button type="button" class="btn btn-primary" id="create_file_save_last" style="z-index:1000;">Save
+                        changes
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <div class="container-fluid">
+        <div class="row mt-10">
+            <div class="col-lg-3">
+                <div class="input-group">
+                    <span class="input-group-addon  span-info" name="get_port" port={{ local_port }}>输入目录</span>
+                    <input type="text" name="mulu" class="form-control" placeholder="Search for..." id="mulu_url"
+                           value={{ gen_mulu }}>
+                    <span class="input-group-btn">
+                     <button class="btn btn-success" id="submit_url">Go!</button>
+                </span>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="btn-group" role="group" aria-label="...">
+                    <button type="button" class="btn btn-default" id="pilaing_yunxing">批量运行</button>
+                    <button class="btn btn-default" data-toggle="modal" data-target="#publick_db">生成接口文件</button>
+                         <button type="button" class="btn btn-default" title="运行信息" data-trigger="focus"
+                            id="ceshi_tools">
+                        关键字生成
+                    </button>
+                    <button type="button" class="btn btn-default" title="运行信息" data-trigger="focus"
+                            id="run_result_open">
+                        查看运行结果
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <form class="form-inline" role="form" method="post">
+                    <div class="input-group">
+                        <span class="input-group-addon  span-info" id="tag_shuruip" name={{ ip_server }}>输入ip</span>
+                        <input type="text" name="ip_dizhi" class="form-control" placeholder="ip 地址" id="ip_地址"
+                               value={{ ip_server }}>
+                        <span class="input-group-btn">
+                     <button class="btn btn-success" id="submit_url" type="submit">Go!</button>
+                </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row mt-10">
+            <div class="col-lg-12">
+                <div class="panel panel-success">
+                    <div class="panel-heading">文件列表</div>
+                    <div class="panel-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-lg-10">
+                                    <div class="btn-toolbar" role="toolbar" aria-label="...">
+                                        <div class="btn-group" id="huanjing">
+                                            <div id="huanjing1">
+                                                <button style="min-width: 160px;" type="button"
+                                                        class="btn btn-default dropdown-toggle btn-block"
+                                                        data-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false">
+                                                    <a id="check_0" name={{ all_mulu }}>{{ select_huanjing }}</a><span
+                                                        class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="#" name="huanjing_list">{{ select_huanjing }}</a></li>
+                                                    {% for i in huanjing %}
+                                                        <li><a href="#" name="huanjing_list">{{ i }}</a></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="btn-group" id="select">
+                                            <div id="selectmenu">
+                                                <button style="min-width: 160px;" type="button"
+                                                        class="btn btn-default dropdown-toggle btn-block"
+                                                        data-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false">
+                                                    <a id="check_1">all</a><span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="#" name="huanjing_list">all</a></li>
+                                                    {% for i in yewu_name %}
+                                                        <li><a href="#" name="huanjing_list">{{ i }}</a></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="btn-group" id="selecttwo">
+                                            <button style="min-width: 160px;" type="button"
+                                                    class="btn btn-default dropdown-toggle btn-block"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <a id="check_2">all</a><span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li name="all_two" class="all_two"><a href="#" name="jiekoulist">all</a>
+                                                </li>
+                                                <li name="all" class="all"><a href="#"
+                                                                              name="jiekoulist">all</a>
+                                                </li>
+                                                {% for i in yewu_name %}
+                                                    {% for z in yewu_name[i] %}
+                                                        <li name={{ i }}  class={{ i+'#'+z }}><a href="#"
+                                                                                                 name="jiekoulist">{{ z }}</a>
+                                                        </li>
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                        <button type="button" class="btn btn-default" data-toggle="modal"
+                                                data-target="#git_submit">
+                                            上传git
+                                        </button>
+                                        <button data-toggle="modal" data-target="#take_linux_log_kuang" type="button"
+                                                class="btn btn-default" data-toggle="modal"
+                                                data-target="#take_server_log">
+                                            服务器log截取
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="input-group col-lg-2 ">
+                                    <input type="text" class="form-control" placeholder="Search for..."
+                                           id="sousuo_name">
+                                    <span class="input-group-btn">
+        <button class="btn btn-default" type="button" id="case_sousuo">搜索</button>
+      </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div id="table">
+                                        <table id="table4" class="table table-hover table-striped">
+                                            <thead>
+                                            <th align="left" width="20%"><input type="checkbox" name="allcheck"
+                                                                                id="allcheck">
+                                                <label>全选</label></th>
+                                            <th align="left" width="25%">业务名</th>
+                                            <th align="left" width="25%">接口名</th>
+                                            <th align="center" width="15%">运行</th>
+                                            <th align="center" width="15%">调试</th>
+                                            <th align="center" width="15%">open_file</th>
+                                            </thead>
+                                            <tbody id="xiangmu_body">
+                                            {% for i in yewu_name %}
+                                                {% for x in yewu_name[i] %}
+                                                    <tr name={{ i }} class={{ x }} id="select_two">
+                                                        <td align="left"><input type="checkbox" name="childcheck"
+                                                                                class={{ i+"#"+x }}></td>
+                                                        <td align="left">{{ i }}</td>
+                                                        <td align="left">{{ x }}</td>
+                                                        <td align="center" name={{ x }}>
+                                                            <button type="button" class="btn btn-default"
+                                                                    aria-label="Left Align" name="simple_run_list">
+                                                                <span class="glyphicon glyphicon-triangle-right"
+                                                                      aria-hidden="true"
+                                                                      class={{ i+"#"+x }} name="simple_run"></span>
+                                                            </button>
+                                                        </td>
+                                                        <td align="center" name={{ x }}>
+                                                            {% if yizhi==1 %}
+                                                                <button type="button" class="btn btn-default"
+                                                                        aria-label="Left Align"
+                                                                        name="tiaoshi_tiaozhuan">
+                                                                    <span class="glyphicon glyphicon-erase"
+                                                                          aria-hidden="true" name={{ i+"#"+x }}></span>
+                                                                </button></td>
+                                                            {% else %}
+                                                                <button type="button" class="btn btn-default"
+                                                                        aria-label="Left Align" disabled="true">
+                                                                    <span class="glyphicon glyphicon-erase"
+                                                                          aria-hidden="true"></span></button></td>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td align="center" name={{ x }}>
+                                                            <button type="button" class="btn btn-default"
+                                                                    name="open_file" aria-label="Left Align">
+                                                                <span class="glyphicon glyphicon-log-in "
+                                                                      aria-hidden="true"></span>
+                                                            </button>
+
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                        <div>
+                                            <ul class="pagination" id="fenye_first">
+                                                <li><a href="#">&laquo;</a></li>
+                                                <li><a href="#">&raquo;</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="file_up" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="/upload_file" method="post" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            模态框（Modal）标题
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid  ">
+                            <div class="row mt-10">
+                                <div class="col-lg-12">
+                                    <div class="form-group" id="file_container">
+                                        <input type="file" name="files" multiple>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-10">
+                                <div class="col-lg-12">
+                                    <div class="input-group">
+                                        <span class="input-group-addon" id="basic-addon1">脚本备注</span>
+                                        <input type="text" class="form-control" placeholder="Username" id="file_detail"
+                                               aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button " class="btn btn-default" data-dismiss="modal">
+                            关闭
+                        </button>
+                        <button type="button submit " class="btn btn-primary" id="submit">
+                            提交
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="git_submit" tabindex="-1" role="dialog" aria-labelledby="git_submit">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">上传git</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="mulu">文件目录</span>
+                        <input type="text" class="form-control" placeholder="文件目录" aria-describedby="basic-addon1">
+                    </div>
+                    <pre style="border:none; background:none"></pre>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="git_address">git库地址</span>
+                        <input type="text" class="form-control" placeholder="git地址" aria-describedby="basic-addon1">
+                    </div>
+                    <pre style="border:none; background:none"></pre>
+                    <div class="alert alert-warning" role="alert" id="git_submit_alert" style="display:none;">参数不能为空
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="git_submit_button">上传</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="take_linux_log_kuang" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" style="width:800px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">日志截取设置</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row mt-low">
+                            <div class="col-lg-12">
+                                <form class="form-horizontal">
+
+                                    <label class="control-label" name="log_label">选择环境</label>
+                                    <div name="file_secret">
+                                        <select class="form-control" id="log_change_huanjing">
+                                            <option>{{ select_huanjing }}</option>
+                                            {% for i in huanjing %}
+                                                <option>{{ i }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row mt-low">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" name="log_label">选择业务</label>
+                                    <div name="file_yewu">
+                                        <select class="form-control" id="log_file_yewu">
+                                            {% for i in yewu_name %}
+                                                <option>{{ i }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <pre style="border:none; background:none"></pre>
+                        </div>
+                        <div class="panel panel-info">
+                            <div class="panel-heading">log截取设置信息</div>
+                            <div class="panel-body">
+                                <div id="log_all">
+                                    <div class="row mt-low">
+                                        <div class="col-lg-12">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">日志目录</span>
+                                                <input type="text" class="form-control"
+                                                       aria-describedby="basic-addon1" id="log_mulu">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-low">
+                                        <div class="col-lg-12">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">服务器地址</span>
+                                                <input type="text" class="form-control"
+                                                       aria-describedby="basic-addon1" id="server_url">
+                                                <span class="input-group-addon">端口号</span>
+                                                <input type="text" class="form-control"
+                                                       aria-describedby="basic-addon1" id="server_port">
+                                                <span class="input-group-addon">用户名</span>
+                                                <input type="text" class="form-control"
+                                                       aria-describedby="basic-addon1"
+                                                       id="server_name">
+                                                <span class="input-group-addon">密码</span>
+                                                <input type="text" class="form-control"
+                                                       aria-describedby="basic-addon1"
+                                                       id="server_password">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-low">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>截取日志开始字符</label>
+                                                <textarea class="form-control" spellcheck="false" rows="4"
+                                                          placeholder='如需参数化如从请求中获取值:["request"]["frontTransNo"]'
+                                                          id="log_begin_split"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>截取日志结束字符</label>
+                                                <textarea class="form-control" spellcheck="false" rows="4"
+                                                          placeholder='如需参数化如从返回中获取值:["result"]["frontTransNo"]'
+                                                          id="log_over_split"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-low">
+                                        <div class="col-lg-10">
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="btn-group" role="group" id="log_button_group"
+                                                 style="position: relative; left: 590px;">
+                                                <button type="button" class="btn btn-warning" id="log_chongzhi">重置
+                                                </button>
+                                                <button type="button" class="btn btn-success" id="log_submit">提交
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="take_linux_log_kuang">关闭</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <div class="modal fade" id="guanjianzi_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" style="width:700px">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row mt-low">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#save_data_careate" aria-controls="home"
+                                                                          role="tab" data-toggle="tab">json参数保存</a>
+                                </li>
+                                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab"
+                                                           data-toggle="tab">关键字校验</a></li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="save_data_careate">
+                                    <div class="container-fluid">
+                                        <div class="row mt-low" name="test_test">
+                                            <form class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label class="col-lg-2 control-label">选择功能</label>
+                                                    <div class="col-lg-10" name="file_secret">
+                                                        <select class="form-control" id="create_bianliang_type">
+                                                            <option>保存变量</option>
+                                                            <option>使用变量</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                           <div id="all_get_bianlaing_id" style="display:none">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+
+                                                <div class="input-group mt-low ">
+                                                     <select class=" form-control  input-xs"  id="get_data_type_num">
+                                                            <option>int</option>
+                                                            <option>str</option>
+                                                           <option>float</option>
+                                                        </select>
+                                                    <span class="input-group-addon" >变量名</span>
+                                                    <input type="text" class="form-control" id="key_get_data"
+                                                           placeholder="变量名"
+                                                           aria-describedby="basic-addon1">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-default" type="button"
+                                                                id="chane_get_careate_button">
+                                                                提交
+                                                            </button>
+                                                        </span>
+                                                </div>
+                                                        </div>
+
+                                        </div>
+                                                  <div id="carete_get_alert">
+
+
+                                        </div>
+                                           </div>
+                                      <div id="all_create_bianlaing_id">
+                                        <div class="row">
+                                        <form class="form-inline col-sm-12">
+                                                <div class="input-group mt-low ">
+                                                              <select class=" form-control  input-xs"  id="dingshi_run_type_time">
+                                                            <option>result</option>
+                                                            <option>request</option>
+                                                        </select>
+                                                         <span class="input-group-addon" id="basic-adfad">参数名</span>
+                                <input type="text" class="form-control" id="canshu_name"
+                                       placeholder="变量名"
+                                       aria-describedby="basic-addon1">
+                                                    <span class="input-group-addon" id="basic-addon1">需提取的参数</span>
+                                                    <input type="text" class="form-control" id="key_save_data"
+                                                           placeholder="json字符串参数"
+                                                           aria-describedby="basic-addon1">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-default" type="button"
+                                                                id="chane_save_careate_button">
+                                                                提交
+                                                            </button>
+                                                        </span>
+                                                </div>
+                                                 </form>
+
+                                        </div>
+                                        <div id="carete_save_alert">
+
+
+                                        </div>
+                                        <div class="row mt-low">
+
+                                                <form role="form" class="col-sm-12">
+
+                                                    <div class="form-group">
+                                                        <label for="name">json字符串</label>
+                                                        <textarea class="form-control" rows="3" spellcheck="false"
+                                                                  contenteditable="true"
+                                                                  id="json_template_save_Data"></textarea>
+                                                    </div>
+                                                </form>
+
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="profile">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <script src="static/hualala/vendor/jquery/jquery.min.js"></script>
+    <script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/hualala/vendor/metisMenu/metisMenu.min.js"></script>
+    <script src="static/hualala/dist/js/sb-admin-2.js"></script>
+    <script src="{{ url_for('static', filename='layer-v3.0/layer/layer.js') }}">
+        <script src = "{{url_for('static', filename='jquery-1.8.0.js')}}" ></script>
+    {#    <script src="{{ url_for('static', filename='test_file/test10.js') }}"></script>#}
+    <script src="static/jquery-cookie-js/jquery.cookie.js"></script>
+    <script src="static/test_this.js"></script>
+    <script src="static/fenye/fenye.js"></script>
+    <script type=text/javascript>
+    $('#create_jiekou_change_type').change(function(){
+        if ($(this).val()=='孔夫子APP')
+        {
+            $('#create_jiekou_anzhuo_all_url').show()
+
+
+            $.post('http://127.0.0.1:' + $('[ name="get_port"]').attr('port') + '/new/kfa_get_all_publick_url', {
+                    mulu: $.cookie('mulu_detail')
+                }, function (data) {
+                var option_str=' <option></option>'
+                if (data!='')
+                {
+                                     $('[name="all_yu_ming_create_jiekou"]').find('select').empty()
+                for (i in data.data)
+                {
+
+                     $('[name="all_yu_ming_create_jiekou"]').find('select').append(option_str)
+                    $('[name="all_yu_ming_create_jiekou"]').find('select').find('option').eq(-1).attr('name',i)
+                     $('[name="all_yu_ming_create_jiekou"]').find('select').find('option').eq(-1).html(data.data[i])
+                }
+
+                }
+                }
+            )
+        }
+        else{
+            $('#create_jiekou_anzhuo_all_url').hide()
+        }
+        })
+
+            $('button[name="open_file"]').each(function(){
+            $(this).click(function(){
+                         var ip = '127.0.0.1'
+            var huanjing=$('#check_0').html()
+                var jiekou_name=$(this).parent().attr('name')
+                var yewu=$(this).parent().prev().prev().prev().prev().html()
+         var gen_mulu=$.cookie('genmulu')
+                                $.post('http://' + ip + ':'+$('[ name="get_port"]').attr('port') + '/open_excel', {type:"open_excel",gen_mulu:gen_mulu,huanjing:huanjing,yewu:yewu,jiekou_name:jiekou_name},
+                        function (data) {
+                               $('#json_template_db').val(data.data)
+                        }
+             )
+            })})
+
+      $('#create_file_save_last').click(function () {
+            //环境名称
+            if ($('#basic-url').is(':visible')) {
+                var ip = '127.0.0.1'
+                var huanajing = $('div[name="file_secret"]').find('select').val()
+                var yewu = $('div[name="file_yewu"]').find('select').val()
+                var sign_type = $('div[name="sign_type"]').find('select').val()
+                var environmental_choice=$('#environmental_choice').val()
+                var method = $('div[name="file_method"]').find('select').val()
+                var request_url = $('#basic-url').val()
+                var json_data = $('#json_template').val()
+                $('#publick_db').modal('hide')
+                if ($('#file_jiekou_name').val().indexOf(" ") >= 0) {
+                    alert("接口名不能包含空格")
+                } else {
+                    if (sign_type=='孔夫子APP'){
+                         $('[name="all_yu_ming_create_jiekou"]').find('select').val()
+                        $('[name="all_yu_ming_create_jiekou"]').find('select').find('option').each(function(){
+                            if ($(this).html()==$('[name="all_yu_ming_create_jiekou"]').find('select').val()){
+                                publick_url = $(this).attr('name')
+                            }
+                        })
+                    }
+                    else {
+                        publick_url = ''
+                    }
+                    $.post('http://' + ip + ':' + $('[ name="get_port"]').attr('port') + '/creat_file', {
+                            gen_mulu: $.cookie('genmulu'),
+                            environmental_choice: environmental_choice,
+                            yewu: yewu,
+                            huanjing: huanajing,
+                            sign_type: sign_type,
+                            request_type: $('[name="send_request"]').find('select').val(),
+                            method: method,
+                            request_url: request_url,
+                            json_data: json_data,
+                            jiekou_name: $('#file_jiekou_name').val(),
+                            publick_url:publick_url
+                        },
+                        function (data) {
+                            if (data.statu == "success") {
+                                    $.ajaxSetup({
+                                        async: false
+                                    });
+                                    var mulu =   $.cookie('mulu_detail')
+                                    var huanjing = ''
+                                    var detail = ''
+                                    var all_data = ''
+                                $.post('http://127.0.0.1:' + $('[ name="get_port"]').attr('port') + '/mulu_detail', {
+                                        mulu: mulu, huanjing: huanjing
+                                    }, function (data) {
+
+                                        all_data = JSON.stringify(data)
+                                        $.post($SCRIPT_ROOT + '/uplate_jiekou_list', {
+                                                mulu: mulu, detail: detail, local_ip: '10.4.148.206', all_data: all_data
+                                            },
+                                            function (data) {
+                                                layer.msg('创建成功', {
+                                                    icon: '1', end: function () {
+                                                        window.location.reload()
+                                                    }
+                                                })
+                                            }
+                                        )
+                                    }
+                                )
+                            } else {
+                                layer.msg(data.statu, {icon: '0'})
+                            }
+                        }
+                    )
+
+                }
+            }
+
+
+            //保存db配置文件
+            if ($('#json_template_db').is(':visible')) {
+                var ip = '127.0.0.1'
+                var huanjing = $('div[name="file_secret_db"]').find('select').val()
+                var yewu = $('div[name="file_yewu_db"]').find('select').val()
+                var json_data = $('#json_template_db').val()
+                var gen_mulu = $.cookie('genmulu')
+                var json_data = $('#json_template_db').val()
+                $('#publick_db').modal('hide')
+                $.post('http://' + ip + ':' + $('[ name="get_port"]').attr('port') + '/save_conifg', {
+                        type: "db_config",
+                        gen_mulu: gen_mulu,
+                        yewu: yewu,
+                        huanjing: huanjing,
+                        json_data: json_data,
+                    },
+                    function (data) {
+                        if (data.statu == "success") {
+                            layer.msg('更新成功', {icon: '1'})
+
+                        } else {
+                            layer.msg(data.statu, {icon: '0'})
+                        }
+                    }
+                )
+            }
+
+
+            //保存publick配置文件
+            if ($('#json_template_publick').is(':visible')) {
+                var ip = '127.0.0.1'
+                var huanjing = $('div[name="file_secret_publick"]').find('select').val()
+                var yewu = $('div[name="file_yewu_publick"]').find('select').val()
+                var json_data = $('#json_template_publick').val()
+                var gen_mulu = $.cookie('genmulu')
+
+                $('#publick_db').modal('hide')
+                $.post('http://' + ip + ':' + $('[ name="get_port"]').attr('port') + '/save_conifg', {
+                        type: "publick_config",
+                        gen_mulu: gen_mulu,
+                        yewu: yewu,
+                        huanjing: huanjing,
+                        json_data: json_data,
+                    },
+                    function (data) {
+                        if (data.statu == "success") {
+                            layer.msg('更新成功', {icon: '1'})
+
+                        } else {
+                            layer.msg(data.statu, {icon: '0'})
+                        }
+                    }
+                )
+            }
+
+            //保存接口配置配置文件
+            if ($('select[name="file_yewu_private_select"]').is(':visible')) {
+                var ip = '127.0.0.1'
+                var huanjing = $('div[name="file_secret_publick"]').find('select').val()
+                var yewu = $('div[name="file_yewu_private"]').find('select').val()
+                var jiekou = $('#private_select_jjiekou_select').val()
+                var config_data = $('#json_template_private').val()
+                var gen_mulu = $.cookie('genmulu')
+                var json_text = $('#json_moban_private').val()
+                $('#publick_db').modal('hide')
+                $.post('http://' + ip + ':' + $('[ name="get_port"]').attr('port') + '/save_conifg', {
+                        type: "private_config",
+                        gen_mulu: gen_mulu,
+                        huanjing: huanjing,
+                        yewu: yewu,
+                        config_data: config_data,
+                        json_data: json_text,
+                        jiekou: jiekou
+
+                    },
+                    function (data) {
+                        if (data.statu == "success") {
+                            layer.msg('更新成功', {icon: '1'})
+
+                        } else {
+                            layer.msg(data.statu, {icon: '0'})
+                        }
+
+                    }
+                )
+            }
+        })
+        //初始化目录
+            $('#create_file_save_last').click(function () {
+                if ($('[href="#create_file"]').attr('aria-expanded') == 'true') {
+                    var sign_type = $('#create_file_type').val()
+                    var muluming = $('#muluming').val()
+                    var yewuming = $('#yewuming').val()
+                    var gongnengming = $('#gongnengming').val()
+                    var publick_url = $('#publick_url').val()
+                    let params = {}
+                    params['sign_type'] = sign_type
+                    params['muluming'] = muluming
+                    params['yewuming'] = yewuming
+                    params['gongnengming'] = gongnengming
+                    params['publick_url'] = publick_url
+                    if (sign_type == '司机端APP') {
+                        params['name'] = $('#driver_phone').val()
+                        params['password'] = $('#driver_password').val()
+                        params['driver_lat'] = $('#driver_lat').val()
+                        params['driver_lng'] = $('#driver_lng').val()
+                    }
+                    else if (sign_type == '孔夫子APP'){
+                        params['name'] = $('#kfz_an_app_name').val()
+                        params['password'] = $('#kfz_an_app_passw').val()
+                        params['kfz_an_uuid'] = $('#kfz_an_uuid').val()
+                        params['kfz_an_ssid'] = $('#kfz_an_ssid').val()
+                        params['kfz_an_app_appneame'] = $('#kfz_an_app_appneame').val()
+                        params['kfz_an_app_utmSource'] = $('#kfz_an_app_utmSource').val()
+                        var all_pu_add = []
+                        $('[name="kfz_cr_pu_mo"]').each(function(){
+                             all_pu_add.push($(this).val())
+                        })
+                        params['more_publick_and']=JSON.stringify(all_pu_add)
+                    }
+                    $.post('http://127.0.0.1:' + $('[ name="get_port"]').attr('port') + '/new/create_new_file', params, function (data) {
+                        if (data.statu == 'success') {
+                            $('#publick_db').modal('hide')
+                            layer.msg('创建成功', {
+                                shade: [0.3, '#fff'],
+                                shadeClose: true,
+                                icon: 1,
+                                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                            })
+                        } else {
+                            $('#publick_db').modal('hide')
+                    $('#muluming').val('')
+                    $('#yewuming').val('')
+                    $('#gongnengming').val('')
+                    $('#publick_url').val('')
+                    layer.msg(data.statu, {
+                        shade: [0.3, '#fff'],
+                        shadeClose: true,
+                        icon: 2,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    })
+                }
+            })
+        }
+    })
+
+        $('#create_file_type').change(function () {
+         $('#b_duan').hide()
+           $('#yunfuw_create').hide()
+           $('#dirver_app_create').hide()
+             $('#andord_app').hide()
+              $('#simple_publick_url').show()
+            if ($(this).val() == 'cpgroupcloud') {
+                $('#b_duan').show()
+            }
+            else if ($(this).val() == 'yunfuw') {
+                $('#yunfuw_create').show()
+            }
+            else if ($(this).val() == '司机端APP') {
+                $('#dirver_app_create').show()
+                    $('#more_top_publick_url').show()
+                $('#simple_publick_url').hide()
+            }
+                        else if ($(this).val() == '孔夫子APP') {
+                $('#andord_app').show()
+            }
+        })
+
+        $('#ceshi_tools').click(function () {
+
+            $('#guanjianzi_modal').modal('show')
+        })
+
+        $('#json_template_save_Data').change(function () {
+            var json_str = $('#json_template_save_Data').val().split('\n').length
+            try {
+
+                json_str = JSON.parse(json_str)
+
+            } catch (err) {
+
+                layer.msg("json字符串格式错误", {
+                    shade: [0.3, '#fff'],
+                    shadeClose: true,
+                    icon: 2,
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                })
+
+            }
+
+            let length = $('#json_template_save_Data').val().split('\n').length + 2
+            $('#json_template_save_Data').attr('rows', length)
+
+        })
+
+
+        $('#create_bianliang_type').change(function () {
+
+            let get_type = $('#create_bianliang_type').val()
+            if (get_type == "保存变量") {
+
+               $('#all_create_bianlaing_id').show()
+                $('#all_get_bianlaing_id').hide()
+            }
+            else if  (get_type=="使用变量"){
+
+               $('#all_create_bianlaing_id').hide()
+                $('#all_get_bianlaing_id').show()
+            }
+        })
+
+    $('#chane_get_careate_button').click(function(){
+
+        get_create_key()
+    })
+
+
+
+            //点击页面表格后面的调试按钮进入调试页面
+        $('button[name="tiaoshi_tiaozhuan"]').each(function () {
+            $(this).click(function () {
+                    mulu = $(this).find('span').attr('name')
+                    var huanjing = $('#check_0').html()
+                    var gen_mulu = $.cookie('genmulu')
+                    $.post($SCRIPT_ROOT + '/jiekou_mulu', {mulu: mulu, statu: "调试", huanjing: huanjing, gen_mulu: gen_mulu},
+                        function (data) {
+                                        mulu=$.cookie('genmulu')+'\\'+$('#check_0').html()+'\\'+mulu.split('#')[0]+'\\'+mulu.split('#')[1]
+                            $.post('http://127.0.0.1:' + $('[ name="get_port"]').attr('port')  + '/jiankong_mulu', {
+                                    mulu: mulu
+                                },
+                                function (data) {
+                                    window.location.replace($SCRIPT_ROOT + '/shishitiaoshi')
+                                }
+                            )
+                        }
+                    )
+                }
+            )
+        })
+
+
+    $('#chane_save_careate_button').click(function(){
+
+        get_create_key()
+    })
+
+        function get_create_key()
+        {
+
+              var this_html='        <div class="row mt-low">\n' +
+                '                                            <div class="col-lg-12">\n' +
+                '                                                <div class="alert alert-success">\n' +
+                '                                                    <strong></strong>\n' +
+                '                                                </div>\n' +
+                '                                            </div>\n' +
+                '                                        </div>'
+       var a='carete_save_alert'
+         let get_type=$('#create_bianliang_type').val()
+            var statu=0
+           let url = $SCRIPT_ROOT + '/tree/save_data_careate_str'
+
+         if (get_type=="保存变量"){
+              var json_str = $('#json_template_save_Data').val()
+            try {
+
+                json_str = JSON.parse(json_str)
+
+            } catch (err) {
+               statu=1
+                layer.msg("json字符串格式错误", {
+                    shade: [0.3, '#fff'],
+                    shadeClose: true,
+                    icon: 2,
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                })
+
+            }
+
+
+         }
+
+            if (statu==0)
+            {
+
+                 if (get_type=="保存变量")
+                 {
+
+                                 let bianliang_name=$('#canshu_name').val()
+                let json_str=$('#json_template_save_Data').val()
+                let uanjian_str=$('#key_save_data').val()
+                let req_type=$('#dingshi_run_type_time').val()
+                let create_bianliang_type=$('#create_bianliang_type').val()
+                $.post(url,{create_bianliang_type:create_bianliang_type,json_str:json_str,uanjian_str:uanjian_str,bianliang_name:bianliang_name,type:req_type},function(data)
+                {
+                     $('#carete_save_alert').empty()
+                    $.each(data.return_data,function(a,b){
+                         $('#carete_save_alert').append(this_html)
+                          $('#carete_save_alert').find('strong').eq(-1).html(b)
+                    })
+                })
+                 }
+                    else if  (get_type=="使用变量"){
+                        let create_bianliang_type=$('#create_bianliang_type').val()
+                     let data_key=$('#key_get_data').val()
+                      let get_data_type_num=$('#get_data_type_num').val()
+                         $.post(url,{get_data_type_num:get_data_type_num,create_bianliang_type:create_bianliang_type,data_key:data_key},function(data)
+                {
+                     $('#carete_get_alert').empty()
+                    $.each(data.return_data,function(a,b){
+                         $('#carete_get_alert').append(this_html)
+                          $('#carete_get_alert').find('strong').eq(-1).html(b)
+                    })
+                })
+
+                 }
+
+
+            }
+
+        }
+
+    $('#add_publick_url').click(function(){
+
+        var this_html='         <div class="row ">\n' +
+            '                                        <form class="form-horizontal">\n' +
+            '                                            <div class="form-group">\n' +
+            '                                                <label class="col-lg-2 control-label">\n' +
+            '\n' +
+            '                                                </label>\n' +
+            '                                                <div class="col-lg-10" name="file_yewu_db">\n' +
+            '                                                    <input type="text" class="form-control" placeholder="业务域名"\n' +
+            '                                                           name="publick_url_more"\n' +
+            '                                                           aria-describedby="basic-addon1">\n' +
+            '                                                </div>\n' +
+            '                                            </div>\n' +
+            '                                        </form>\n' +
+            '                                    </div>'
+
+    $('#more_top_publick_url').append(this_html)
+
+    })
+
+
+            $('#add_yu_kfz').click(function(){
+                                    var heml_adaf=['                              <div name="yuming_add_kfz_more">',
+'                                        <div class="row mt-low">',
+'                                            <form class="form-horizontal">',
+'                                                <div class="form-group">',
+'                                                    <div class="col-lg-10 col-lg-offset-2" >',
+'                                                        <div class="input-group">',
+'                                                            <input type="text"  name="kfz_cr_pu_mo"   class="form-control">',
+'                                                            <span class="input-group-btn">',
+'						<button class="btn btn-warning" type="button" name="kfz_cr_pu_mo_del">',
+'							删除域名',
+'						</button>',
+'					</span>',
+'                                                        </div>',
+'                                                    </div>',
+'                                                </div>',
+'                                            </form>',
+'                                        </div>',
+'                                    </div>'].join("")
+                $('#yuming_add_kfz').append(heml_adaf)
+            })
+            $('#publick_db').on('show.bs.modal', function () {
+ $('[name="yuming_add_kfz_more"]').remove()
+})
+
+            $('#yuming_add_kfz').on('click','[name="kfz_cr_pu_mo_del"]',function() {
+                $(this).parent().parent().parent().parent().parent().parent().parent().remove()
+            })
+    </script>
+{% endblock %}

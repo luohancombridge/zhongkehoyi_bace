@@ -1,0 +1,103 @@
+{% extends "/simple_page/ss.html" %}
+{% block content %}
+<p style="text-align:center">通用配置</p>
+
+
+
+
+
+
+       <style type="text/css">
+table.zyhovertable {
+
+
+    font-family:
+    verdana,arial,sans-serif;
+    font-size:11px;
+    color:#333333;
+    border-width: 1px;
+    border-color: #999999;
+    border-collapse:
+    collapse;
+}
+
+table.zyhovertable th {
+    background-color:#C3DDE0;
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #999999;
+}
+
+table.zyhovertable tr {
+    background-color:#DCDCDC;
+}
+
+table.zyhovertable td {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #999999;
+}
+</style>
+
+    <input type="button"  style="line-height:1.5;"  value="生成常态档期"  id="creat_qi" >  <p id="1"></p>
+      <form action="/add_qian" method="POST"  enctype="multipart/form-data">
+    <input type="text" id="add"  name="add" value="add" style="width:140px;"  />
+         <input type="submit"  style="line-height:1.5;"  value="添加标签"  id="add_qian_submit" />
+    </form>
+<form action="/creat_detail" method="post"   name="yuansu"  id="yuansu"  style="display:none;" >
+ 常态合作编码: <input type="text" name="number" />
+  <input type="submit" value="Submit" />
+</form>
+
+
+<hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+
+<script src="{{url_for('static', filename='jquery-1.8.0.js')}}"></script>
+
+     <script src="/static/layer-v3.0/layer/layer.js"></script>
+<script type=text/javascript>
+var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+</script>
+<script type=text/javascript>
+
+//删除标签
+
+
+$('#creat_qi').click(function(){
+
+
+layer.open({
+  type: 1,
+  skin: 'layui-layer-rim', //加上边框
+  area: ['620px', '240px'], //宽高
+  content:  $('#yuansu'),
+}
+);
+
+
+
+})
+
+
+
+
+$(document).ready(function(){
+ setInterval(function () {
+       $.post($SCRIPT_ROOT + '/no_user', {shi: $(this).attr("name")},
+                 function(data)
+                 {
+                     $('#1').html(data.da);
+
+
+    })
+
+
+
+    }, 3000);
+});
+
+
+    </script>
+{% endblock %}

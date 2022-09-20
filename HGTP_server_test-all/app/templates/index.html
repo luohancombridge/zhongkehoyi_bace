@@ -1,0 +1,160 @@
+<html >
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>简单漂亮的后台管理界面模板 - 源码之家</title>
+<link href={{url_for('static', filename='images/style.css')}}  rel="stylesheet" type="text/css" />
+<select  id="sltList" name="list">
+            {% for i in  mulu %}
+    <option value ={{i}}>{{i}}</option>
+        {% endfor %}
+</select>
+<form action="" method="GET">
+<br /><br />
+        {% for i in  names %}
+            <label><input name="Fruit" id="hk" type="checkbox" value={{i}} />{{i}} </label>
+        {% endfor %}
+
+</form>
+<p><input type="button" id="resulte" value="运行"></p>
+<p><input type="button" id="bianji" value="编辑"  ></p>
+<a data-click="{
+			'F':'778317EA',
+			'F1':'9D73F1E4',
+			'F2':'4CA6DDEA',
+			'F3':'54E5243F',
+			'T':'1442570081',
+						'y':'8B8DF693'
+
+										,'rsv_gwlink':'1'
+						}" href={{url}} target="_blank"  id="userr">查看结果</em></a>
+
+<div class="page-header">
+
+    <textarea rows="1" cols="160" id="arear" style="display:none;" >
+</textarea>
+<p></p>
+<input class="btn btn-default" id="submitttt" name="submitttt" type="submit" value="保存" style="display:none;" >
+</div>
+  <h1 id="sunzhennan">提交脚本</h1>
+    <form action="/" method="POST" enctype="multipart/form-data">
+    <input type="file" name="file"  />
+       <p> <input type="submit"  style="line-height:1.5;"  value="提交" /></p>
+    </form>
+
+<!-- 插入jquery -->
+<script src="{{url_for('static', filename='jquery-1.8.0.js')}}"></script>
+<script type=text/javascript>
+var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+</script>
+<script type=text/javascript>
+$(function() {
+    function submit_form() {
+        var fruit = "";
+        var vegetable = "";
+        $("[name='Fruit']:checked").each(function () {
+            fruit += $(this).val() + " ";
+        })
+        $("input[name='Fruit']").each(function () {
+            $(this).attr("checked", false);
+        });
+        if (fruit != "") {
+           $("#resulte").attr({"disabled": "disabled"});
+            $("#resulte").val('运行中');
+
+            $.getJSON($SCRIPT_ROOT + '/add', {name: "John", dsd: fruit, ame: "John"},
+                    function (data) {
+                        $("#userr").attr("href", data.user);
+                        $("#resulte").val(data.result)
+                        $("#resulte").removeAttr("disabled");
+                    });
+        }
+    };
+    function submit_fm() {
+        var fruit = "";
+        $("[name='Fruit']:checked").each(function () {
+            fruit += $(this).val() + " ";
+        })
+                $("input[name='Fruit']").each(function(){
+   $(this).attr("checked",false);
+  });
+        $.getJSON($SCRIPT_ROOT + '/zz', {name: "John", dsd: fruit, ame: "bianji"},
+                function (data) {
+                    $("#arear").attr("rows",data.len);
+                    $("#arear").show();
+                    $("#submitttt").show();
+                    $("#arear").html(data.result);
+
+                });
+
+    };
+
+
+
+  function submit_text() {
+        var fruit =  $("#arear").val();
+
+        $.getJSON($SCRIPT_ROOT + '/nimadebi', {name: "John", dsd: fruit, ame: "bianji"},
+                function (data) {
+                    $("#arear").attr("rows","1");
+                      $("#arear").html("");
+                       $("#arear").attr("style","display:none;");
+                        $("#submitttt").attr("style","display:none;");
+
+                });
+
+    };
+    //获取下拉列表选项修改session值并刷新
+
+ $("#sltList").change(function(){var fruit = $('#sltList').val() ;
+
+      $.getJSON($SCRIPT_ROOT + '/xiala', {name: "John", dsd: fruit, ame: "bianji"},
+                function (data) {
+             window.location.reload()
+                    $("#sltList ").val(data.result);
+                });
+ });
+//加载页面时执行下拉列表那一项被选中
+$(document).ready(function() {
+
+      $.getJSON($SCRIPT_ROOT + '/xiala', {name: "John", dsd: 'open', ame: "bianji"},
+                function (data) {
+
+                   $("#sltList ").val(data.result);
+                });
+});
+
+
+    // 绑定click事件
+       $('#resulte').bind('click', submit_form);
+       $('#bianji').bind('click', submit_fm);
+       $('#submitttt').bind('click', submit_text);
+});
+
+</script>
+
+<script type="text/javascript" language="javascript">
+var left=$('#sltList').offset().left;
+var topp=$('#sltList').offset().top;
+var thisEle = $('[name="file"]').css("font-size");
+var yuanu=$('label');
+ for( var i = 0; i < yuanu.length; i++ ) {
+       yuanu.eq(i).css({position: "fixed ",'top':topp+50,'left':left+9,'z-index':1});
+     left=  yuanu.eq(i).offset().left+60;
+
+     }
+$('[name="list"]').css('width', 100);
+$('[name="list"]').css('height', 30);
+$('label').css('height', 300);
+$("#sunzhennan").css({position: "fixed ",'top':topp+200,'z-index':1});
+$('#resulte').css({position: "fixed ",'top':topp+100,'z-index':1});
+$("#sunzhennan").css("font-size",thisEle );
+$('#userr').css({position: "fixed ",'top':topp+150,'z-index':1});
+$('form[enctype="multipart/form-data"]').css({position: "fixed ",'top':topp+250,'z-index':1});
+$('[value="提交"]').css({position: "fixed ",'top':topp+280,'z-index':1});
+left=$('#resulte').offset().left;
+topp=$('#resulte').offset().top;
+    $('#bianji').css({position: "fixed ",'top':topp,'left':left+60,'z-index':1})
+
+</script>
+</body>
+</html>
+

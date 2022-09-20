@@ -1,0 +1,880 @@
+{% extends "/hualala/pages/base.html" %}
+{% block content %}
+    <style type="text/css">
+        .mt-10 {
+            margin-top: 25px;
+        }
+
+        .row.no-gutter {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    </style>
+    <div class="panel panel-default " style="width: 1500px;">
+        <div class="panel-body">
+            <div class="container-fluid">
+                <div class="row mt-10">
+                    <div class="col-lg-12">
+                        <nav id="navbar-example" class="navbar navbar-default navbar-static" role="navigation">
+                            <div class="container-fluid">
+                                <div class="navbar-header">
+                                    <button class="navbar-toggle" type="button" data-toggle="collapse"
+                                            data-target=".bs-js-navbar-scrollspy">
+                                        <span class="sr-only">切换导航</span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                    </button>
+                                    <a class="navbar-brand" href="#">目录名称</a>
+                                </div>
+                                <div class="collapse navbar-collapse bs-js-navbar-scrollspy">
+                                    <ul class="nav navbar-nav">
+                                        <li><a href="#huanjing">环境搭建</a></li>
+                                        <li><a href="#svn">新建接口</a></li>
+                                        <li class="dropdown">
+                                            <a href="#" id="navbarDrop1" class="dropdown-toggle"
+                                               data-toggle="dropdown">配置文件
+                                                <b class="caret"></b>
+                                            </a>
+                                            <ul class="dropdown-menu" role="menu"
+                                                aria-labelledby="navbarDrop1">
+                                                <li><a href="#jmeter" tabindex="-1">公共配置文件config.txt</a></li>
+                                                <li><a href="#db_config" tabindex="-1">数据库配置文件db.txt</a></li>
+                                                <li><a href="#json_moban" tabindex="-1">请求模板json.txt</a></li>
+                                                <li><a href="#case_excel" tabindex="-1">case表格</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="#" id="navbarDrop1" class="dropdown-toggle"
+                                               data-toggle="dropdown">断言编写
+                                                <b class="caret"></b>
+                                            </a>
+                                            <ul class="dropdown-menu" role="menu"
+                                                aria-labelledby="navbarDrop1">
+                                                <li><a href="#assert_write" tabindex="-1">普通断言</a></li>
+                                                <li><a href="#sql_result" tabindex="-1">单独sql返回值断言</a></li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="dropdown">
+                                            <a href="#" id="navbarDrop1" class="dropdown-toggle"
+                                               data-toggle="dropdown">参数化
+                                                <b class="caret"></b>
+                                            </a>
+                                            <ul class="dropdown-menu" role="menu"
+                                                aria-labelledby="navbarDrop1">
+                                                <li><a href="#before_request" tabindex="-1">业务流（前置接口）</a></li>
+                                                <li><a href="#python_code" tabindex="-1">自动生成数据</a></li>
+                                                <li><a href="#db_data_use" tabindex="-1">使用数据库</a></li>
+                                                <li><a href="#dongtai_data" tabindex="-1">动态常量</a></li>
+                                                <li><a href="#sql_canshuhua" tabindex="-1">sql参数化</a></li>
+                                                <li><a href="#run_sql_be_af" tabindex="-1">运行前后sql执行及断言</a></li>
+                                                <li><a href="#data_guding" tabindex="-1">使用固定常量</a></li>
+                                                <li><a href="#split_str" tabindex="-1">保存参数中部分字符</a></li>
+                                                <li><a href="#yunsuan_data" tabindex="-1">数据计算</a></li>
+                                                <li><a href="#python_jiaoben" tabindex="-1">调用python脚本进行断言</a></li>
+                                                <li><a href="#send_empty_data" tabindex="-1">发送为空参数</a></li>
+                                                <li><a href="#jiangeshezhi" tabindex="-1">业务流运行间隔设置</a></li>
+                                                <li><a href="#add_head" tabindex="-1">添加请求head</a></li>
+                                                <li><a href="#request_list" tabindex="-1">请求参数为列表</a></li>
+                                                <li><a href="#same_request" tabindex="-1">请求体中包含相同参数</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="#git_submit">提交git</a></li>
+                                        <li><a href="#user_tongji">使用统计</a></li>
+                                        <li><a href="#wentitongji">问题统计</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </nav>
+                        <h4 id="huanjing"><strong>环境搭建</strong></h4>
+                        <pre style="border:none; background:none">
+    1. 安装python最新版本（至少3.0以上）
+    2. 配置python 环境变量
+    3. 安装 pip ，并配置环境变量
+    4. 在cmd命令行下执行 pip install 模块名 （模块名如下：
+        flask ，flask_sqlalchemy， paramiko，chardet，demjson，flask_bootstrap，selenium，xlrd，requests）若命令提示：no module  named 模块名，缺少相应模块，
+        安装好相应的模块即可
+    5. 在cmd命令行中进入server目录执行 python run.py 未报错则可以使用
+    6. 申请git账号，找人赋予开发者权限，本地server的git库地址 http://code.qdedu.cn/sunzhen/local_server.git，下载后，启动根目录下的run.py，若重新拉代码，进入local_server目录下，打开git命令行，依次执行：
+        git fetch --all ,git reset --hard origin/master,   git pull。
+    8.本地创建空目录,（用以存放接口文件）
+    9.在页面中初始化目录（生成必要的配置文件）
+    </pre>
+                        <h4 id="svn"><strong>新建接口</strong></h4>
+                        <img src="/static/picture/creat_file.png" alt="上海鲜花港 - 郁金香" class="text-left">
+                        <p class="text-left">点击页面左侧local接口
+                            ，在输入目录输入框中，输入新建的根目录路径（包含根目录名），点击GO,页面刷新后，点击生成接口文件按钮，弹出弹出框。</p>
+                        <pre style="border:none; background:none">
+    </pre>
+                        <div class="media">
+                            <div class="media-right">
+                                <a href="#">
+                                    <img class="media-object" class="img-thumbnail"
+                                         src="/static/picture/creat_file_alert.png" alt="上海鲜花港 - 郁金香" id="testimg"
+                                         height="400" width="400">
+                                </a>
+                            </div>
+                            <div class="media-body  media-right">
+                                <h4 class="media-heading">创建接口文件</h4>
+                                选择环境下拉列表内容为，接口根目录下第一级目录，选择业务为第二级目录，接口类型:无需走pc端单点登录接口选择app，需走pc端单点登录接口选择web，请求方式：选择get，或post
+                                private_url：接口请求地址url后半部分，和所选第二级目录下，config配置文件中public_url合起来为请求url，json模板中输入请求json字符串，完毕后，点击save
+                                change按钮，若
+                                弹出创建成功提示框，则接口文件创建成功，重新在输入目录输入框中，输入新建的根目录路径（包含根目录名），点击GO，在下方列表中，可看到新创建的接口
+                            </div>
+                        </div>
+                        <pre style="border:none; background:none"></pre>
+                        <h4 id="jmeter"><strong>公共配置文件config.txt</strong>></h4>
+                        <pre style="border:none; background:none"></pre>
+                        <div class="media">
+                            <div class="media-right">
+                                <a href="#">
+                                    <img class="media-object" class="img-thumbnail"
+                                         src="/static/picture/publick_config_mulu.png" alt="上海鲜花港 - 郁金香" id="testimg"
+                                         height="100" width="100">
+                                </a>
+                            </div>
+                            <div class="media-body  media-right">
+                                <h4 class="media-heading">配置文件存放地址</h4>
+                                该文件存放在与接口目录同级的目录下，该目录下所有接口均使用该公共配置文件
+                            </div>
+                        </div>
+                        <pre style="border:none; background:none"></pre>
+                        <div class="media">
+                            <div class="media-right">
+                                <a href="#">
+                                    <img class="media-object" src="/static/picture/publick_config_deta.png"
+                                         class="img-thumbnail" alt="上海鲜花港 - 郁金香" id="testimg" height="200" width="200">
+                                </a>
+                            </div>
+                            <div class="media-body  media-right">
+                                <h4 class="media-heading"> 配置文件编写</h4>
+                                <dl class="dl-horizontal">
+                                    <dt>public_url</dt>
+                                    <dd>请求url前半段固定的部分，框架发送请求的时候和每个接口的private_url拼接成完整的url</dd>
+                                    <dt>sign_type</dt>
+                                    <dd>接口请求的方式，目前为app,web,Backstage_web，为app则是接口请求不需要验证登录状态，为web则是接口请求需要验证登录状态,MD5
+                                        加rsa加密,Backstage_web为md5加密，业务接口header中需传递登陆接口返回的token,jy_appserver请求参数全部加密，返回数据全部解密
+                                        适用系统：借悦，zhixin，获取返回的session，适用session登录，适用系统：执信
+                                    </dd>
+                                    <dt>login</dt>
+                                    <dd>若sign_type为app该模块不起作用，若为web，则需填入：url 登录的地址，name 用户名，password 用户密码</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <pre style="border:none; background:none"></pre>
+                        <h4 id="db_config"><strong>数据库配置文件db.txt</strong></h4>
+                        <pre style="border:none; background:none"></pre>
+                        <div class="media">
+                            <div class="media-right">
+                                <a href="#">
+                                    <img class="media-object" class="img-thumbnail" src="/static/picture/db_weizhi.png"
+                                         alt="上海鲜花港 - 郁金香" id="testimg" height="100" width="100">
+                                </a>
+                            </div>
+                            <div class="media-body  media-right">
+                                <h4 class="media-heading">配置文件存放地址</h4>
+                                该文件存放在与接口目录同级的目录下，该目录下所有接口均使用该公共配置文件
+                            </div>
+                        </div>
+                        <pre style="border:none; background:none"></pre>
+                        <div class="media">
+                            <div class="media-right">
+                                <a href="#">
+                                    <img class="media-object" src="/static/picture/db_deta.png" class="img-rounded"
+                                         alt="上海鲜花港 - 郁金香" id="testimg" height="200" width="400">
+                                </a>
+                            </div>
+                            <div class="media-body  media-right">
+                                <h4 class="media-heading"> 数据库信息</h4>
+                                <dl class="dl-horizontal">
+                                    <dt>db_oracle</dt>
+                                    <dd>该模块存放连接数据库的信息，可以以db开头的字符串随意命名</dd>
+                                    <dt>type</dt>
+                                    <dd>当需要连接的数据库为oracle时,type=oracle，当连接的数据库为mysql时，type=mysql</dd>
+                                    <dt>配置项</dt>
+                                    <dd>如oracle写conn，例子：conn=loan0731/loan0731@172.18.100.126:1521/testdb，
+                                        conn=用户名/密码@ip地址:端口号/数据库
+                                        如为mysql,配置项:host:ip地址，port:端口号，user:用户名,password:密码，db：数据库
+                                    </dd>
+                                </dl>
+                                <h4 class="media-heading"> sql在该块下面填写要调用的sql</h4>
+                                <pre style="border:none; background:none">
+                例子：sql1_code=select * from LA_T_DXRETUAHEA  where rownum = 1,sql1_code(sql语句的名字，可以随意写),
+                等号后面的sql必须有一个返回值
+            </pre>
+                            </div>
+                        </div>
+                        <pre style="border:none; background:none"></pre>
+                        <h4 id="json_moban"><strong>请求模板json.txt</strong></h4>
+                        <pre style="border:none; background:none"></pre>
+                        <div class="media">
+                            <div class="media-right">
+                                <a href="#">
+                                    <img class="media-object" class="img-thumbnail" src="/static/picture/json_mu.png"
+                                         alt="上海鲜花港 - 郁金香" id="testimg" height="100" width="200">
+                                </a>
+                            </div>
+                            <div class="media-body  media-right">
+                                <h4 class="media-heading">配置文件存放地址</h4>
+                                该文件存放在接口目录目录下
+                            </div>
+                        </div>
+                        <pre style="border:none; background:none"></pre>
+                        <div class="media">
+                            <div class="media-right">
+                                <a href="#">
+                                    <img class="media-object" class="img-thumbnail" src="/static/picture/json_deta.png"
+                                         alt="上海鲜花港 - 郁金香" id="testimg" height="200" width="200">
+                                </a>
+                            </div>
+                            <div class="media-body  media-right">
+                                <h4 class="media-heading">文件内容:</h4>
+                                <h4>
+                                    该文件存放请求报文的json模板，各参数的值保持数据类型不变即可，若某参数值为列表，则该参数在文件中的值为：“"change_json"”，此文件可通过页面创建接口功能，自动创建。
+                                </h4>
+                            </div>
+                        </div>
+                        <pre style="border:none; background:none"></pre>
+                        <h4 id="case_excel"><strong>case表格</strong></h4>
+                        <pre style="border:none; background:none"></pre>
+                        <div class="media">
+                            <div class="media-right">
+                                <a href="#">
+                                    <img class="media-object" class="img-thumbnail" src="/static/picture/json_mu.png"
+                                         alt="上海鲜花港 - 郁金香" id="testimg" height="100" width="200">
+                                </a>
+                            </div>
+                            <div class="media-body  media-right">
+                                <h4 class="media-heading">case表格存放地址</h4>
+                                该文件存放在接口目录目录下（可以通过前端页面的生成接口文件功能自动生成），该文件名，必须和它所在的目录名一致
+                            </div>
+                        </div>
+                        <pre style="border:none; background:none"></pre>
+                        <div class="row">
+                            <div class="col-sm-9 col-md-9">
+                                <div class="thumbnail" style=" background:none">
+                                    <img class="media-object" class="img-thumbnail" src="/static/picture/case_exce.png"
+                                         alt="上海鲜花港 - 郁金香" id="testimg">
+                                    <div class="caption text-left">
+                                        <h4>文件内容:
+                                            <smal>从第二行开始每一行对应一个case，每一个请求参数对应一列</smal>
+                                        </h4>
+                                        <h4>特殊列:</h4>
+                                        <dl class="dl-horizontal ">
+                                            <dt>id</dt>
+                                            <dd>case编号,必须为数字，不能为空</dd>
+                                            <dt>Comment</dt>
+                                            <dd> case名不能为空</dd>
+                                            <dt>result</dt>
+                                            <dd>case的预期结果（可以为空）</dd>
+                                            <dt>url列（非必填）</dt>
+                                            <dd>
+                                                若excel表格中包含url列且某行数据不为空，则该行数据发送接口请求时，该url列地址作为请求url，而不是configparse.txt中url值
+                                            </dd>
+                                            <dt>json列（非必填）</dt>
+                                            <dd>如果表格中包含该列，且某行用例不为空，执行该行用例时，请求参数为该行json列的值</dd>
+                                            <dt>before_request列</dt>
+                                            <dd>存放跑该case之前，需要先跑的接口cae（非必填）</dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="media">
+                            <div class="media-right">
+                                <a href="#">
+                                </a>
+                            </div>
+                            <div class="media-body  media-right">
+                                <h4 class="media-heading">文件内容:</h4>
+                                <h4>
+                                    该文件存放请求报文的json模板，各参数的值保持数据类型不变即可，若某参数值为列表，则该参数在文件中的值为：“"change_json"”，此文件可通过页面创建接口功能，自动创建。
+                                </h4>
+                            </div>
+                        </div>
+                        <pre style="border:none; background:none"></pre>
+                        <h4 id="assert_write"><strong>断言编写</strong></h4>
+                        <pre style="border:none; background:none"></pre>
+                        <pre style="border:none; background:none"><h4>接口表格中 result列存储该行用例的断言json字符串，在接口批量运行时，与该行接口用例实际返回json字符串进行匹配，判定该用例是否通过</h4></pre>
+                        <div class="row">
+                            <div class="col-sm-6 col-md-4">
+                                <div class="thumbnail">
+                                    <img class="media-object" src="/static/picture/assert_pass1.png" alt="上海鲜花港 - 郁金香">
+                                    <div class="caption">
+                                        <h4>断言通过：</h4>
+                                        <p>断言json与接口返回json完全相同</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-4">
+                                <div class="thumbnail">
+                                    <img class="media-object" class="img-thumbnail"
+                                         src="/static/picture/assert_pass2.png" alt="上海鲜花港 - 郁金香"
+                                         id="testimg">
+                                    <div class="caption">
+                                        <h4>断言通过：</h4>
+                                        <p>断言json中的参数与接口返回的相同参数的相同位置参数的值一致</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-left">
+                            <h4>断言json中参数值编写：</h4>
+                            <dl class="dl-horizontal ">
+                                <dt>“*int”</dt>
+                                <dd>返回参数类型为int型，判定为通过</dd>
+                                <dt>“in:aa”</dt>
+                                <dd>判断返回参数中是否包含aa字符</dd>
+                                <dt>“*float”</dt>
+                                <dd> 返回参数类型为float型，判定为通过</dd>
+                                <dt>“*long”</dt>
+                                <dd> 返回参数类型为long型，判定为通过</dd>
+                                <dt>“*str”</dt>
+                                <dd> 返回参数类型为str型，判定为通过</dd>
+                                <dt>“*”</dt>
+                                <dd> 通配符，返回json中包含该参数，无论为何值均为通过</dd>
+                                <dt>列表长度</dt>
+                                <dd> 如需对name参数值的长度断言，则在json字符串name的值写为"len*10",后面数字为预期长度，预期name值的长度为10</dd>
+                                <dt>只是判断sql值是否正确</dt>
+                                <dd> 则在表格中调用sq的位置加上等号及预期值，如：
+                                    [db_mysql_test1][before_sql_one,before_sql_two,before_sql_three]=2
+                                </dd>
+                            </dl>
+                        </div>
+
+                        <pre style="border:none; background:none"></pre>
+                        <h4 id="sql_result"><strong>sql返回值断言</strong></h4>
+                        <pre style="border:none; background:none"></pre>
+                        <div class="row">
+                            <div class="col-sm-9 col-md-9">
+                                <dl>
+                                    <dt>编写方式</dt>
+                                    <dd>
+                                        （支持调用python脚本进行断言的方式）在before_sql或after_sql列中增加，示例：[db_mysql][before_sql_one]=1，预期结果为1，字符也无需添加引号,如果为mongodb则为：
+                                        [db_mongodb][device_info][sql_test]，第一个中括号内为db名，第二个为表名，第三个为配置文件中sql名，值为与其返回的字典，如：[db_mongodb][device_info][sql_test]={"appVersion":
+                                        "1.4.5"}
+                                    </dd>
+                                </dl>
+                            </div>
+
+                        </div>
+
+
+                        <pre style="border:none; background:none"></pre>
+                        <pre style="border:none; background:none"></pre>
+                        <h4 id="before_request"><strong>业务流（前置接口）</strong></h4>
+                        <pre style="border:none; background:none">
+            若接口需要从其他接口中获取数据作为请求参数值则需要在表格中增加before_request列，在相应case对应的单元格中写入要调用case的位置，当运行该case时，会先去找到前置的case，
+            若前置的case也有调用别的case，则继续向上找，直到找到最开始的case，然后从最开始的case。一直向下运行。
+        </pre>
+                        <div class="row">
+                            <div class="col-sm-5 col-md-3">
+                                <div class="thumbnail">
+                                    <img class="media-object" class="img-thumbnail"
+                                         src="/static/picture/before_request.png" alt="上海鲜花港 - 郁金香">
+                                    <div class="caption">
+                                        <h4>字符串组成：</h4>
+                                        <p>业务名/接口名$接口表格中case的id号</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-md-3">
+                                <div class="thumbnail">
+                                    <img class="media-object" class="img-thumbnail"
+                                         src="/static/picture/result_take.png" alt="上海鲜花港 - 郁金香">
+                                    <div class="caption">
+                                        <h4>从前置接口返回中获取参数：</h4>
+                                        <p>{{ ["sysSource"] }}
+                                            表示从前置接口返回的数据中提取sysSource字段值将该关键字替换掉，注意：外面两个大括号，里面一个中括号，且中括号里面内容符合python
+                                            从json中查找属性语法</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-md-3">
+                                <div class="thumbnail">
+                                    <img class="media-object" class="img-thumbnail"
+                                         src="/static/picture/before_request7.png" alt="上海鲜花港 - 郁金香">
+                                    <div class="caption">
+                                        <h4>从前置接口请求中获取参数：</h4>
+                                        <p>
+                                            ((["telephone"]))表示从前置接口请求的数据中提取telephone字段值将该关键字替换掉，注意：外面两个小括号，里面一个中括号，且中括号里面内容符合python
+                                            从json中查找属性语法</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <pre style="border:none; background:none"></pre>
+                        <h4 id="db_data_use"><strong>使用数据库</strong></h4>
+                        <div class="media">
+                            <div class="media-right">
+                                <a href="#">
+                                    <img class="media-object" class="img-thumbnail" src="/static/picture/db_weizhi.png"
+                                         alt="上海鲜花港 - 郁金香" id="testimg" height="100" width="100">
+                                </a>
+                            </div>
+                            <div class="media-body  media-right">
+                                <h4 class="media-heading">配置文件存放地址</h4>
+                                该文件存放在与接口目录同级的目录下，该目录下所有接口均使用该db配置文件
+                            </div>
+                        </div>
+                        <pre style="border:none; background:none"></pre>
+                        <div class="media">
+                            <div class="media-right">
+                                <a href="#">
+                                    <img class="media-object" src="/static/picture/db_deta.png" class="img-rounded"
+                                         alt="上海鲜花港 - 郁金香" id="testimg" height="200" width="400">
+                                </a>
+                            </div>
+                            <div class="media-body  media-right">
+                                <h4 class="media-heading"> 数据库信息</h4>
+                                <dl class="dl-horizontal">
+                                    <dt>db_oracle</dt>
+                                    <dd>该模块存放连接数据库的信息，可以以db开头的字符串随意命名</dd>
+                                    <dt>type</dt>
+                                    <dd>当需要连接的数据库为oracle时,type=oracle</dd>
+                                    <dt>conn</dt>
+                                    <dd>例子：conn=loan0731/loan0731@172.18.100.126:1521/testdb， conn=用户名/密码@ip地址:端口号/数据库
+                                    </dd>
+                                </dl>
+                                <h4 class="media-heading"> sql在该块下面填写要调用的sql</h4>
+                                <pre style="border:none; background:none">
+                例子：sql1_code=select * from LA_T_DXRETUAHEA  where rownum = 1,sql1_code(sql语句的名字，可以随意写),
+                等号后面的sql必须有一个返回值
+            </pre>
+                            </div>
+                        </div>
+                        <pre style="border:none; background:none"></pre>
+                        <div class="row">
+                            <div class="col-sm-5 col-md-3">
+                                <h4>调用上图所示sql语句方法如下：</h4>
+                                <div class="thumbnail">
+                                    <img class="media-object" class="img-thumbnail" src="/static/picture/db_excel.png"
+                                         alt="上海鲜花港 - 郁金香">
+                                    <div class="caption">
+                                        <h4>字符串组成：</h4>
+                                        <p> [db_oracle][sql1_code][int]
+                                            ，db_oracle为接口目录所在目录下的db.txt文件中，session名，sql1_code为db.txt文件中sql模块下的sql语句名，int指获取sql数据后转为整型，
+                                            同理，str转为字符型，float转为浮点型，long转为long型</p>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-7 col-md-3">
+                                <h4>mongodb 的方式如下：</h4>
+                                <div class="thumbnail">
+                                    <img class="media-object" class="img-thumbnail" src="/static/picture/mongodb.png">
+                                    <div class="caption">
+                                        <h4>用法</h4>
+                                        <p>图片db为库名，关键字调用： [db_mongodb][device_info][sql_test]
+                                            ，第一个为配置文件中库名，第二个为表名，第三个为配置文件中的sql名，sql
+                                            例子为：[{"osVersion":
+                                            "9"},{"appVersion":1}]，pymongo标准格式，第一个字典为查询条件，第二个子弹为返回参数，返回值为
+                                            查出来的第一条数据，类型为字典类型，如果验证数据，例子：[db_mongodb][device_info][sql_test]={"appVersion":
+                                            "1.4.5"}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <pre style="border:none; background:none"></pre>
+                        <pre style="border:none; background:none"></pre>
+                        <h4 id="dongtai_data"><strong>使用动态常量:</strong></h4>
+                        <pre style="border:none; background:none"></pre>
+                        <div class="media">
+                            <div class="media-right">
+                                <a href="#">
+                                    <img class="media-object" src="/static/picture/dongtai_data.png" class="img-rounded"
+                                         alt="上海鲜花港 - 郁金香" id="dongtai_excel_data" height="300" width="500">
+                                </a>
+                            </div>
+                            <div class="media-body  media-right">
+                                <h4 class="media-heading"><strong>使用场景</strong></h4>
+                                当某个接口调用一次后，请求参数或结果返回值，需要在不同接口中调用时使用该功能，当批量运行时，该接口需在调用接口前运行，实时调试功能也许提前运行被调接口，被调接口运行完后，所设置数值会存入目录下的db.txt文档中
+                                <pre style="border:none; background:none"></pre>
+                                <h4 class="media-heading"><strong>例子 :</strong>表头为save_data，值为ceshi=["result"]["responseBody"]['cityCode'],test=["request"]["frontTransNo"]
+                                </h4>
+                                <h4 class="media-heading"><strong>各字段含义</strong></h4>
+                                <dl class="dl-horizontal">
+                                    <dt>常量名</dt>
+                                    <dd>result，test，等号前为常量名</dd>
+                                    <dt>从请求中取值</dt>
+                                    <dd>test=["request"]["frontTransNo"],第一个中括号中为request，第二个为要去的参数key</dd>
+                                    <dt>从sql中取值</dt>
+                                    <dd>test=["db_oracle2"]["hkje"]["str"],第一个中括号中为数据库名，第二个为要去的参数sql名，第三个为类型</dd>
+                                    <dt>从结果中取值</dt>
+                                    <dd>ceshi=["result"]["responseBody"]['cityCode'],第一个中括号中为result，后面取值符合python语法要求
+                                    </dd>
+                                    <dt>多个常量</dt>
+                                    <dd>test=["request"]["frontTransNo"],多个常量用英文逗号隔开</dd>
+                                    <dt>调用方式</dt>
+                                    <dd>调用方式与调用固定常量方式相同</dd>
+                                    <dt>使用脚本保存</dt>
+                                    <dd>在data_config文件夹下（目录同级文件夹）创建python脚本，脚本中方法，两个参数，第一个为接口输入，第二个为接口输出，返回值为，要保存的数据的key和value
+                                    组成的字典，平台会根据返回的字典自动保存到相应配置文件data section中，书写格式为&&脚本名.方法名 ，中间注意为英文点</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <pre style="border:none; background:none"></pre>
+                        <div class="media">
+                            <div class="media-right">
+                                <a href="#">
+                                    <img class="media-object" src="/static/picture/dongtaijiekou2.png"
+                                         class="img-rounded" alt="上海鲜花港 - 郁金香" id="dongtai_excel_data" height="300"
+                                         width="500">
+                                </a>
+                            </div>
+                            <div class="media-body  media-right">
+                                <h4 class="media-heading"><strong>使用场景</strong></h4>
+                                当需要跑单个接口，但是动态全局常量还未创建时，需要事先设定，要产出动态常量的接口，当跑该接口时，会自动创建动态常量，注意：如果设定的接口业务流中有接口也有调用该类型接口则不起作用
+                                <pre style="border:none; background:none"></pre>
+                                <h4 class="media-heading"><strong>各字段含义</strong></h4>
+                                <dl class="dl-horizontal">
+                                    <dt>表头</dt>
+                                    <dd>global_data</dd>
+                                    <dt>例子</dt>
+                                    <dd>蜗牛好房/1登录$1</dd>
+                                    <dt>编写方法</dt>
+                                    <dd>与前置接口编写方式一致</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <pre style="border:none; background:none"></pre>
+                        <div class="media">
+                            <div class="media-right">
+                                <a href="#">
+                                    <img class="media-object" src="/static/picture/dongtai_data.png" class="img-rounded"
+                                         alt="上海鲜花港 - 郁金香" id="dongtai_excel_data" height="300" width="500">
+                                </a>
+                            </div>
+                            <div class="media-body  media-right">
+                                <h4 class="media-heading"><strong>使用场景</strong></h4>
+                                当某个接口调用一次后，请求参数或结果返回值，需要在不同接口中调用时使用该功能，当批量运行时，该接口需在调用接口前运行，实时调试功能也许提前运行被调接口，被调接口运行完后，所设置数值会存入目录下的db.txt文档中
+                                <pre style="border:none; background:none"></pre>
+                                <h4 class="media-heading"><strong>例子 :</strong>表头为save_data，值为ceshi=["result"]["responseBody"]['cityCode'],test=["request"]["frontTransNo"]
+                                </h4>
+                                <h4 class="media-heading"><strong>各字段含义</strong></h4>
+                                <dl class="dl-horizontal">
+                                    <dt>常量名</dt>
+                                    <dd>result，test，等号前为常量名</dd>
+                                    <dt>从请求中取值</dt>
+                                    <dd>test=["request"]["frontTransNo"],第一个中括号中为request，第二个为要去的参数key</dd>
+                                    <dt>从结果中取值</dt>
+                                    <dd>ceshi=["result"]["responseBody"]['cityCode'],第一个中括号中为result，后面取值符合python语法要求
+                                    </dd>
+                                    <dt>多个常量</dt>
+                                    <dd>test=["request"]["frontTransNo"],多个常量用英文逗号隔开</dd>
+                                    <dt>调用方式</dt>
+                                    <dd>调用方式与调用固定常量方式相同</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <pre style="border:none; background:none"></pre>
+                        <h4 id="data_guding"><strong>使用固定常量:</strong></h4>
+                        <pre style="border:none; background:none"></pre>
+                        <div class="media">
+                            <div class="media-right">
+                                <a href="#">
+                                    <img class="media-object" class="img-thumbnail" src="/static/picture/db_weizhi.png"
+                                         alt="上海鲜花港 - 郁金香" id="testimg" height="100" width="100">
+                                </a>
+                            </div>
+                            <div class="media-body  media-right">
+                                <h4 class="media-heading">配置文件存放地址</h4>
+                                该文件存放在与接口目录同级的目录下，该目录下所有接口均使用该db配置文件
+                            </div>
+                        </div>
+
+                        <pre style="border:none; background:none"></pre>
+
+                        <pre style="border:none; background:none"></pre>
+                        <div class="media">
+                            <div class="media-right">
+                                <a href="#">
+                                    <img class="media-object" src="/static/picture/db_data_changliang.png"
+                                         class="img-rounded" alt="上海鲜花港 - 郁金香" id="testimg" height="200" width="200">
+                                </a>
+                            </div>
+                            <div class="media-body  media-right">
+                                <h4 class="media-heading"> 配置信息</h4>
+                                <dl class="dl-horizontal">
+                                    在配置文件data模块下，配置常量，格式如下：常量名=值，如图所示：name=3
+                                </dl>
+                            </div>
+                        </div>
+                        <pre style="border:none; background:none"></pre>
+                        <h4>调用上图所示常量方法如下：</h4>
+                        <div class="row">
+                            <div class="col-sm-5 col-md-3">
+                                <div class="thumbnail">
+                                    <img class="media-object" class="img-thumbnail"
+                                         src="/static/picture/data_changliang_diaoyong.png">
+                                    <div class="caption">
+                                        <h4>字符串组成：</h4>
+                                        <p> [data][name][int]，[data]固定值，意思为后面要调用的事常量，[name]常量名，int指获取常量数据后转为整型，
+                                            同理，str转为字符型，float转为浮点型，long转为long型</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <pre style="border:none; background:none"></pre>
+
+                        <h4 id="sql_canshuhua"><strong>sql语句参数化</strong></h4>
+                        <pre style="border:none; background:none"></pre>
+                        <dl class="dl-horizontal">
+                            <dt>适用场景：</dt>
+                            <dd>当sql语句中需要从接口请求或返回中获取的数据</dd>
+                            <dt>适用逻辑:</dt>
+                            <dd>暂时只支持，从db.txt中的data 块中获取数据</dd>
+                            <dt>使用方法:</dt>
+                            <dd> 如S在db.txt 中sql为 name= select * from table where iphone=222,可改为 name= select * from
+                                table where iphone=[data][name][int]
+                            </dd>
+                        </dl>
+                        <pre style="border:none; background:none"></pre>
+
+                        <h4 id="yunsuan_data"><strong>数据计算:</strong></h4>
+                        <pre style="border:none; background:none">  <h4> 如："([request][id][str]+1111）[int]"括号内包含的为运算表达式，括号很后面的为计算后的结果，要转成的类型</h4></pre>
+                        <div class="media">
+                            <div class="media-right">
+                                <a href="#">
+                                    <img class="media-object" src="/static/picture/data_all_suan.png"
+                                         class="img-rounded" alt="上海鲜花港 - 郁金香" id="testimg" height="200" width="400">
+                                </a>
+                            </div>
+                            <div class="media-body  media-right">
+                                <h4 class="media-heading"> 右图断言中各参数值如下：</h4>
+                                <dl class="dl-horizontal">
+                                    <dt>client_oid：</dt>
+                                    <dd>[db_oracle][sql1][str]
+                                        连接db.txt文件中db_oracle块所配置数据，执行名为sql1的sql语句，并将返回值换成字符型赋予client_oid
+                                    </dd>
+                                    <dt>order_id</dt>
+                                    <dd>[request][product_id][str]，从该接口请求参数中获取product_id参数的值，转成字符型，赋予order_id</dd>
+                                    <dt>sss</dt>
+                                    <dd>"([data][name][int]*9)[str]"，常量name的值乘以9后的数值转为字符型,赋予sss</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <pre style="border:none; background:none"></pre>
+                            <h4 id="run_sql_be_af"><strong>运行前后执行sql，及sql断言</strong></h4>
+                            <pre style="border:none; background:none"></pre>
+                            <h4 id="before_sql"><strong>运行前执行sql</strong></h4>
+                            <dl class="dl-horizontal">
+                                <dt> 运行前执行sql</dt>
+                                <dd>运行前执行sql，表格中加入before_sql列
+                                </dd>
+                                <dt> 运行后执行sql</dt>
+                                <dd>运行前执行sql，表格中加入aftr_sql列
+                                </dd>
+                                <dt>参数值</dt>
+                                <dd>值为[db_oracle][sql],[db_oracle][sql]
+                                    第一个为数据库名，第二个为sql名，多个sql用英文逗号隔开
+                                </dd>
+                                <dt>sql断言位置</dt>
+                                <dd>在after_sql或before_sql中添加</dd>
+                                <dt>sql断言值</dt>
+                                <dd>值为[db_oracle][sql][str]==1,[db_oracle][sql][int]>=[db_oracle][sql][int]
+                                    第一个为数据库名，第二个为sql名，第三个为类型，多个用英文逗号隔开，逻辑判断用python语法:等于==等
+                                </dd>
+                            </dl>
+                        </div>
+                        <pre style="border:none; background:none"></pre>
+                        <pre style="border:none; background:none"></pre>
+                        <h4 id="python_code"><strong>自动生成数据:</strong></h4>
+                        <pre style="border:none; background:none"></pre>
+                        <p style="border:none; background:none">  <h4>
+                        case表格中允许写入单行python代码，格式如下:##运行的代码，如：##time.time(),可以通过此功能达到随机生成数据的目的</h4></p>
+                        <pre style="border:none; background:none"></pre>
+                        <dl class="dl-horizontal">
+                            <h4>示例如下:</h4>
+                            <dt>随机银行卡号 ：</dt>
+                            <dd>
+                                ##['622615','622588','622660','622700'][random.randint(0,len(['622615','622588','622660','622700'])-1)]+str(random.randint(10**9,
+                                10**10-1))
+                            </dd>
+                            <dt>rsa 加密字符</dt>
+                            <dd>##RSA:后面跟需要加密的字符串
+                            </dd>
+                            <dt>随机手机号 ：</dt>
+                            <dd>##'15'+str(int(time.time()))[-4:]+str(random.randint(10000,99999))</dd>
+                            <dt>随机字符 ：</dt>
+                            <dd>##random.str:12</dd>
+                            <dt>随机姓名 ：</dt>
+                            <dd>##(chr(random.randint(0x4E00, 0x9FBF))+chr(random.randint(0x4E00, 0x9FBF))+chr(random.randint(0x4E00, 0x9FBF)))
+                            </dd>
+                            <dt>随机身份证号</dt>
+                            <dd>
+                                ##getRandomIdCard()
+                            </dd>
+                        </dl>
+
+                        <pre style="border:none; background:none"></pre>
+                        <h4 id="split_str"><strong>保存部分字符:</strong></h4>
+                        <pre style="border:none; background:none"></pre>
+                        <pre style="border:none; background:none">  save_data中requestSign=["result_split"]["result"][a,b],保存返回json中result字段a和b之间的字符串</pre>
+
+                        <pre style="border:none; background:none"></pre>
+                        <h4 id="python_jiaoben"><strong>调用python脚本进行断言:</strong></h4>
+                        <pre style="border:none; background:none"></pre>
+                        <p style="border:none; background:none">  <h4> assert 里面如果需要调用第三方函数执行断言，则在接口同级目录下创建目录
+                        data_config，将py文件放入文件夹中，在assert单元格里写入&&文件名.方法名，
+                        方法接收两个参数，第一个为请求json字符串，第二个为返回json字符串
+                    </h4></p>
+
+                        <pre style="border:none; background:none"></pre>
+                        <h4 id="git_submit"><strong>提交case文件至git库</strong></h4>
+                        <pre style="border:none; background:none"></pre>
+                        <div class="media">
+                            <div class="media-right">
+                                <a href="#">
+                                    <img class="media-object" class="img-thumbnail" src="/static/picture/git_submit.png"
+                                         alt="上海鲜花港 - 郁金香"
+                                         id="testimg" height="300" width="400">
+                                </a>
+                            </div>
+                            <div class="media-body  media-right">
+                                <h4 class="media-heading">注意事项</h4>
+                                目录地址填写case所在根目录，git库填写索要上传的git地址，点击上传即可，因为过程中包含压缩，传输，解压，
+                                上传git等步骤，耗时半分钟左右。
+                            </div>
+                        </div>
+                        <h4 id="user_tongji"><strong>使用统计</strong></h4>
+                        <pre style="border:none; background:none"></pre>
+                        <div class="media">
+                            <div class="media-right">
+                                <a href="#">
+                                    <img class="media-object" class="img-thumbnail"
+                                         src="/static/picture/jinrutongjibiao.png"
+                                         alt="上海鲜花港 - 郁金香" height="400" width="300">
+                                </a>
+                            </div>
+                            <div class="media-body  media-right">
+                                <h4 class="media-heading">统计弹出框</h4>
+                                在接口自动化平台分页中，点击运行统计图表，弹出统计弹出框，统计时间维度：七天，一天
+                                ，统计类型：ci持续集成（git库）（使用频率，case通过率），本地运行（使用频率，case通过率）
+                                本地运行统计按照用户分组进行统计，用户登录系统后，在用户管理页面，选择所在分组即可！
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-5 col-md-3">
+                            <div class="thumbnail">
+                                <img class="media-object" class="img-thumbnail" src="/static/picture/citongji_sevev.png"
+                                     alt="上海鲜花港 - 郁金香">
+                                <div class="caption">
+                                    <h4>ci统计</h4>
+                                    <p>ci统计，时间维度七天，一谈，统计每个git库使用频率，及运行情况，git库与业务线关联，名字为页面中显示的git库的备注</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-5 col-md-3">
+                            <div class="thumbnail">
+                                <img class="media-object" class="img-thumbnail"
+                                     src="/static/picture/local_tongji_seven.png"
+                                     alt="上海鲜花港 - 郁金香">
+                                <div class="caption">
+                                    <h4>本地统计</h4>
+                                    <p>本地统计，时间维度七天，一天，统计每个用户组所有成员在本地的接口执行频率，及执行结果</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-5 col-md-3">
+                            <div class="thumbnail">
+                                <img class="media-object" class="img-thumbnail" src="/static/picture/creat_user_zu.png"
+                                     alt="上海鲜花港 - 郁金香">
+                                <div class="caption">
+                                    <h4>新建用户组</h4>
+                                    <p>本地统计，时间维度七天，一天，统计每个用户组所有成员在本地的接口执行频率，及执行结果</p>
+                                </div>
+                            </div>
+                        </div>
+                        {#    <ol>#}
+                        {#  <li>...</li>#}
+                        {#</ol>#}
+
+
+                        <pre style="border:none; background:none"></pre>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <pre style="border:none; background:none"></pre>
+                                <h4 id="jiangeshezhi"><strong>运行间隔</strong></h4>
+                                <a>若在业务流中接口运行中间间隔一些时间，则在接口配置文件sign项下加入：run_interval=1，间隔一秒</a>
+                                <pre style="border:none; background:none"></pre>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <pre style="border:none; background:none"></pre>
+                                <h4 id="add_head"><strong>添加head</strong></h4>
+                                <a>如果需要添加head，则在表格中增加head_data列，值的类型为字典，key为head的key，value为head的value,支持参数化</a>
+                                <pre style="border:none; background:none"></pre>
+                            </div>
+                        </div>
+
+                                         <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <pre style="border:none; background:none"></pre>
+                                <h4 id="add_head"><strong>save_data切片</strong></h4>
+                                <a>正常字符后面加.和python的split语法</a>
+                                <pre style="border:none; background:none"></pre>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <pre style="border:none; background:none"></pre>
+                                <h4 id="request_list"><strong>请求参数为列表</strong></h4>
+                                <a>如果请求参数为列表，则列表value，在下一行填写，格式与原来一致，非列表元素为空，（id，comment等特殊列一定为空）</a>
+                                <pre style="border:none; background:none"></pre>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <pre style="border:none; background:none"></pre>
+                                <h4 id="same_request"><strong>请求中包含相同参数</strong></h4>
+                                <a>如不同层级中包含test参数，则按照从外向内，会依次命名为test,1__test,2__test，后台自动匹配参数会自动根据前面的数字匹配</a>
+                                <pre style="border:none; background:none"></pre>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <h4 id="send_empty_data"><strong>为空参数</strong></h4>
+                                <a>如果需要发送参数值为空的数据，则在excel表格中填入入局data_empty</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <h4 id="yunxingcixu"><strong>运行顺序</strong></h4>
+                                <a>已数字开头的先运行，不是数字开头的接口，首先获取业务流，业务流最开始的先运行，如果已经运行的业务流中包含了后面运行的接口，则后面运行的接口不会运行</a>
+                            </div>
+                        </div>
+                                             <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <h4 id="yunxingcixu"><strong>发送文件</strong></h4>
+                                <a>若需发送文件，接口类型选择post， 表单，接口目录同级目录下，创建file_config文件夹，将
+                                    文件放入改文件夹下，cae表格中添加files_data列，该列单元值为存入创建file_config目录的文件全名包含后缀</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="static/hualala/vendor/jquery/jquery.min.js"></script>
+        <script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="static/hualala/vendor/metisMenu/metisMenu.min.js"></script>
+        <script src="static/hualala/dist/js/sb-admin-2.js"></script>
+        <script src="{{ url_for('static', filename='layer-v3.0/layer/layer.js') }}">
+            <
+            script
+            src = "{{url_for('static', filename='jquery-1.8.0.js')}}" ></script>
+        <script src="static/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+        <script type=text/javascript>
+            //模态框打开后执行清空操作
+            var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+
+        </script>
+{% endblock %}

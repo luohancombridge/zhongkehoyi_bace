@@ -1,0 +1,50 @@
+#-*-coding:utf-8-*-
+__author__ = 'SUNZHEN519'
+import socket   #socket模块
+import subprocess   #执行系统命令模块
+import os
+import threading
+import sqlite3
+import socket
+import time
+import os
+import unittest
+import jenkins
+import HTMLTestRunner
+import smtplib
+import json
+import stat
+from email.mime.text import MIMEText
+s= socket.socket(socket.AF_INET,socket.SOCK_STREAM)   #定义socket类型，网络通信，TCP
+myname = socket.getfqdn(socket.gethostname(  ))
+k=(socket.gethostbyname(myname),8065)
+s.bind(k)
+s.listen(15)         #开始TCP监听
+#接口实时调试数据池
+jiekou_shishi={}
+class MyThread(threading.Thread):
+    def __init__(self, conn,addr):
+        self.conn=conn
+        self.addr=addr
+        threading.Thread.__init__(self)
+    def run(self):
+        self.data = self.conn.recv(1024)
+        if self.data == 'jiekoiu_shishi':
+            self.conn.send('plsase send data')
+            self.data = self.conn.recv(1024)
+            jiekou_shishi[self.addr[0]] = self.data
+        elif self.data == 'get_jiekou_tiaoshi':
+            self.conn.send('plsase send addr')
+            ip = self.conn.recv(1024)
+            if ip in jiekou_shishi:
+                self.conn.send(jiekou_shishi[ip])
+            else:
+                self.conn.send('none')
+        self.conn.close()
+while 1:
+       conn,addr=s.accept()   #接受TCP连接，并返回新的套接字与IP地址
+       print('Connected by',addr)    #输出客户端的IP地址
+       ub = MyThread(conn,addr)
+       ub.start()
+
+

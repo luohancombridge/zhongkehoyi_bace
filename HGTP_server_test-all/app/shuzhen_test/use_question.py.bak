@@ -1,0 +1,101 @@
+# -*- coding: utf-8 -*-
+__author__ = 'SUNZHEN519'
+import sys
+import os
+import json
+import demjson
+import chardet
+import time
+from flask_cors import cross_origin
+from flask import Blueprint,jsonify,request
+import ConfigParser
+import requests
+import time
+import sqlite3
+from flask import render_template, flash, redirect,request,g,Response,stream_with_context
+from flask import current_app
+use_question = Blueprint('use_question',__name__)
+@use_question.route('/question_submit',methods=['POST','GET'])
+@cross_origin()
+def admin_index():
+    ex_db = sqlite3.connect(current_app.config.get('DB_DIZHI'))
+    ex_cu = ex_db.cursor()
+    insert_question_detail=request.form['insert_question_detail']
+    insert_question_leixing=request.form['insert_question_leixing']
+    insert_question_title=request.form['insert_question_title']
+    insert_question_type=request.form['insert_question_type']
+    insert_question_you=request.form['insert_question_you']
+    submit_time=int(time.time())
+    ip=request.headers.get('X-Real-IP')
+    user_name=ex_cu.execute('select name from user').fetchall()[0][0]
+    ex_db.close()
+    ex_db = sqlite3.connect(current_app.config.get('JIE_KOU'))
+    ex_cu = ex_db.cursor()
+    yiyou_chongfu=ex_cu.execute('select * from use_quetion where title="%s" '  % ( insert_question_title)).fetchall()
+    if len(yiyou_chongfu)>0:
+        return jsonify(statu=u"标题重复，请勿重复提交")
+    ex_cu.executemany('INSERT INTO use_quetion VALUES (null,?,?,?,?,?,?,?,?)', [
+        (user_name,insert_question_title,insert_question_type,insert_question_you,insert_question_leixing,insert_question_detail
+         ,submit_time,u'未解决')])
+    ex_db.commit()
+    ex_db.close()
+    return jsonify(statu="success")
+@use_question.route('/get_qustion_detail',methods=['POST'])
+@cross_origin()
+def get_qustion_detail():
+    db = sqlite3.connect(current_app.config.get('DB_DIZHI'))
+    cu = db.cursor()
+    name = cu.execute(
+        'select name from user where ip="%s" order by time desc limit 0,1' % request.headers.get(
+            'X-Real-IP')).fetchall()[0][0]
+    db.close()
+    ex_db = sqlite3.connect(current_app.config.get('JIE_KOU'))
+    ex_cu = ex_db.cursor()
+    yiyou_chongfu=ex_cu.execute('select * from use_quetion  ').fetchall()
+    table_key=[i[0]  for i in ex_cu.description]
+    dictt_detail=[]
+    for i in yiyou_chongfu:
+        i=list(i)
+        i[-2]=time.strftime("%Y-%m-%d %H:%M", time.localtime(int(i[-2])))
+        dictt_detail.append(dict(zip(table_key,i)))
+    ex_db.commit()
+    ex_db.close()
+    return jsonify(data=dictt_detail,name=name)
+@use_question.route('/order_insert',methods=['POST'])
+@cross_origin()
+def order_insert():
+    db = sqlite3.connect(current_app.config.get('DB_DIZHI'))
+    cu = db.cursor()
+    name = cu.execute(
+        'select name from user where ip="%s" order by time desc limit 0,1' % request.headers.get(
+            'X-Real-IP')).fetchall()[0][0]
+    db.close()
+    ex_db = sqlite3.connect(current_app.config.get('JIE_KOU'))
+    ex_cu = ex_db.cursor()
+    ex_cu.executemany('INSERT INTO  question_order values (null,?,?,?,?)', [(int(request.form['question_id']),name,request.form['order_detail'],int(time.time()))])
+    ex_db.commit()
+    ex_db.close()
+    return jsonify(statu='success')
+
+@use_question.route('/order_detail',methods=['POST'])
+@cross_origin()
+def order_detail():
+    ex_db = sqlite3.connect(current_app.config.get('JIE_KOU'))
+    ex_cu = ex_db.cursor()
+    all_order=ex_cu.execute('select * from question_order where question_id="%s"' %(request.form['question_id'])).fetchall()
+    all_order=sorted(all_order,key=lambda z:z[0])
+    for k,i in enumerate(all_order):
+        all_order[k]=list(all_order[k])
+        all_order[k][-1]= time.strftime("%Y-%m-%d %H:%M", time.localtime(int(i[-1])))
+    ex_db.commit()
+    ex_db.close()
+    return jsonify(statu='success',data=all_order)
+@use_question.route('/question_statu_change',methods=['POST'])
+@cross_origin()
+def question_statu_change():
+    ex_db = sqlite3.connect(current_app.config.get('JIE_KOU'))
+    ex_cu = ex_db.cursor()
+    ex_cu.executemany('update  use_quetion  set type=?  where id=?', [(request.form['order_statu'], request.form['question_id'])])
+    ex_db.commit()
+    ex_db.close()
+    return jsonify(statu='success')

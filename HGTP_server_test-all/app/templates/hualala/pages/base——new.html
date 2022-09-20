@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>HGTP 1.0</title>
+    <style type="text/css">
+        #main-nav {
+            margin-left: 1px;
+        }
+        #main-nav.nav-tabs.nav-stacked > li > a {
+            padding: 10px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #4A515B;
+            background: #E9E9E9;
+            background: -moz-linear-gradient(top, #FAFAFA 0%, #E9E9E9 100%);
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FAFAFA), color-stop(100%,#E9E9E9));
+            background: -webkit-linear-gradient(top, #FAFAFA 0%,#E9E9E9 100%);
+            background: -o-linear-gradient(top, #FAFAFA 0%,#E9E9E9 100%);
+            background: -ms-linear-gradient(top, #FAFAFA 0%,#E9E9E9 100%);
+            background: linear-gradient(top, #FAFAFA 0%,#E9E9E9 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FAFAFA', endColorstr='#E9E9E9');
+            -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#FAFAFA', endColorstr='#E9E9E9')";
+            border: 1px solid #D5D5D5;
+            border-radius: 4px;
+        }
+        #main-nav.nav-tabs.nav-stacked > li > a > span {
+            color: #4A515B;
+        }
+        #main-nav.nav-tabs.nav-stacked > li.active > a, #main-nav.nav-tabs.nav-stacked > li > a:hover {
+            color: #FFF;
+            background: #3C4049;
+            background: -moz-linear-gradient(top, #4A515B 0%, #3C4049 100%);
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4A515B), color-stop(100%,#3C4049));
+            background: -webkit-linear-gradient(top, #4A515B 0%,#3C4049 100%);
+            background: -o-linear-gradient(top, #4A515B 0%,#3C4049 100%);
+            background: -ms-linear-gradient(top, #4A515B 0%,#3C4049 100%);
+            background: linear-gradient(top, #4A515B 0%,#3C4049 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4A515B', endColorstr='#3C4049');
+            -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#4A515B', endColorstr='#3C4049')";
+            border-color: #2B2E33;
+        }
+        #main-nav.nav-tabs.nav-stacked > li.active > a, #main-nav.nav-tabs.nav-stacked > li > a:hover > span {
+            color: #FFF;
+        }
+        #main-nav.nav-tabs.nav-stacked > li {
+            margin-bottom: 4px;
+        }
+        /*定义二级菜单样式*/
+        .secondmenu a {
+            font-size: 10px;
+            color: #4A515B;
+            text-align: center;
+        }
+        .navbar-static-top {
+            background-color: #212121;
+            margin-bottom: 5px;
+        }
+        .navbar-brand {
+            background:  no-repeat 10px 8px;
+            display: inline-block;
+            vertical-align: middle;
+            padding-left: 50px;
+            color: 	#F0FFF0;
+        }
+
+
+
+        .mt-10 {
+            margin-top: 25px;
+        }
+        .mt-low {
+            margin-top: 15px;
+        }
+        .textarea {
+            width: 650px;
+            min-height: 420px;
+            max-height: 420px;
+            _height: 120px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 3px;
+            outline: 0;
+            border: 1px solid #a0b3d6;
+            font-size: 12px;
+            line-height: 24px;
+            padding: 2px;
+            word-wrap: break-word;
+            overflow-x: hidden;
+            overflow-y: auto;
+            border-color: rgba(82, 168, 236, 0.8);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+        }
+        .row.no-gutter {
+            margin-left: 0;
+            margin-right: 0;
+        }
+        .daohanglan{
+    width: 8.3333333%;
+}
+    </style>
+<!-- Latest compiled and minified CSS -->
+       <link href="static\bootstrap-table-master\dist\bootstrap-table.min.css" rel="stylesheet">
+<link rel="stylesheet"  href="static/bootstrap-select/dist/css/bootstrap-select.min.css">
+<!-- Latest compiled and minified JavaScript -->
+<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+<link rel="stylesheet" href="static\jQuery-File\css\jquery.fileupload.css">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="static\hualala\vendor\bootstrap\css\bootstrap.min.css" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="static/hualala/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <link hrel="stylesheet" href="static/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="static/hualala/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="static/hualala/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <![endif]-->
+
+</head>
+
+<body   >
+
+
+
+
+<div class="navbar navbar-duomi navbar-static-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" id="logo">测试管理平台
+            </a>
+        </div>
+        <div>
+            <div class="container-fluid">
+                <div class="col-xs-11">
+                    <!--<button type="button" class="btn btn-default navbar-btn navbar-right">-->
+                        <!--<span class="glyphicon glyphicon-user"></span>-->
+                        <!--导航栏按钮-->
+                    <!--</button>-->
+            <!--<button type="button" class="btn btn-default navbar-btn navbar-right">-->
+                <!--<span class="glyphicon glyphicon-user"></span>-->
+                <!--导航栏按钮-->
+            <!--</button>-->
+                    <div class="btn-group navbar-right" role="group" aria-label="..." id="sunzhennan"  style="position: relative; top: 6px; z-index: 1;">
+                        <button type="button" class="btn btn-default ">
+                            <span class="glyphicon glyphicon-baby-formula"></span>
+                            登出</button>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="glyphicon glyphicon-user"></span>
+                                用户信息
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">登录ip:127.0.0.1</a></li>
+                                <li><a href="#">登录时间: 2019/2/27 16:24</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-2 ">
+            <ul id="main-nav" class="nav nav-tabs nav-stacked" style="">
+                <li class="active">
+                    <a href="#">
+                        <i class="glyphicon glyphicon-th-large"></i>
+                        首页
+                    </a>
+                </li>
+                <li>
+
+
+                                 <a href="#systemSetting" class="nav-header collapsed" data-toggle="collapse">
+                        <i class="glyphicon glyphicon-cog"></i>
+                     接口自动化
+                        <span class="pull-right glyphicon glyphicon-chevron-down"></span>
+                    </a>
+                            <ul id="systemSetting" class="nav nav-list collapse secondmenu" style="height: 0px;">
+                        <li><a href="/jiekou_yun"><i class="glyphicon glyphicon-user"></i>持续集成</a></li>
+                        <li><a href="/jiekou_fenxi"><i class="glyphicon glyphicon-th-list"></i>结果分析</a></li>
+                        <li><a href="/uplate_jiekou_list"><i class="glyphicon glyphicon-asterisk"></i>local 接口</a></li>
+                        <li><a href="/teach"><i class="glyphicon glyphicon-edit"></i>教程</a></li>
+                    </ul>
+
+                </li>
+
+                <li>
+                    <a href="#uizidonghua" class="nav-header collapsed" data-toggle="collapse">
+                        <i class="glyphicon glyphicon-cog"></i>
+                        ui 自动化
+                        <span class="pull-right glyphicon glyphicon-chevron-down"></span>
+                    </a>
+                    <ul id="uizidonghua" class="nav nav-list collapse secondmenu" style="height: 0px;">
+                        <li><a href="/first_page"><i class="glyphicon glyphicon-user"></i>持续集成</a></li>
+                        <li><a href="/local_ui_test"><i class="fa fa-dashboard fa-fw"></i>本地ui测试 </a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#zaxiang" class="nav-header collapsed" data-toggle="collapse">
+                        <i class="glyphicon glyphicon-cog"></i>
+                        杂项
+                        <span class="pull-right glyphicon glyphicon-chevron-down"></span>
+                    </a>
+                    <ul id="zaxiang" class="nav nav-list collapse secondmenu" style="height: 0px;">
+                        <li><a href="/second_page"><i class="fa fa-dashboard fa-fw"></i>测试页面 </a></li>
+
+                        <li>
+                            <a href="/jiekou_page"><i class="fa fa-dashboard fa-fw"></i>接口自动化 </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="/nmon_log"><i class="fa fa-dashboard fa-fw"></i>nomn监控 </a>
+                </li>
+
+                <li>
+                    <a href="/moke_dangban"><i class="fa fa-dashboard fa-fw"></i>moke 挡板 </a>
+                </li>
+                <li>
+                    <a href="/zichan_shouye"> <span class="glyphicon glyphicon-magnet" aria-hidden="true"></span> 资产管理
+                    </a>
+                </li>
+
+                               <li>
+
+                             <a href="#peizhiguanli" class="nav-header collapsed" data-toggle="collapse"></i> 配置管理<span class="fa arrow"></span></a>
+                            <ul class="nav  nav-list nav-second-level"  id="peizhiguanli">
+                                <li>
+                                    <a href="/user_manage"> <i class="glyphicon glyphicon-wrench" aria-hidden="true"></i>用户管理</a>
+                                </li>
+                                <li>
+                                    <a href="/server_manage">server管理</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+
+            </ul>
+        </div>
+        <div class="col-md-10">
+             {% block content %}{% endblock %}
+</div>
+    </div>
+</div>
+<script>
+    $(document).ready(function()
+    {
+ $('#main-nav').find('ul').click(function()
+ {
+     $(this).find('li')
+ })
+
+        })
+</script>
+
+</body>
+
+</html>

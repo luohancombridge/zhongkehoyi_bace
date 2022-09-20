@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="static/hualala/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+<link href="static/hualala/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+ <link rel="stylesheet" href="static\layui\layui\css\layui.css" media="all">
+
+
+
+</head>
+
+<body>
+
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					模态框（Modal）标题
+				</h4>
+
+			</div>
+			<div class="modal-body">
+                    <div class="container-fluid  ">
+                        <div class="row mt-10">
+                            <div class="col-lg-12">
+				                <button type="button" class="layui-btn layui-btn-primary" id="test1">
+                                      <i class="layui-icon">&#xe67c;</i>上传脚本
+                                 </button>
+                                <button type="button" class="btn btn-default" id="update_button">上传</button>
+                            </div>
+                        </div>
+                       <div class="row mt-10">
+                            <div class="col-lg-12">
+				               <div class="input-group">
+                                       <span class="input-group-addon" id="basic-addon1">脚本备注</span>
+                                       <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                               </div>
+                            </div>
+                        </div>
+                 </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+					关闭
+				</button>
+				<button type="button" class="btn btn-primary">
+					提交文件
+				</button>
+			</div>
+
+
+
+
+   <script src="static/hualala/vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="static/hualala/vendor/metisMenu/metisMenu.min.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="static/hualala/dist/js/sb-admin-2.js"></script>
+<script src="{{url_for('static', filename='layer-v3.0/layer/layer.js')}}">
+<script src="{{url_for('static', filename='jquery-1.8.0.js')}}"></script>
+<script src="static/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="static\layui\layui\layui.js"></script>
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+    <script type=text/javascript>
+var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+layui.use('upload', function(){
+  var upload = layui.upload;
+
+  //执行实例
+  var uploadInst = upload.render({
+    elem: '#test1' //绑定元素
+    ,url: '/upload_file' //上传接口
+    ,accept: 'file'
+    ,done: function(res){
+      //上传完毕回调
+    }
+    ,error: function(){
+      //请求异常回调
+    },
+    auto:false,
+    bindAction:$('#update_button'),
+    done: function(res){
+              layer.msg('上传成功', {
+                            shade: [0.3, '#fff'],
+                            shadeClose: true,
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        });
+    }
+  });
+});
+</script>
+</body>
+
+</html>

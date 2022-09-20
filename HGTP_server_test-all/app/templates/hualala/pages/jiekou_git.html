@@ -1,0 +1,918 @@
+{% extends "/hualala/pages/base.html" %}
+{% block content %}
+<style type="text/css">
+.mt-10{margin-top:25px;}
+
+.html_center {
+	width: 960px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.row.no-gutter {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+</style>
+    <pre  style = "border:none; background:none"></pre>
+<div class="modal fade  bs-example-modal-lg"  id="change_host" tabindex="-1" role="dialog" aria-labelledby="mychange_host" >
+  <div class="modal-dialog  modal-lg" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                      aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="gridSystemModalLabel">Modal title</h4>
+          </div>
+          <div class="modal-body">
+              <ul class="nav nav-tabs" role="tablist">
+                  <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab"
+                                                            data-toggle="tab"  id="sever_tongji">CI统计(七天)</a></li>
+                  <li role="presentation"><a  id="local_seven" href="#profile" aria-controls="profile" role="tab" data-toggle="tab">本地统计(七天)</a>
+                  </li>
+                  <li role="presentation"><a href="#messages" aria-controls="messages" role="tab"
+                                             data-toggle="tab"  id="ci_today">ci统计(当天)</a></li>
+                  <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">本地统计(当天)</a>
+                  </li>
+              </ul>
+              <div class="tab-content">
+                  <div role="tabpanel" class="tab-pane active" id="home">
+                      <pre style="border:none; background:none"></pre>
+                      <div>
+                      <table class="table table-hover table-bordered">
+                          <thead>
+                          <tr>
+                              <th>业务线</th>
+                              <th>运行次数</th>
+                              <th>运行接口数</th>
+                              <th>通过case数</th>
+                              <th>失败case数</th>
+                              <th>最高通过率</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                           {% for i in git_detail %}
+                          <tr class="dingshi_detail"  name="ci_tongji_seven"  git_url={{i[0]}}  branch={{i[5]}}>
+                              <td  class="tongji_name">{{i[1]}}  </td>
+                              <td  class="user_num"> 0</td>
+                              <td  class="run_num">0</td>
+                              <td  class="pass_cas_num">0</td>
+                               <td  class="fail_cas_num"> 0</td>
+                              <td  class="high_num">0</td>
+                          </tr>
+                           {% endfor %}
+                          <tr   class="text-center"  >
+                              <td colspan="6"   style="vertical-align: middle !important;text-align: center;">
+                              <div class="progress">
+                                  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                       aria-valuemax="100" style="width: 2%;min-width: 7em;"  id="all_baifenbi">
+                                      总体通过率:60%
+                                  </div>
+                              </div>
+                               </td>
+                          </tr>
+                          </tbody>
+                      </table>
+                          <h4>业务线通过率</h4>
+
+                          <img class="img-responsive " alt="Cinque Terre"  id="zhuzhuangtu"  >
+
+ </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="profile">
+                                  <pre style="border:none; background:none"></pre>
+                      <div>
+                      <table class="table table-hover table-bordered">
+                          <thead>
+                          <tr>
+                              <th>业务组</th>
+                              <th>使用人数</th>
+                              <th>运行接口数</th>
+                              <th>运行case数</th>
+                              <th>通过case数</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                           {% for i in team_detail %}
+                          <tr class="dingshi_detail"  git_url={{i}} name="local_seven_table"   >
+                              <td  class="local_seven_name">{{i}}  </td>
+                              <td  class="local_seven_user_num"> 0</td>
+                              <td  class="local_seven_cishu">0</td>
+                              <td  class="local_seven_pass_jiekou_num">0</td>
+                               <td  class="local_seven_fail_jiekou_num"> 0</td>
+                          </tr>
+                           {% endfor %}
+                          </tbody>
+                      </table>
+                          <h4>业务线使用比率</h4>
+                       <img class="img-responsive " alt="Cinque Terre"  id="local_seven_today_pic"  style="position: relative; left: 160px;">
+ </div>
+    </div>
+    <div role="\static\picture\before_request.pngtabpanel" class="tab-pane" id="messages">
+                          <pre style="border:none; background:none"></pre>
+                      <div>
+                      <table class="table table-hover table-bordered">
+                          <thead>
+                          <tr>
+                              <th>业务线</th>
+                              <th>运行次数</th>
+                              <th>运行接口数</th>
+                              <th>通过case数</th>
+                              <th>失败case数</th>
+                              <th>最高通过率</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                           {% for i in git_detail %}
+                          <tr class="dingshi_detail"  git_url={{i[0]}} name="ci_tongji_today"   branch={{i[5]}}>
+                              <td  class="tongji_name_today">{{i[1]}}  </td>
+                              <td  class="user_num_today"> 0</td>
+                              <td  class="run_num_today">0</td>
+                              <td  class="pass_cas_num_today">0</td>
+                               <td  class="fail_cas_num_today"> 0</td>
+                              <td  class="high_num_today">0</td>
+                          </tr>
+                           {% endfor %}
+                          <tr   class="text-center"  >
+                              <td colspan="6"   style="vertical-align: middle !important;text-align: center;">
+                              <div class="progress">
+                                  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                       aria-valuemax="100" style="width: 2%;min-width: 7em;"  id="all_baifenbi_today">
+                                      总体通过率:60%
+                                  </div>
+                              </div>
+                               </td>
+                          </tr>
+                          </tbody>
+                      </table>
+                          <h4>业务线通过率</h4>
+                          <img class="img-responsive " alt="Cinque Terre"  id="zhuzhuangtu_today"  >
+
+
+ </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="settings">
+                                          <pre style="border:none; background:none"></pre>
+                      <div>
+                      <table class="table table-hover table-bordered">
+                          <thead>
+                          <tr>
+                              <th>业务组</th>
+                              <th>使用人数</th>
+                              <th>运行接口数</th>
+                              <th>运行case数</th>
+                              <th>通过case数</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                           {% for i in team_detail %}
+                          <tr class="dingshi_detail"  git_url={{i}} name="local_today_table"   >
+                              <td  class="local_today_name">{{i}}  </td>
+                              <td  class="local_today_user_num"> 0</td>
+                              <td  class="local_today_cishu">0</td>
+                              <td  class="local_today_pass_jiekou_num">0</td>
+                               <td  class="local_today_fail_jiekou_num"> 0</td>
+                          </tr>
+                           {% endfor %}
+                          </tbody>
+                      </table>
+                          <h4>业务线使用比率</h4>
+                          <img class="img-responsive " alt="Cinque Terre"  id="local_today_today_pic"  style="position: relative; left: 160px;">
+
+ </div>
+    </div>
+  </div>
+</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+ <div class="container"  id='git_insert'   style="display: none;"  >
+  <div class="row mt-10"   >
+            <div class="col-lg-5">
+              <div class="input-group">
+                  <p> git代码库上传 </p>
+              </div>
+            </div>
+        </div>
+        <div class="row  mt-10"   >
+            <div class="col-lg-5">
+              <div class="input-group">
+                  <span class="input-group-addon" >输入git地址</span>
+                  <input type="text" spellcheck="false"  id="git_file" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2">
+              </div>
+            </div>
+        </div>
+      <div class="row  mt-10"   >
+            <div class="col-lg-5">
+              <div class="input-group">
+                  <span class="input-group-addon" >输入分支名</span>
+                  <input type="text" spellcheck="false"  id="git_branch" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2">
+              </div>
+            </div>
+        </div>
+    <div class="row mt-10">
+            <div class="col-lg-5">
+              <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon2">设置备注   </span>
+                  <input type="text" spellcheck="false"  id="git_beizhu" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2">
+              </div>
+            </div>
+        </div>
+     </div>
+ <div class="container-fluid">
+     <div class="row " 　>
+         <div class="col-sm-8" id="ding_shi">
+             <div class="input-group input-group-lg" id="time_input">
+                 <div class="input-group-btn">
+                     <button type="button" class="btn  btn-default btn-sm" id="run_ben">运行脚本</button>
+                     <button type="button" class="btn btn-default  btn-sm" id="open_git">插入git地址</button>
+                     <button type="button" class="btn  btn-default  btn-sm" data-toggle="modal" data-target="#myModal"
+                             id="open_dingshi_detail">查看结果 <span class="caret"></span></button>
+                     <button id="dingshi_simple_check" type="button" class="btn btn-default  btn-sm dropdown-toggle"
+                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">接口定时设置 ： {{ time_date }}
+                         <span class="caret"></span></button>
+                     <ul class="dropdown-menu dropdown-menu-right" 　>
+                         <li><a href="#" name="dingshi_simple_check">接口定时设置 ： {{ time_date }}  </a></li>
+                         <li><a href="#" name="dingshi_simple_check">接口定时设置 ：everyday</a></li>
+                     </ul>
+                 </div>
+                  <input type="text" spellcheck="false"   class="form-control input-sm" placeholder="example 14:12" aria-describedby="basic-addon2">
+                          <span class="input-group-btn input-group-lg">
+                                  <button type="button" class="btn btn-default" id="dingshi_button_submit"   >  定时设置提交</button>
+                          </span>
+              </div>
+                 </div>
+            <div class="col-sm-4"   id="sousuo1" >
+                         <div class="input-group ">
+                                 <span class="input-group-btn">
+                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">搜索类型 <span class="caret"></span></button>
+                                      <ul class="dropdown-menu"  id="suznze_search" style="z-index: 1; ">
+                                          <li><a href="#" >上传用户</a></li>
+                                          <li><a href="#">git 地址</a></li>
+                                      </ul>
+                                 </span>
+                                 <span class="input-group-addon" id="sear_result"  >上传用户</span>
+                             <input type="text" class="form-control  " aria-label="...">
+                           <div class="input-group-btn  ">
+                           <button type="button" class="btn btn-default "    id="sougou" aria-haspopup="true" aria-expanded="false">Go! </button>
+                     </div>
+                        </div>
+       </div>
+</div>
+</div>
+ <div class="row mt-10" >
+     <div class="col-lg-12"    >
+<div class="panel panel-warning">
+  <div class="panel-heading text-center">运行前设置</div>
+  <div class="panel-body">
+<div class="col-lg-2"  id="job_list"   >
+      <div class="input-group  "    id="88"  >
+                    <span class="input-group-addon"   id="huoqu_name"   name={{ user_name }} quanxian={{ quanxian }} >job 列表</span>
+ <button type="button"  id="shou_job" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="fa_jianren"  >no select<span class="caret"></span></button>
+                                 <ul class="dropdown-menu"  id="show_job_next">
+                                     {% for i in jobs %}
+                                <li><a href="#"  name={{ i[1] }} num={{ i[0] }}>{{ i [1]}}</a>   </li>
+                              {% endfor %}
+                                      </ul>
+                 </div>
+</div>
+<div id="move1">
+ <div class="col-lg-2">
+      <div class="input-group  "    id="email_title"  >
+                    <span class="input-group-addon" id="send_sear_result"  >邮件title</span>
+                    <input type="text" class="form-control" placeholder="HGTP Report" aria-describedby="basic-addon1" spellcheck="false">
+                 </div>
+</div>
+ <div class="col-lg-2">
+      <div class="input-group  "    id="55"  >
+                    <span class="input-group-addon" id="send_sear_result"  >收件人</span>
+<span class="input-group-btn"  >
+                          <select id="usertype" name="usertype"      class="selectpicker show-tick form-control" multiple data-live-search="false">
+                              {% for i in email_detail %}
+                                <option name={{ i }}>{{ i }}</option>
+                              {% endfor %}
+                           </select>
+        </span>
+                 </div>
+</div>
+  <div class="col-lg-3">
+      <div class="input-group  "    id="44"   style="z-index: 10" >
+                    <span class="input-group-addon"   >发件人</span>
+                          <button type="button"  id="shou_email" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >no email<span class="caret"></span></button>
+                                 <ul class="dropdown-menu"  id="send_email">
+                                     {% for i in fajianren %}
+                                <li><a href="#"  name={{ i }}>{{ i }}</a>   </li>
+                              {% endfor %}
+                                      </ul>
+                 </div>
+</div>
+</div>
+       <div class="col-lg-1"   id="move2"  style="position: relative; left: -100px; z-index: 1;">
+      <div class="input-group"    >
+                    <span class="input-group-addon" >run server</span>
+                          <button type="button" id="show-server"  class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >自动分发<span class="caret"></span></button>
+                                 <ul class="dropdown-menu" id="send_server" >
+                                     {% for i in server_detail %}
+                                <li><a href="#"  name={{ i }}>{{ i }}</a>   </li>
+                              {% endfor %}
+                                      </ul>
+                 </div>
+</div>
+ <div class="col-lg-2">
+      <div class="button-group  "    id="host_detail"  >
+          <button type="button" class="btn btn-default"  data-toggle="modal" data-target="#change_host" >运行统计图表</button>
+                 </div>
+</div>
+  </div>
+</div>
+</div>
+  </div>
+<div class="modal " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">运行结果</h4>
+      </div>
+      <div class="modal-body">
+          <table class="table table-hover"  >
+		                              <thead>
+                                         <tr>
+                                              <th>上传时间</th>
+                                              <th>运行时间</th>
+                                              <th>运行状态</th>
+                                              <th>运行地址</th>
+			                             </tr>
+		                              </thead>
+		                          <tbody id="all_dingshi">
+                                       {% for i in dingshi_detail %}
+			                                  <tr  class="dingshi_detail"   name={{i[4]}}>
+				                                   <td  name={{i[1]}}      >{{i[1]}}</td>
+                                                   <td 　　name={{i[2]}}   >  {{i[2]}}</td>
+				                                   <td    name={{i[3]}}   >{{i[3]}}</td>
+			                                  </tr>
+                                       {% endfor %}
+		                          </tbody>
+                                 </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+    <table class="table">
+		<caption><h4>脚本列表</h4></caption>
+		<thead>
+			<tr>
+                <th><input type="checkbox" id="all_checkbos"> all</th>
+				<th>git地址</th>
+                <th>git分支</th>
+				<th>git备注</th>
+				<th>上传用户名</th>
+                <th>上传时间</th>
+                <th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+        {% for i in git_detail %}
+			<tr>
+               <td>
+			             <input type="checkbox" name="sigle_checkbox"     id={{i[0]}}  >
+               </td>
+				<td  name={{i[0]}}   statu="git">{{i[0]}}</td>
+                <td  name={{i[-1]}}      >{{i[-1]}}</td>
+				<td 　　name={{i[1]}}   >  {{i[1]}}</td>
+				<td    name={{i[2]}}  statu="name" >{{i[2]}}</td>
+                <td     name={{i[3]}}   >{{i[3]}}</td>
+             <td     name={{i[0]}}   > <button type="button" class="btn btn-default"  name="delete_ben"   >删除</button>
+             <button type="button" class="btn btn-default"  name="fileaoo_detail"   >详细信息</button>            </td>
+			</tr>
+         {% endfor %}
+		</tbody>
+</table>
+   <script src="static/hualala/vendor/jquery/jquery.min.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="static/hualala/vendor/metisMenu/metisMenu.min.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="static/hualala/dist/js/sb-admin-2.js"></script>
+<script src="{{url_for('static', filename='layer-v3.0/layer/layer.js')}}">
+<script src="{{url_for('static', filename='jquery-1.8.0.js')}}"></script>
+<script src="static/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+	<script src="{{url_for('static', filename='layer-v3.0/layer/layer.js')}}"></script>
+    <script type=text/javascript>
+var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+$(document).ready(function()
+{
+    var name=$('#huoqu_name').attr('name')
+    var quanxian=$('#huoqu_name').attr('quanxian')
+    if (quanxian!="super")
+    {
+           $('[name="delete_ben"]').each(function()
+    {
+        if ($(this).parent().prev().prev().html()!=name)
+        {
+            $(this).attr('disabled',true)
+        }
+    })
+    }
+
+})
+
+
+//搜索逻辑
+$(document).ready(function(){
+$('#local_seven_today_pic').hide()
+$('#local_today_today_pic').hide()
+$('#zhuzhuangtu_today').hide()
+$('#zhuzhuangtu').hide()
+})
+$(document).on('keydown',function(event){
+                  if(event.keyCode ==13){
+                    if ($('#sougou').parent().prev().val().trim()=='' )
+{
+if ($('#sear_result').html().trim()=='上传用户')
+{
+$('td[statu="name"]').parent().parent().each(function(){$(this).show()})
+}
+if($('#sear_result').html().trim()=='git 地址')
+{
+$('td[statu="name"]').parent().parent().each(function(){$(this).show()})
+}
+}
+else{
+if ($('#sear_result').html().trim()=='上传用户')
+{
+var name=$('#sougou').parent().prev().val()
+$('td[name="'+name+'"]'+'[statu="name"]').parent().parent().each(function(){$(this).show()})
+$('td[name!="'+name+'"]'+'[statu="name"]').parent().parent().each(function(){$(this).hide()})
+}
+if($('#sear_result').html().trim()=='git 地址')
+{
+var name=$('#sougou').parent().prev().val()
+$('td[name="'+name+'"]'+'[statu="git"]').parent().parent().each(function(){$(this).show()})
+$('td[name!="'+name+'"]'+'[statu="git"]').parent().parent().each(function(){$(this).hide()})
+}
+}
+                  }
+                });
+$('#sougou').click(function()
+                   {
+if ($(this).parent().prev().val().trim()=='' )
+{
+if ($('#sear_result').html().trim()=='上传用户')
+{
+$('td[statu="name"]').parent().parent().each(function(){$(this).show()})
+}
+if($('#sear_result').html().trim()=='git 地址')
+{
+$('td[statu="name"]').parent().parent().each(function(){$(this).show()})
+}
+}
+else{
+if ($('#sear_result').html().trim()=='上传用户')
+{
+var name=$(this).parent().prev().val()
+$('td[name="'+name+'"]'+'[statu="name"]').parent().parent().each(function(){$(this).show()})
+$('td[name!="'+name+'"]'+'[statu="name"]').parent().parent().each(function(){$(this).hide()})
+}
+if($('#sear_result').html().trim()=='git 地址')
+{
+var name=$(this).parent().prev().val()
+$('td[name="'+name+'"]'+'[statu="git"]').parent().parent().each(function(){$(this).show()})
+$('td[name!="'+name+'"]'+'[statu="git"]').parent().parent().each(function(){$(this).hide()})
+}
+}
+}
+)
+$(function(){
+function show(){
+$('span[class="filter-option pull-left"]').html('select email')
+    $('#usertype').change(function()
+                      {
+                       $('span[class="filter-option pull-left"]').html('select email')
+                          $('ul[role="listbox"]').find('li').each(
+function()
+    {
+if ($(this).attr('class')=='selected')
+{
+$('span[class="filter-option pull-left"]').html('has   selected ')
+}
+    }
+)
+})
+}
+setTimeout(show,100);// 注意函数名没有引号和括弧！
+// 使用setInterval("show()",3000);会报“缺少对象”
+});
+$('#send_server').find('a').click(function(){$('#show-server').html($(this).html()+'<span class="caret"></span>')})
+$('#send_email').find('a').click(function(){$('#shou_email').html($(this).html()+'<span class="caret"></span>')})
+$('#suznze_search').find('a').each(function(){$(this).click(function(){
+$('#sear_result').html($(this).html())
+})})
+//打开定时详细信息页面
+    $('#open_dingshi_detail').click(function () {
+            $('#all_dingshi').empty()
+            $.post($SCRIPT_ROOT + '/open_dingshi_detail', {statu: 'jiekou_dingshi'},
+                function (data) {
+                    $('#all_dingshi').append(data.html)
+                }
+            )
+        }
+    )
+    //定时设置弹出结果页面
+    $('#all_dingshi').on("click", ".dingshi_detail", function () {
+            if ($(this).find('td').eq(2).html() == 'over') {
+                window.open($SCRIPT_ROOT + '/jiekou_result/' + $(this).attr('name'))
+            }
+        }
+    )
+    $('a[name="dingshi_simple_check"]').each(function () {
+        $(this).click(function () {
+                $('#dingshi_simple_check').html($(this).html() + '<span class="caret"></span>')
+            }
+        )
+    })
+    $('#open_git').click(function () {
+            layer.open({
+                type: 1,
+                shadeClose: true,
+                btn: ['提交', '取消'],
+                btn2: function (index, layero) {
+                    //do something
+                    layer.close(index); //如果设定了yes回调，需进行手工关闭
+                },
+                yes: function (index, layero) {
+                    //do something
+                    if ($('#git_file').val().indexOf("http://") >=0)
+                    {
+                      var git_file=$('#git_file').val().split('http://')[1]
+                    }
+                    else
+                    {
+                       var git_file=$('#git_file').val()}
+                    $.post($SCRIPT_ROOT + '/jiekou_yun', {git: git_file, beizu: $('#git_beizhu').val(),
+                        branch:$('#git_branch').val()},
+                        function (data) {
+                            window.location.reload();
+                            layer.closeAll()
+                        }
+                    )
+                },
+                end: function () {
+                    $('#git_insert').attr('style', 'display: none;')
+                },
+                area: ['600px', '450px'],
+                skin: 'layui-layer-rim',
+                title: false, //不显示标题
+                content: $('#git_insert'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+            })
+        }
+    )
+    //操作checkob 全选
+    $('#all_checkbos').click(function () {
+        if ($(this).is(':checked')) {
+            $('input[name="sigle_checkbox"]').prop('checked', true)
+        }
+        else {
+            $('input[name="sigle_checkbox"]').prop('checked', false)
+        }
+    })
+//点击运行按钮发送选中的请求
+    $('#run_ben').click(function () {
+            $("#run_ben").attr("disabled", true);
+            var run_server=$('#show-server').html().split('<span class="caret"></span>')[0]
+            var job_name=$('#shou_job').html().split('<span class="caret"></span>')[0]
+            var job_id=$('#shou_job').attr('num')
+            var email = ''
+            $("#usertype").find("option:selected").each(function () {
+                email = email + "##" + $(this).text()
+            })
+        var send_email_user=$('#shou_email').html().split('<span class="caret"></span>')[0]
+            var all_path = '';
+            var all_name = '';7
+            var all_branch = '';
+            var emali_title=$('#email_title').find('input').val()
+            $('input[name="sigle_checkbox"]').each(function () {
+                    if ($(this).is(':checked')) {
+                        all_path = all_path + '#' + $(this).attr('id')
+                        all_name = all_name + '#' + $(this).parent().siblings().eq(3).attr('name')
+                        all_branch = all_branch + '#' + $(this).parent().siblings().eq(1).attr('name')
+                    }
+                }
+            )
+            $.post($SCRIPT_ROOT + '/run_hualala', {type:'url',run_server:run_server,all_path: all_path, all_name: all_name, email: email, time: "",all_branch:all_branch,statue:'jiekou_shishi',  send_email_user:send_email_user,emali_title:emali_title,job:$('#shou_job').html(),job_id: job_id=$('#shou_job').attr('num')},
+                function (data) {
+                if (data.statu=='running')
+                {
+                                            layer.msg('正在运行中', {
+                            shade: [0.3, '#fff'],
+                            shadeClose: true,
+                            icon: 2,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        });
+                    $('#run_ben').removeAttr('disabled')
+                }
+                else
+                {
+layer.msg('开始运行', {
+                shade: [0.3, '#fff'],
+                shadeClose: true,
+                icon: 1,
+                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+            }, function () {
+                $("#run_ben").attr("disabled", false);
+                //do something
+            });
+                }
+                }
+            )
+        }
+    )
+    $('#dingshi_button_submit').click(function () {
+            $(this).attr('disabled', true)
+            var email = ''
+            $("#usertype").find("option:selected").each(function () {
+                email = email + "##" + $(this).text()
+            })
+            var send_email_user=$('#shou_email').html().split('<span class="caret"></span>')[0]
+        var emali_title=$('#email_title').find('input').val()
+            var all_path = '';
+            var all_name = '';
+            var all_branch='';
+            var time_run = $('#dingshi_simple_check').html().split('<span class="caret"></span>')[0] + $('#time_input').find('input').val()
+            var run_statu = $('#dingshi_simple_check').html()
+            $('input[name="sigle_checkbox"]').each(function () {
+                    if ($(this).is(':checked')) {
+                        all_path = all_path + '#' + $(this).attr('id')
+                        all_name = all_name + '#' + $(this).parent().siblings().eq(2).attr('name')
+                        all_branch = all_branch + '#' + $(this).parent().siblings().eq(1).attr('name')
+                    }
+                }
+            )
+            $.post($SCRIPT_ROOT + '/run_hualala', {
+                  run_server:$('#show-server').html().split('<span class="caret"></span>')[0],
+                   send_email_user:send_email_user,
+                    all_path: all_path,
+                    all_name: all_name,
+                    email: email,
+                    job:$('#shou_job').html(),
+                    job_id:job_id=$('#shou_job').attr('num'),
+                    time: time_run,
+                    statu: "jiekou_dingshi",
+                    run_statu: run_statu,
+                all_branch:all_branch,
+                emali_title:emali_title
+                },
+                function (data) {
+                    if (data.statu == 'error') {
+                        layer.msg('时间输入格式错误', {
+                            shade: [0.3, '#fff'],
+                            shadeClose: true,
+                            icon: 2,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        });
+                        $('#dingshi_button_submit').attr('disabled', false)
+                    }
+                    else {
+                        layer.msg('定时设置添加成功', {
+                            shade: [0.3, '#fff'],
+                            shadeClose: true,
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        });
+                        $('tbody').eq(0).empty()
+                        $('tbody').eq(0).append(data.html)
+                        $('#dingshi_button_submit').attr('disabled', false)
+                    }
+                }
+            )
+        }
+    )
+    $('#open_result').click(function () {
+            window.open($SCRIPT_ROOT + '/dingshi_result/shishi')
+        }
+    )
+//删除git文件
+    $('button[name="delete_ben"]').each(function () {
+            $(this).click(function () {
+                    var name = $(this).parent().prevAll().eq(1).attr('name')
+                    var git = $(this).parent().prevAll().eq(4).attr('name')
+                     var branch = $(this).parent().prevAll().eq(3).attr('name')
+                    window.location.reload()
+                    $.post($SCRIPT_ROOT + '/delete_ben', {name: name, git: git,branch:branch,statu:'jiekou'},
+                        function (data) {
+                            window.location.reload()
+                        }
+                    )
+                }
+            )
+        }
+    )
+    var a = '<div id="textarea"> <textarea class="form-control" rows="10" cols="10"  spellcheck="false" style="width:600px; height:400px " ></textarea></div>'
+    $('button[name="fileaoo_detail" ]').click(function () {
+        var name = $(this).parent().prevAll().eq(1).attr('name')
+        var git = $(this).parent().prevAll().eq(4).attr('name')
+        layer.open({
+            type: 1,
+            title: "完成功能描述",
+            shadeClose: true,
+            btn: ['提交', '取消'],
+            success: function (layero, index) {
+                $.get($SCRIPT_ROOT + '/add_file_detail', {name: name, git: git,type:"jiekou"},
+                    function (data) {
+                        $('textarea').eq(1).text(data.a)
+                    }
+                )
+            },
+            skin: 'layui-layer-rim', //加上边框
+            area: ['600px', '400px'], //宽高
+            yes: function (index, layero) {
+                //do something
+                $.post($SCRIPT_ROOT + '/add_file_detail', {detail: $('textarea').eq(1).val(), name: name, git: git,type:"jiekou"},
+                    function (data) {
+                        layer.closeAll()
+                    }
+                )
+            },
+            content: a
+        });
+    })
+    //统计图表(七天)
+    $('#sever_tongji').on('show.bs.tab', function (e) {
+})
+//统计图表框弹出显示，默认标签页显示
+$('#change_host').on('hide.bs.modal', function () {
+})
+ $('#change_host').on('show.bs.modal', function (e) {
+ $('#sever_tongji').tab('show')
+var name = $(this).parent().prevAll().eq(1).attr('name')
+
+$.post($SCRIPT_ROOT +'/test_image/'+'yewu_seven'+Date.parse(new Date()).toString(),{type:'ci_seven'},
+function(data)
+{
+if (data.statu=='all_zero')
+{
+$('#zhuzhuangtu').hide()
+  }
+  else
+  {
+  $('#zhuzhuangtu').show()
+  $('#zhuzhuangtu').attr('src',data.pic_path)
+  }
+
+})
+
+$.post($SCRIPT_ROOT + '/yunxing_tongji', {name:name,type:"yewu_seven"},
+          function (data) {
+          var kk=$.parseJSON(data.detail)
+          var ceshi="width: "+data.tongguolv+"%;min-width: 7em;"
+          $('#all_baifenbi').attr('style',ceshi)
+          $('#all_baifenbi').html("总体通过率"+data.tongguolv+"%")
+          $.each(kk,function()
+          {
+            var git_url=this['name']
+            var git_branch=this['branch']
+            var yuansu=$('tr[git_url="'+git_url+'"]'+'[name="ci_tongji_seven"]'+'[branch="'+git_branch+'"]')
+            $('tr[git_url="'+git_url+'"]'+'[branch="'+git_branch+'"]').find('.user_num').html(this['cishu_num'])
+            yuansu.find('.user_num').html(this['cishu_num'])
+            yuansu.find('.run_num').html(this['jiekou_num'])
+            yuansu.find('.pass_cas_num').html(this['pass_num'])
+            yuansu.find('.fail_cas_num').html(this['fail_num'])
+            yuansu.find('.high_num').html(this['max_pass'])
+          }
+          )
+                    }
+                )
+})
+//ci统计当天
+$('#ci_today').on('show.bs.tab', function (e) {
+var name = $(this).parent().prevAll().eq(1).attr('name')
+
+$.post($SCRIPT_ROOT +'/pic_yewu_oday/'+'yewu_today'+Date.parse(new Date()).toString(),{type:'ci_seven'},
+function(data)
+{
+if (data.statu=='all_zero')
+{
+$('#zhuzhuangtu_today').hide()
+}
+else
+{
+$('#zhuzhuangtu_today').show()
+  $('#zhuzhuangtu_today').attr('src',data.pic_path)
+}
+})
+
+
+$.post($SCRIPT_ROOT + '/yunxing_tongji', {name:name,type:"yewu_today"},
+          function (data) {
+          var kk=$.parseJSON(data.detail)
+          var ceshi="width: "+data.tongguolv+"%;min-width: 7em;"
+          $('#all_baifenbi_today').attr('style',ceshi)
+          $('#all_baifenbi_today').html("总体通过率"+data.tongguolv+"%")
+          $.each(kk,function()
+          {
+            var git_url=this['name']
+            var git_branch=this['branch']
+            var yuansu=$('tr[git_url="'+git_url+'"]'+'[name="ci_tongji_today"]'+'[branch="'+git_branch+'"]')
+            $('tr[git_url="'+git_url+'"]'+'[branch="'+git_branch+'"]').find('.user_num').html(this['cishu_num'])
+            yuansu.find('.user_num_today').html(this['cishu_num'])
+            yuansu.find('.run_num_today').html(this['jiekou_num'])
+            yuansu.find('.pass_cas_num_today').html(this['pass_num'])
+            yuansu.find('.fail_cas_num_today').html(this['fail_num'])
+            yuansu.find('.high_num_today').html(this['max_pass'])
+          }
+          )
+                    }
+                )
+})
+$('#profile').click(function(){
+$.post($SCRIPT_ROOT + '/test_image/22', {name:name,type:"yewu_seven"},
+          function (data) {
+$('#profile').find('img').attr('src','')
+                    }
+                )
+})
+//local统计七天
+$('#local_seven').on('show.bs.tab', function (e) {
+  $('#local_seven_today_pic').attr('src','')
+$.post($SCRIPT_ROOT +'/local_seven_pic/22',{type:'local_seven'},
+function(data)
+{
+if (data.statu=='all_zero')
+{
+$('#local_seven_today_pic').hide()
+}
+else
+{
+$('#local_seven_today_pic').show()
+  $('#local_seven_today_pic').attr('src',data.pic_path)
+}
+})
+
+//$('#local_seven_today_pic').attr('src','/local_seven_pic/'+'local_seven_pic'+Date.parse(new Date()).toString())
+$.post($SCRIPT_ROOT +'/local_seven_today', {type:"local_seven"},
+function(data)
+{
+var local_detail=$.parseJSON(data.local_detail)
+$.each(local_detail,function()
+{
+    var name=this[0]
+    if (name=='无分组')
+    {
+    name="其他"
+    }
+  $('[git_url="'+name+'"]'+'[name="local_seven_table"]').find('td').eq(1).html(this["1"])
+$('[git_url="'+name+'"]'+'[name="local_seven_table"]').find('td').eq(2).html(parseInt(this["2"])+parseInt(this["3"]))
+$('[git_url="'+name+'"]'+'[name="local_seven_table"]').find('td').eq(3).html(parseInt(this["4"])+parseInt(this["5"]))
+$('[git_url="'+name+'"]'+'[name="local_seven_table"]').find('td').eq(4).html(this["5"])
+}
+)
+                    }
+                )
+})
+//local统计今天
+$('a[href="#settings"]').on('show.bs.tab', function (e) {
+$.post($SCRIPT_ROOT +'/local_today_pic/77',{type:'local_seven'},
+function(data)
+{
+if (data.statu=='all_zero')
+{
+$('#local_today_today_pic').hide()
+}
+else
+{
+$('#local_today_today_pic').show()
+  $('#local_today_today_pic').attr('src',data.pic_path)
+}
+})
+
+$.post('http://127.0.0.1:5025/local_today_today', {type:"local_today"},
+function(data)
+{
+var local_detail=$.parseJSON(data.local_detail)
+$.each(local_detail,function()
+{
+    var name=this[0]
+    if (name=='无分组')
+    {
+
+    name="其他"
+    }
+  $('[git_url="'+name+'"]'+'[name="local_today_table"]').find('td').eq(1).html(this["1"])
+$('[git_url="'+name+'"]'+'[name="local_today_table"]').find('td').eq(2).html(parseInt(this["2"])+parseInt(this["3"]))
+$('[git_url="'+name+'"]'+'[name="local_today_table"]').find('td').eq(3).html(parseInt(this["4"])+parseInt(this["5"]))
+$('[git_url="'+name+'"]'+'[name="local_today_table"]').find('td').eq(4).html(this["5"])
+}
+)
+                    }
+                )
+})
+</script>
+{% endblock %}

@@ -1,0 +1,49 @@
+# -*- coding: utf-8 -*-
+__author__ = 'SUNZHEN519'
+# -*- coding: utf-8 -*-
+from tempfile import mktemp
+from app import app
+from flask import send_from_directory,send_file,Response
+import socket
+
+import os
+import json
+import urllib2
+import re
+import  chardet
+
+import time
+
+import sqlite3
+
+from flask import render_template, flash, redirect,request,g,Response,stream_with_context
+from flask_bootstrap import Bootstrap
+
+from flask import current_app
+from werkzeug.utils import secure_filename
+from flask import Flask, render_template, session, redirect, url_for, flash,jsonify
+import datetime
+def login_exe(func):
+    def login_do():
+        func()
+        db = sqlite3.connect(current_app.config.get('DB_DIZHI'))
+        cu = db.cursor()
+        if request.method == 'GET':
+            db.close()
+            return render_template('/hualala/login.html')
+        else:
+            ip=request.headers.get('X-Real-IP')
+            name=request.form['name']
+            passs = request.form['password']
+            user_check =  cu.execute('select * from user where name="%s" and pass="%s" ' % (name,passs)).fetchall()
+            if len(user_check)!=0:
+                #cu.executemany('UPDATE user SET ip="null" WHERE ip=?', [(ip)])
+               db.commit()
+               cu.executemany('update  user  set time=? ,ip=? where name=?', [(time.time(), ip, name)])
+               db.commit()
+               db.close()
+               return redirect(url_for('first_page_exe'))
+            else:
+                db.close()
+                return render_template('/hualala/login.html')
+    return login_do

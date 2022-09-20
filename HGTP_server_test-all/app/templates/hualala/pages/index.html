@@ -1,0 +1,673 @@
+{% extends "/hualala/pages/base.html" %}
+{% block content %}
+<style type="text/css">
+.mt-10{margin-top:25px;}
+
+.row.no-gutter {
+    margin-left: 0;
+    margin-right: 0;
+}
+</style>
+ <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h3 class="page-header">UI自动化管理</h3>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+            </div>
+ <div class="container"  id='git_insert'   style="display: none;"  >
+  <div class="row mt-10"   >
+            <div class="col-lg-5">
+              <div class="input-group">
+                  <p> git代码库上传 </p>
+              </div>
+            </div>
+        </div>
+        <div class="row  mt-10"   >
+            <div class="col-lg-5">
+              <div class="input-group">
+                  <span class="input-group-addon" >输入git地址</span>
+                  <input type="text" spellcheck="false"  id="git_file" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2">
+              </div>
+            </div>
+        </div>
+      <div class="row  mt-10"   >
+            <div class="col-lg-5">
+              <div class="input-group">
+                  <span class="input-group-addon" >输入分支名</span>
+                  <input type="text" spellcheck="false"  id="git_branch" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2">
+              </div>
+            </div>
+        </div>
+    <div class="row mt-10">
+            <div class="col-lg-5">
+              <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon2">设置备注   </span>
+                  <input type="text" spellcheck="false"  id="git_beizhu" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2">
+              </div>
+            </div>
+        </div>
+     </div>
+ <div class="container-fluid">
+        <div class="row " 　>
+            <div class="col-sm-8"   id="ding_shi">
+                      <div class="input-group input-group-lg" id="time_input">
+                                         <div class="input-group-btn">
+                                                             <button type="button" class="btn  btn-default"  id="run_ben">运行脚本</button>
+                    <button type="button" class="btn btn-default"  id="open_git">插入git地址</button>
+                                <button type="button" class="btn  btn-default" data-toggle="modal" data-target="#myModal" id="open_dingshi_detail">查看结果 <span class="caret"></span></button>
+        <button    id="dingshi_simple_check"   type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">定时设置 ： {{ time_date }}  <span class="caret"></span></button>
+        <ul class="dropdown-menu dropdown-menu-right" 　>
+          <li><a href="#"   name="dingshi_simple_check">定时设置 ： {{ time_date }}  </a></li>
+          <li><a href="#"   name="dingshi_simple_check">定时设置 ：everyday</a></li>
+        </ul>
+      </div>
+                  <input type="text" spellcheck="false"   class="form-control" placeholder="example 14:12" aria-describedby="basic-addon2">
+                          <span class="input-group-btn input-group-lg">
+                                  <button type="button" class="btn btn-default" id="dingshi_button_submit"   >  定时设置提交</button>
+                          </span>
+              </div>
+                 </div>
+            <div class="col-sm-4"   id="sousuo1" >
+                         <div class="input-group ">
+                                 <span class="input-group-btn">
+                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">搜索类型 <span class="caret"></span></button>
+                                      <ul class="dropdown-menu"  id="suznze_search" style="z-index: 1; ">
+                                          <li><a href="#" >上传用户</a></li>
+                                          <li><a href="#">git 地址</a></li>
+                                      </ul>
+                                 </span>
+                                 <span class="input-group-addon" id="sear_result"  >上传用户</span>
+                             <input type="text" class="form-control  " aria-label="...">
+                           <div class="input-group-btn  ">
+                           <button type="button" class="btn btn-default "    id="sougou" aria-haspopup="true" aria-expanded="false">Go! </button>
+                     </div>
+                        </div>
+       </div>
+</div>
+
+</div>
+
+ <div class="row mt-10" >
+     <div class="col-lg-12"    >
+<div class="panel panel-success">
+  <div class="panel-heading text-center">运行前设置</div>
+  <div class="panel-body">
+
+<div class="col-lg-2"  id="job_list"   >
+      <div class="input-group  "    id="88"  >
+                    <span class="input-group-addon"   >job 列表</span>
+
+
+ <button type="button"  id="shou_job" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="fa_jianren"  >no select<span class="caret"></span></button>
+
+
+                                 <ul class="dropdown-menu"  id="show_job_next">
+
+
+                                     {% for i in jobs %}
+                                <li><a href="#"  name={{ i }}>{{ i }}</a>   </li>
+                              {% endfor %}
+
+                                      </ul>
+
+                 </div>
+</div>
+<div id="move1">
+ <div class="col-lg-2">
+      <div class="input-group  "    id="email_title"  >
+                    <span class="input-group-addon" id="send_sear_result"  >邮件title</span>
+                    <input type="text" class="form-control" placeholder="HGTP Report" aria-describedby="basic-addon1" spellcheck="false">
+                 </div>
+</div>
+
+ <div class="col-lg-2">
+      <div class="input-group  "    id="55"  >
+                    <span class="input-group-addon" id="send_sear_result"  >收件人</span>
+
+
+<span class="input-group-btn"  >
+
+                          <select id="usertype" name="usertype"      class="selectpicker show-tick form-control" multiple data-live-search="false">
+                              {% for i in email_detail %}
+                                <option name={{ i }}>{{ i }}</option>
+                              {% endfor %}
+                           </select>
+
+        </span>
+
+
+                 </div>
+</div>
+
+
+
+
+
+
+
+  <div class="col-lg-3">
+      <div class="input-group  "    id="44"  >
+                    <span class="input-group-addon"   >发件人</span>
+                          <button type="button"  id="shou_email" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >no email<span class="caret"></span></button>
+                                 <ul class="dropdown-menu"  id="send_email">
+                                     {% for i in fajianren %}
+                                <li><a href="#"  name={{ i }}>{{ i }}</a>   </li>
+                              {% endfor %}
+                                      </ul>
+                 </div>
+</div>
+
+</div>
+
+
+
+
+       <div class="col-lg-2"   id="move2"  style="position: relative; left: -50px; z-index: 1;">
+      <div class="input-group"    >
+                    <span class="input-group-addon" >run server</span>
+                          <button type="button" id="show-server"  class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >自动分发<span class="caret"></span></button>
+                                 <ul class="dropdown-menu" id="send_server" >
+                                     {% for i in server_detail %}
+                                <li><a href="#"  name={{ i }}>{{ i }}</a>   </li>
+                              {% endfor %}
+                                      </ul>
+                 </div>
+</div>
+  </div>
+</div>
+</div>
+
+  </div>
+<div class="modal " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">运行结果</h4>
+      </div>
+      <div class="modal-body">
+          <table class="table table-hover"  >
+		                              <thead>
+                                         <tr>
+                                              <th>上传时间</th>
+				                               <th>运行时间</th>
+				                                <th>运行状态</th>
+                                             <th>运行地址</th>
+			                             </tr>
+		                              </thead>
+		                          <tbody id="all_dingshi">
+                                       {% for i in dingshi_detail %}
+
+			                                  <tr  class="dingshi_detail"   name={{i[4]}}>
+				                                   <td  name={{i[1]}}      >{{i[1]}}</td>
+                                                   <td 　　name={{i[2]}}   >  {{i[2]}}</td>
+				                                   <td    name={{i[3]}}   >{{i[3]}}</td>
+			                                  </tr>
+                                       {% endfor %}
+		                          </tbody>
+                                 </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel panel-default">
+<div class="panel-heading text-left">脚本列表</div>
+  <div class="panel-body">
+    <table class="table">
+		<thead>
+			<tr>
+                <th><input type="checkbox" id="all_checkbos"> all</th>
+				<th>git地址</th>
+                <th>git分支</th>
+				<th>git备注</th>
+				<th>上传用户名</th>
+                <th>上传时间</th>
+                <th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+        {% for i in git_detail %}
+			<tr>
+               <td>
+			             <input type="checkbox" name="sigle_checkbox"     id={{i[0]}}  >
+               </td>
+				<td  name={{i[0]}}   statu="git">{{i[0]}}</td>
+                <td  name={{i[-1]}}      >{{i[-1]}}</td>
+				<td 　　name={{i[1]}}   >  {{i[1]}}</td>
+				<td    name={{i[2]}}  statu="name" >{{i[2]}}</td>
+                <td     name={{i[3]}}   >{{i[3]}}</td>
+             <td     name={{i[0]}}   > <button type="button" class="btn btn-default"  name="delete_ben"   >删除</button>
+             <button type="button" class="btn btn-default"  name="fileaoo_detail"   >详细信息</button>            </td>
+			</tr>
+         {% endfor %}
+		</tbody>
+</table>
+    </div>
+</div>
+   <script src="static/hualala/vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="static/hualala/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="static/hualala/vendor/metisMenu/metisMenu.min.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="static/hualala/dist/js/sb-admin-2.js"></script>
+<script src="{{url_for('static', filename='layer-v3.0/layer/layer.js')}}">
+<script src="{{url_for('static', filename='jquery-1.8.0.js')}}"></script>
+<script src="static/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+	<script src="{{url_for('static', filename='layer-v3.0/layer/layer.js')}}"></script>
+    <script type=text/javascript>
+var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+//搜索逻辑
+$(document).on('keydown',function(event){
+                  if(event.keyCode ==13){
+                    if ($('#sougou').parent().prev().val().trim()=='' )
+{
+if ($('#sear_result').html().trim()=='上传用户')
+{
+$('td[statu="name"]').parent().parent().each(function(){$(this).show()})
+}
+if($('#sear_result').html().trim()=='git 地址')
+{
+$('td[statu="name"]').parent().parent().each(function(){$(this).show()})
+}
+}
+else{
+if ($('#sear_result').html().trim()=='上传用户')
+{
+var name=$('#sougou').parent().prev().val()
+$('td[name="'+name+'"]'+'[statu="name"]').parent().parent().each(function(){$(this).show()})
+$('td[name!="'+name+'"]'+'[statu="name"]').parent().parent().each(function(){$(this).hide()})
+}
+if($('#sear_result').html().trim()=='git 地址')
+{
+var name=$('#sougou').parent().prev().val()
+$('td[name="'+name+'"]'+'[statu="git"]').parent().parent().each(function(){$(this).show()})
+$('td[name!="'+name+'"]'+'[statu="git"]').parent().parent().each(function(){$(this).hide()})
+}
+}
+                  }
+                });
+$('#sougou').click(function()
+                   {
+if ($(this).parent().prev().val().trim()=='' )
+{
+if ($('#sear_result').html().trim()=='上传用户')
+{
+$('td[statu="name"]').parent().parent().each(function(){$(this).show()})
+}
+if($('#sear_result').html().trim()=='git 地址')
+{
+$('td[statu="name"]').parent().parent().each(function(){$(this).show()})
+}
+}
+else{
+if ($('#sear_result').html().trim()=='上传用户')
+{
+var name=$(this).parent().prev().val()
+$('td[name="'+name+'"]'+'[statu="name"]').parent().parent().each(function(){$(this).show()})
+$('td[name!="'+name+'"]'+'[statu="name"]').parent().parent().each(function(){$(this).hide()})
+}
+if($('#sear_result').html().trim()=='git 地址')
+{
+var name=$(this).parent().prev().val()
+$('td[name="'+name+'"]'+'[statu="git"]').parent().parent().each(function(){$(this).show()})
+$('td[name!="'+name+'"]'+'[statu="git"]').parent().parent().each(function(){$(this).hide()})
+}
+}
+}
+)
+$(function(){
+function show(){
+$('span[class="filter-option pull-left"]').html('select email')
+    $('#usertype').change(function()
+                      {
+                       $('span[class="filter-option pull-left"]').html('select email')
+                          $('ul[role="listbox"]').find('li').each(
+function()
+    {
+if ($(this).attr('class')=='selected')
+{
+$('span[class="filter-option pull-left"]').html('has   selected ')
+}
+    }
+)
+})
+}
+setTimeout(show,100);// 注意函数名没有引号和括弧！
+// 使用setInterval("show()",3000);会报“缺少对象”
+});
+$('#send_server').find('a').click(function(){$('#show-server').html($(this).html()+'<span class="caret"></span>')})
+$('#send_email').find('a').click(function(){$('#shou_email').html($(this).html()+'<span class="caret"></span>')})
+$('#suznze_search').find('a').each(function(){$(this).click(function(){
+$('#sear_result').html($(this).html())
+})})
+//打开定时详细信息页面
+    $('#open_dingshi_detail').click(function () {
+            $('#all_dingshi').empty()
+            $.post($SCRIPT_ROOT + '/open_dingshi_detail', {update_time: '11'},
+                function (data) {
+                    $('#all_dingshi').append(data.html)
+                }
+            )
+        }
+    )
+    //定时设置弹出结果页面
+    $('#all_dingshi').on("click", ".dingshi_detail", function () {
+            if ($(this).find('td').eq(2).html() == 'over') {
+                window.open($SCRIPT_ROOT + '/dingshi_result/' + $(this).attr('name'))
+            }
+        }
+    )
+    $('a[name="dingshi_simple_check"]').each(function () {
+        $(this).click(function () {
+                $('#dingshi_simple_check').html($(this).html() + '<span class="caret"></span>')
+            }
+        )
+    })
+    $('#open_git').click(function () {
+            layer.open({
+                type: 1,
+                shadeClose: true,
+                btn: ['提交', '取消'],
+
+                btn2: function (index, layero) {
+                    //do something
+                    layer.close(index); //如果设定了yes回调，需进行手工关闭
+                },
+
+                yes: function (index, layero) {
+                    //do something
+                    if ($('#git_file').val().indexOf("http://") >=0)
+                    {
+
+                      var git_file=$('#git_file').val().split('http://')[1]
+                    }
+                    else
+                    {
+
+                       var git_file=$('#git_file').val()}
+                    $.post($SCRIPT_ROOT + '/first_page', {git: git_file, beizu: $('#git_beizhu').val(),
+                        branch:$('#git_branch').val()},
+                        function (data) {
+                            window.location.reload();
+                            layer.closeAll()
+                        }
+                    )
+
+                },
+
+
+                end: function () {
+                    $('#git_insert').attr('style', 'display: none;')
+                },
+                area: ['600px', '450px'],
+                skin: 'layui-layer-rim',
+                title: false, //不显示标题
+                content: $('#git_insert'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+
+            })
+
+
+        }
+    )
+
+
+    //操作checkob 全选
+
+    $('#all_checkbos').click(function () {
+
+        if ($(this).is(':checked')) {
+
+            $('input[name="sigle_checkbox"]').prop('checked', true)
+        }
+        else {
+            $('input[name="sigle_checkbox"]').prop('checked', false)
+
+        }
+    })
+
+
+//点击运行按钮发送选中的请求
+    $('#run_ben').click(function () {
+                        layer.msg('正在运行中', {
+                            shade: [0.3, '#fff'],
+                            shadeClose: true,
+                            icon: 2,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        });
+            $("#run_ben").attr("disabled", true);
+
+
+
+            var run_server=$('#show-server').html().split('<span class="caret"></span>')[0]
+            var job_name=$('#shou_job').html().split('<span class="caret"></span>')[0]
+            var email = ''
+            $("#usertype").find("option:selected").each(function () {
+                email = email + "##" + $(this).text()
+            })
+        var send_email_user=$('#shou_email').html().split('<span class="caret"></span>')[0]
+            var all_path = '';
+            var all_name = '';7
+            var all_branch = '';
+            var emali_title=$('#email_title').find('input').val()
+            $('input[name="sigle_checkbox"]').each(function () {
+                    if ($(this).is(':checked')) {
+                        all_path = all_path + '#' + $(this).attr('id')
+                        all_name = all_name + '#' + $(this).parent().siblings().eq(3).attr('name')
+                        all_branch = all_branch + '#' + $(this).parent().siblings().eq(1).attr('name')
+                    }
+                }
+            )
+            $.post($SCRIPT_ROOT + '/run_hualala', {statue:'url_shishi',run_server:run_server,all_path: all_path, all_name: all_name, email: email, time: "",all_branch:all_branch,statue:'shishi',  send_email_user:send_email_user,emali_title:emali_title,job:$('#shou_job').html()},
+                function (data) {
+
+                if (data.statu=='running')
+
+                {
+                    $('#run_ben').removeAttr('disabled')
+                }
+
+                else
+                {
+layer.msg('开始运行', {
+                shade: [0.3, '#fff'],
+                shadeClose: true,
+                icon: 1,
+                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+            }, function () {
+                $("#run_ben").attr("disabled", false);
+                //do something
+            });
+
+
+                }
+                }
+            )
+
+        }
+    )
+
+
+    $('#dingshi_button_submit').click(function () {
+            $(this).attr('disabled', true)
+            var email = ''
+            $("#usertype").find("option:selected").each(function () {
+                email = email + "##" + $(this).text()
+            })
+            var send_email_user=$('#shou_email').html().split('<span class="caret"></span>')[0]
+        var emali_title=$('#email_title').find('input').val()
+            var all_path = '';
+            var all_name = '';
+            var all_branch='';
+            var time_run = $('#dingshi_simple_check').html().split('<span class="caret"></span>')[0] + $('#time_input').find('input').val()
+            var run_statu = $('#dingshi_simple_check').html()
+            $('input[name="sigle_checkbox"]').each(function () {
+
+
+                    if ($(this).is(':checked')) {
+                        all_path = all_path + '#' + $(this).attr('id')
+                        all_name = all_name + '#' + $(this).parent().siblings().eq(2).attr('name')
+                        all_branch = all_branch + '#' + $(this).parent().siblings().eq(1).attr('name')
+                    }
+                }
+            )
+
+            $.post($SCRIPT_ROOT + '/run_hualala', {
+                  run_server:$('#show-server').html().split('<span class="caret"></span>')[0],
+                   send_email_user:send_email_user,
+                    all_path: all_path,
+                    all_name: all_name,
+                    email: email,
+                    job:$('#shou_job').html(),
+                    time: time_run,
+                    statu: "dingshi",
+                    run_statu: run_statu,
+                all_branch:all_branch,
+                emali_title:emali_title
+                },
+                function (data) {
+                    if (data.statu == 'error') {
+
+                        layer.msg('时间输入格式错误', {
+                            shade: [0.3, '#fff'],
+                            shadeClose: true,
+                            icon: 2,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        });
+
+                        $('#dingshi_button_submit').attr('disabled', false)
+
+                    }
+                    else {
+
+                        layer.msg('定时设置添加成功', {
+                            shade: [0.3, '#fff'],
+                            shadeClose: true,
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        });
+
+
+                        $('tbody').eq(0).empty()
+                        $('tbody').eq(0).append(data.html)
+
+                        $('#dingshi_button_submit').attr('disabled', false)
+                    }
+
+                }
+            )
+        }
+    )
+    $('#open_result').click(function () {
+
+
+            window.open($SCRIPT_ROOT + '/dingshi_result/shishi')
+
+
+        }
+    )
+
+
+//删除git文件
+    $('button[name="delete_ben"]').each(function () {
+
+            $(this).click(function () {
+                    var name = $(this).parent().prevAll().eq(1).attr('name')
+                    var git = $(this).parent().prevAll().eq(4).attr('name')
+                     var branch = $(this).parent().prevAll().eq(3).attr('name')
+                    window.location.reload()
+                    $.post($SCRIPT_ROOT + '/delete_ben', {name: name, git: git,branch:branch,statu:'url'},
+                        function (data) {
+                            window.location.reload()
+
+                        }
+                    )
+
+
+                }
+            )
+
+
+        }
+    )
+
+
+    var a = '<div id="textarea"> <textarea class="form-control" rows="10" cols="10"  spellcheck="false" style="width:600px; height:400px " ></textarea></div>'
+
+    $('button[name="fileaoo_detail" ]').click(function () {
+        var name = $(this).parent().prevAll().eq(1).attr('name')
+        var git = $(this).parent().prevAll().eq(4).attr('name')
+        layer.open({
+            type: 1,
+            title: "完成功能描述",
+            shadeClose: true,
+            btn: ['提交', '取消'],
+
+
+            success: function (layero, index) {
+
+
+                $.get($SCRIPT_ROOT + '/add_file_detail', {name: name, git: git},
+                    function (data) {
+
+
+                        $('textarea').text(data.a)
+
+                    }
+                )
+
+
+            },
+
+
+            skin: 'layui-layer-rim', //加上边框
+            area: ['600px', '400px'], //宽高
+            yes: function (index, layero) {
+                //do something
+
+
+                $.post($SCRIPT_ROOT + '/add_file_detail', {detail: $('textarea').val(), name: name, git: git},
+                    function (data) {
+
+                        layer.closeAll()
+
+                    }
+                )
+            },
+            content: a
+        });
+    })
+//操作选中的job
+$('#show_job_next').find('a').each(function()
+                                   {
+$(this).click(function()
+
+
+              {
+
+$('#shou_job').html($(this).html()+'<span class="caret"></span>')
+$(this).html()
+
+
+}
+
+)
+
+}
+
+)
+
+
+
+</script>
+{% endblock %}
