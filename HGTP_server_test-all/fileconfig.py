@@ -5,9 +5,11 @@ import socket
 import platform
 SECRET_KEY = 'you-will-never-guess'
 basedir = os.path.abspath(os.path.dirname(__file__))
+print (basedir)
 parent_path= os.path.dirname(basedir)
 if platform.system()=='Linux':
-	db_path = r'/root/repo/hgtp_server/sqlite_db'
+	db_path = os.path.join(parent_path,'sqlite_db')
+	# db_path = r'/root/repo/hgtp_server/sqlite_db'
 else :
     db_path= r'D:\中源宏一\base_code\sqlite_db'
 # myname = socket.getfqdn(socket.gethostname(  ))
