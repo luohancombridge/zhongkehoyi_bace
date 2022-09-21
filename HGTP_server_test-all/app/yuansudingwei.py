@@ -11,7 +11,7 @@ from .zhixing import *
 import time
 import sqlite3
 from .shell_name import *
-from .form import  *
+# from .form import  *
 from flask import render_template, flash, redirect,request,g,Response,stream_with_context
 from flask import current_app
 from werkzeug.utils import secure_filename
