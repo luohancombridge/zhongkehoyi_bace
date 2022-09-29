@@ -10,10 +10,13 @@ import os
 from flask import current_app
 import platform
 app = Flask(__name__)
-if platform.system()=='Linux':
-	db_path = r'/root/repo/hgtp_server/sqlite_db'
-else :
-    db_path= r'D:\中源宏一\base_code\sqlite_db'
+# if platform.system()=='Linux':
+# 	db_path = r'/root/repo/hgtp_server/sqlite_db'
+# else :
+#     db_path= r'D:\中源宏一\base_code\sqlite_db'
+basedir = os.path.abspath(os.path.dirname(__file__))
+parent_path= os.path.dirname(os.path.dirname(basedir))
+db_path = os.path.join(parent_path,'sqlite_db')
 basedir=os.path.join(db_path,'example.db')
 app.config.update(RESTFUL_JSON=dict(ensure_ascii=False))
 db = SQLAlchemy(app)# 实例化一个flask 对象

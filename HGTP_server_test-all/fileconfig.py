@@ -14,6 +14,7 @@ else :
     db_path= r'D:\中源宏一\base_code\sqlite_db'
 # myname = socket.getfqdn(socket.gethostname(  ))
 # myaddr = socket.gethostbyname(myname)
+SQL_DB_URL= db_path
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(db_path, 'app.db')
 SQLALCHEMY_MIGRATE_REPO = os.path.join(db_path, 'db_repository')
 #脚本存储路径
