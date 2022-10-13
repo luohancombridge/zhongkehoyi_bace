@@ -184,3 +184,15 @@ class quanxiandian(db.Model):
         self.create_user = create_user
 
 
+class xiangmu_xiangmu_list(db.Model):
+    __tablename__ = 'xiangmu_xiangmu_list'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100))
+    create_time = db.Column(db.String(120))
+    create_user = db.Column(db.String(120))
+    def __init__(self, name= None,create_time=None,create_user=None):
+        self.name = name
+        self.create_time = create_time
+        self.create_user = create_user
+
+

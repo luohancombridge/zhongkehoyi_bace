@@ -1163,7 +1163,7 @@ def get_case_detail(version_id,interface_id):
         list1.append(json.loads(j[0]))
     detail[interface_id]['case_detail'] = list1
     return jsonify(statu='success', detail=detail)
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 # #通过率图片接口
 # @jing_new.route('/pass_rate_image_interface',methods=['POST','GET'])
 # def pass_rate_image_interface():

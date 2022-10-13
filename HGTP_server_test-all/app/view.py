@@ -51,6 +51,8 @@ from app.wuzhou_kaoshi.wuzhou_kaoshi import wuzhou
 from app.kaoshifenxi.dirctory_tree import kaoshifenxi
 from app.jishiben.dirctory_tree import jishiben
 from app.vue_yonghu.dirctory_tree import vueyonghu
+from app.xiangmu_guanli.dirctory_tree import xiangmuguanli
+app.register_blueprint(xiangmuguanli, url_prefix='/xiangmuguanli')
 app.register_blueprint(vueyonghu, url_prefix='/vueyonghu')
 app.register_blueprint(jishiben, url_prefix='/jishiben')
 app.register_blueprint(kfz, url_prefix='/kfz')
